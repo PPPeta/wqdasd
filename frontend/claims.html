@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Обращения · InsurePro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link rel="stylesheet" href="/css/app.css">
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+  <a href="#main" class="skip-link">К содержимому</a>
+  <header class="sticky top-0 z-30 bg-white border-b border-slate-200 h-16 flex items-center px-4 sm:px-6 justify-between" data-chrome-navbar></header>
+  <div class="flex">
+    <aside data-chrome-sidebar class="w-64 shrink-0 bg-white"></aside>
+    <div data-chrome-backdrop aria-hidden="true"></div>
+
+    <main id="main" class="flex-1 p-4 sm:p-8 max-w-full" x-data="claimsPage()" x-init="initPage()">
+      <header class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold">Страховые обращения</h1>
+          <p class="text-sm text-slate-500 mt-1">Все заявки на возмещение</p>
+        </div>
+        <button type="button" x-show="$store.auth.hasRole('employee', 'admin', 'company_manager')" class="btn btn-primary" @click="openModal()">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+          Подать обращение
+        </button>
+      </header>
+
+      <div class="card p-3 mb-6 flex gap-2 overflow-x-auto">
+        <template x-for="f in filters" :key="f.value">
+          <button type="button"
+                  class="px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap"
+                  :class="filter === f.value ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100'"
+                  @click="filter = f.value; load()"
+                  x-text="f.label"></button>
+        </template>
+      </div>
+
+      <div class="card overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Номер</th>
+                <th>Тип</th>
+                <th>Сотрудник</th>
+                <th>Статус</th>
+                <th>Сумма</th>
+                <th>Дата</th>
+                <th class="text-right">Действия</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="c in claims" :key="c.id">
+                <tr>
+                  <td class="font-mono text-sm" x-text="c.number || `CL-${c.id}`"></td>
+                  <td x-text="TYPE_LABELS[c.type] || c.type"></td>
+                  <td class="text-slate-600" x-text="c.employee_name || '—'"></td>
+                  <td><span class="badge" :class="`badge-${c.status}`" x-text="STATUS_LABELS[c.status] || c.status"></span></td>
+                  <td class="font-medium" x-text="formatRub(c.amount)"></td>
+                  <td class="text-slate-500 text-sm" x-text="formatDate(c.incident_date)"></td>
+                  <td class="text-right">
+                    <a :href="`/claim.html?id=${c.id}`" class="text-blue-600 hover:underline text-sm font-medium">Открыть →</a>
+                  </td>
+                </tr>
+              </template>
+              <tr x-show="!loading && !claims.length">
+                <td colspan="7" class="text-center text-slate-400 py-12">
+                  <p class="text-lg font-medium">Обращений нет</p>
+                  <p class="text-sm mt-1">Пусто — это хорошо</p>
+                </td>
+              </tr>
+              <template x-if="loading">
+                <tr><td colspan="7"><div class="skeleton h-10 my-3"></div></td></tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- New claim modal -->
+      <div x-show="modal.open" x-transition.opacity class="fixed inset-0 z-50 grid place-items-center bg-slate-900/60 p-4" role="dialog" aria-modal="true" aria-labelledby="claim-title" @keydown.escape.window="modal.open = false">
+        <div class="card w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto" @click.stop>
+          <header class="flex items-center justify-between mb-4">
+            <h2 id="claim-title" class="text-lg font-semibold">Новое обращение</h2>
+            <button type="button" class="p-1 rounded-lg hover:bg-slate-100" @click="modal.open = false" aria-label="Закрыть">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </header>
+          <form @submit.prevent="save()" class="space-y-4">
+            <div class="field">
+              <label for="cl-type">Тип обращения</label>
+              <select id="cl-type" required x-model="modal.data.type">
+                <option value="">Выберите тип</option>
+                <option value="medical">Медуслуга</option>
+                <option value="hospitalization">Госпитализация</option>
+                <option value="medication">Медикаменты</option>
+                <option value="dental">Стоматология</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="cl-desc">Описание</label>
+              <textarea id="cl-desc" rows="3" required x-model.trim="modal.data.description" placeholder="Опишите ситуацию"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="field">
+                <label for="cl-date">Дата случая</label>
+                <input id="cl-date" type="date" required x-model="modal.data.incident_date">
+              </div>
+              <div class="field">
+                <label for="cl-amount">Сумма, ₽</label>
+                <input id="cl-amount" type="number" min="0" step="0.01" required x-model.number="modal.data.amount">
+              </div>
+            </div>
+            <div class="field">
+              <label for="cl-place">Место</label>
+              <input id="cl-place" x-model.trim="modal.data.place" placeholder="Название клиники / города">
+            </div>
+            <div class="field">
+              <label for="cl-file">Документ (чек, справка)</label>
+              <input id="cl-file" type="file" accept="image/*,application/pdf" class="block w-full text-sm">
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+              <button type="button" class="btn btn-secondary" @click="modal.open = false">Отмена</button>
+              <button type="submit" class="btn btn-primary" :disabled="modal.saving" x-text="modal.saving ? 'Отправка...' : 'Отправить'"></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    InsurePro.mountChrome('claims');
+
+    const STATUS_LABELS = { pending: 'В ожидании', approved: 'Одобрено', rejected: 'Отклонено' };
+    const TYPE_LABELS = { medical: 'Медуслуга', hospitalization: 'Госпитализация', medication: 'Медикаменты', dental: 'Стоматология' };
+
+    function claimsPage() {
+      return {
+        claims: [], loading: false,
+        filter: 'all',
+        filters: [
+          { value: 'all', label: 'Все' },
+          { value: 'pending', label: 'В ожидании' },
+          { value: 'approved', label: 'Одобренные' },
+          { value: 'rejected', label: 'Отклонённые' },
+        ],
+        modal: { open: false, saving: false, data: {} },
+        STATUS_LABELS, TYPE_LABELS,
+
+        initPage() {
+          this.load();
+          if (new URLSearchParams(location.search).get('new') === '1') this.openModal();
+        },
+
+        async load() {
+          this.loading = true;
+          try {
+            const qs = this.filter === 'all' ? '' : `?status=${this.filter}`;
+            const data = await InsurePro.api('GET', `/claims/${qs}`).catch(() => ({ results: [] }));
+            this.claims = data.results || data || [];
+          } catch (err) {
+            InsurePro.toast(err.message, 'error');
+          } finally {
+            this.loading = false;
+          }
+        },
+
+        openModal() {
+          this.modal = {
+            open: true, saving: false,
+            data: { type: '', description: '', incident_date: '', amount: 0, place: '' },
+          };
+        },
+
+        async save() {
+          this.modal.saving = true;
+          try {
+            await InsurePro.api('POST', '/claims/', this.modal.data);
+            InsurePro.toast('Обращение отправлено', 'success');
+            this.modal.open = false;
+            this.load();
+          } catch (err) {
+            InsurePro.toast(err.message, 'error');
+          } finally {
+            this.modal.saving = false;
+          }
+        },
+
+        formatDate(d) { return d ? new Date(d).toLocaleDateString('ru-RU') : '—'; },
+      };
+    }
+
+    function formatRub(v) {
+      return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(v || 0);
+    }
+  </script>
+</body>
+</html>
