@@ -307,5 +307,3 @@ export const FOOTER_LINKS = [
     ],
   },
 ] as const;
-
-export { Code2 };
