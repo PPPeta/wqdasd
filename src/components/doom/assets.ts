@@ -5,48 +5,59 @@ export const HEIGHT = 270;
 export const TEX_SIZE = 64;
 export const SPRITE_SIZE = 64;
 
-export const MOVE_SPEED = 3.2;
-export const ROT_SPEED = 2.6;
-export const MOUSE_SENS = 0.0025;
-export const FIRE_COOLDOWN_MS = 280;
+export const MOVE_SPEED = 4.0;
+export const ROT_SPEED = 2.8;
+export const MOUSE_SENS = 0.0022;
+export const FIRE_COOLDOWN_MS = 260;
 export const MAX_HEALTH = 100;
 export const MAX_AMMO = 50;
 export const DAMAGE_PER_SHOT = 50;
 export const ENEMY_HEALTH = 75;
-export const ENEMY_SPEED = 1.4;
-export const ENEMY_ATTACK_RANGE = 0.9;
-export const ENEMY_DAMAGE = 8;
-export const ENEMY_ATTACK_COOLDOWN = 0.55;
+export const ENEMY_SPEED = 1.05;
+export const ENEMY_ATTACK_RANGE = 0.85;
+export const ENEMY_DAMAGE = 6;
+export const ENEMY_ATTACK_COOLDOWN = 0.75;
+export const ENEMY_INITIAL_COOLDOWN = 1.8;
+export const ENEMY_AGGRO_RANGE = 10;
+export const GAME_GRACE_MS = 2500;
+export const PLAYER_HURT_IFRAMES = 0.35;
+
+export const PLAYER_SPAWN = {
+  x: 1.5,
+  y: 1.5,
+  dirX: 1,
+  dirY: 0,
+} as const;
 
 // 0 = empty, 1..5 = wall type
 export const MAP: WallMap = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 2, 2, 0, 0, 0, 5, 5, 0, 0, 0, 2, 2, 0, 1],
-  [1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1],
-  [1, 0, 0, 0, 0, 3, 3, 0, 0, 3, 3, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 5, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 5, 0, 1],
-  [1, 0, 5, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 5, 0, 1],
-  [1, 0, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 1],
-  [1, 0, 0, 0, 0, 3, 3, 0, 0, 3, 3, 0, 0, 0, 0, 1],
-  [1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1],
-  [1, 0, 2, 2, 0, 0, 0, 5, 5, 0, 0, 0, 2, 2, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 1],
+  [1, 0, 0, 2, 0, 0, 0, 3, 3, 0, 0, 0, 2, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 2, 0, 0, 0, 3, 3, 0, 0, 0, 2, 0, 0, 1],
+  [1, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
 export const ENEMY_SPAWNS: ReadonlyArray<{ x: number; y: number }> = [
-  { x: 7.5, y: 7.5 },
-  { x: 12.5, y: 3.5 },
-  { x: 3.5, y: 12.5 },
-  { x: 12.5, y: 12.5 },
-  { x: 8.5, y: 9.5 },
-  { x: 3.5, y: 3.5 },
-  { x: 12.5, y: 8.5 },
-  { x: 8.5, y: 3.5 },
+  { x: 13.5, y: 2.5 },
+  { x: 2.5, y: 13.5 },
+  { x: 13.5, y: 13.5 },
+  { x: 8.5, y: 2.5 },
+  { x: 2.5, y: 8.5 },
+  { x: 13.5, y: 8.5 },
+  { x: 8.5, y: 13.5 },
+  { x: 6.5, y: 6.5 },
 ];
 
 type Rgb = readonly [number, number, number];

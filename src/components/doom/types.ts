@@ -15,6 +15,7 @@ export type Player = {
   ammo: number;
   kills: number;
   bobPhase: number;
+  iframes: number;
 };
 
 export type Enemy = {
@@ -25,6 +26,7 @@ export type Enemy = {
   health: number;
   hitFlash: number;
   deathAt: number;
+  attackCooldown: number;
 };
 
 export type GameState = {
@@ -32,7 +34,6 @@ export type GameState = {
   enemies: Enemy[];
   muzzleFlash: number;
   hurtFlash: number;
-  hurtCooldown: number;
   lastFireTime: number;
   status: 'playing' | 'won' | 'lost';
   startTime: number;

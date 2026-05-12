@@ -3,39 +3,45 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   DAMAGE_PER_SHOT,
+  ENEMY_AGGRO_RANGE,
   ENEMY_ATTACK_COOLDOWN,
   ENEMY_ATTACK_RANGE,
   ENEMY_DAMAGE,
   ENEMY_HEALTH,
+  ENEMY_INITIAL_COOLDOWN,
   ENEMY_SPAWNS,
   ENEMY_SPEED,
   FIRE_COOLDOWN_MS,
+  GAME_GRACE_MS,
   HEIGHT,
   MAP,
   MAX_AMMO,
   MAX_HEALTH,
   MOUSE_SENS,
   MOVE_SPEED,
+  PLAYER_HURT_IFRAMES,
+  PLAYER_SPAWN,
   ROT_SPEED,
   WIDTH,
   createImpSprite,
   createTextures,
 } from './assets';
 import { AudioEngine } from './audio';
-import { createEngineState, isBlocked, renderFrame } from './engine';
+import { createEngineState, hasLineOfSight, isBlocked, renderFrame } from './engine';
 import type { Enemy, GameState, Keys, Player } from './types';
 
 const initialPlayer = (): Player => ({
-  x: 2.5,
-  y: 2.5,
-  dirX: 1,
-  dirY: 0,
+  x: PLAYER_SPAWN.x,
+  y: PLAYER_SPAWN.y,
+  dirX: PLAYER_SPAWN.dirX,
+  dirY: PLAYER_SPAWN.dirY,
   planeX: 0,
   planeY: 0.66,
   health: MAX_HEALTH,
   ammo: MAX_AMMO,
   kills: 0,
   bobPhase: 0,
+  iframes: 0,
 });
 
 const initialEnemies = (): Enemy[] =>
@@ -47,6 +53,7 @@ const initialEnemies = (): Enemy[] =>
     health: ENEMY_HEALTH,
     hitFlash: 0,
     deathAt: 0,
+    attackCooldown: ENEMY_INITIAL_COOLDOWN,
   }));
 
 const initialState = (): GameState => ({
@@ -54,18 +61,27 @@ const initialState = (): GameState => ({
   enemies: initialEnemies(),
   muzzleFlash: 0,
   hurtFlash: 0,
-  hurtCooldown: 0,
   lastFireTime: 0,
   status: 'playing',
   startTime: performance.now(),
 });
 
-function tryMove(player: Player, nx: number, ny: number): void {
-  const pad = 0.2;
-  if (!isBlocked(nx + Math.sign(nx - player.x) * pad, player.y)) {
+/**
+ * Axis-separated collision with wall padding. Prevents getting stuck in corners
+ * and never moves the player into a solid cell.
+ */
+function tryMove(player: Player, mx: number, my: number): void {
+  const pad = 0.22;
+  // Try X axis
+  const nx = player.x + mx;
+  if (!isBlocked(nx + Math.sign(mx) * pad, player.y - pad) &&
+      !isBlocked(nx + Math.sign(mx) * pad, player.y + pad)) {
     player.x = nx;
   }
-  if (!isBlocked(player.x, ny + Math.sign(ny - player.y) * pad)) {
+  // Try Y axis
+  const ny = player.y + my;
+  if (!isBlocked(player.x - pad, ny + Math.sign(my) * pad) &&
+      !isBlocked(player.x + pad, ny + Math.sign(my) * pad)) {
     player.y = ny;
   }
 }
@@ -95,7 +111,6 @@ export function DoomGame(): JSX.Element {
   const keysRef = useRef<Keys>(new Set());
   const firingRef = useRef(false);
   const pointerLockedRef = useRef(false);
-  const enemyCooldownRef = useRef<Map<number, number>>(new Map());
   const audioRef = useRef<AudioEngine>(new AudioEngine());
 
   const [hud, setHud] = useState<HudSnapshot>({
@@ -109,7 +124,6 @@ export function DoomGame(): JSX.Element {
 
   const restart = useCallback((): void => {
     stateRef.current = initialState();
-    enemyCooldownRef.current.clear();
     setHud({
       health: MAX_HEALTH,
       ammo: MAX_AMMO,
@@ -135,10 +149,10 @@ export function DoomGame(): JSX.Element {
     s.muzzleFlash = 1;
     audio.gunshot();
 
-    // Hitscan: find the closest enemy within a tight cone in front
+    // Hitscan: find the closest enemy within a tight cone in front with LOS
     let best: Enemy | null = null;
     let bestDist = Infinity;
-    const cosMin = Math.cos(0.1);
+    const coneCos = Math.cos(0.12);
     for (const enemy of s.enemies) {
       if (!enemy.alive) continue;
       const dx = enemy.x - s.player.x;
@@ -146,34 +160,21 @@ export function DoomGame(): JSX.Element {
       const dist = Math.hypot(dx, dy);
       if (dist < 0.01) continue;
       const dot = (dx * s.player.dirX + dy * s.player.dirY) / dist;
-      if (dot < cosMin) continue;
-      if (dist < bestDist) {
-        best = enemy;
-        bestDist = dist;
-      }
+      if (dot < coneCos) continue;
+      if (dist >= bestDist) continue;
+      if (!hasLineOfSight(s.player.x, s.player.y, enemy.x, enemy.y)) continue;
+      best = enemy;
+      bestDist = dist;
     }
     if (best) {
-      // Wall check: is there a clear line of sight?
-      const steps = Math.ceil(bestDist * 8);
-      const sx = (best.x - s.player.x) / steps;
-      const sy = (best.y - s.player.y) / steps;
-      let blocked = false;
-      for (let i = 1; i < steps; i++) {
-        if (isBlocked(s.player.x + sx * i, s.player.y + sy * i)) {
-          blocked = true;
-          break;
-        }
-      }
-      if (!blocked) {
-        best.health -= DAMAGE_PER_SHOT;
-        best.hitFlash = 0.18;
-        audio.enemyHit();
-        if (best.health <= 0) {
-          best.alive = false;
-          best.deathAt = performance.now();
-          s.player.kills += 1;
-          audio.enemyDeath();
-        }
+      best.health -= DAMAGE_PER_SHOT;
+      best.hitFlash = 0.2;
+      audio.enemyHit();
+      if (best.health <= 0) {
+        best.alive = false;
+        best.deathAt = performance.now();
+        s.player.kills += 1;
+        audio.enemyDeath();
       }
     }
   }, []);
@@ -237,7 +238,7 @@ export function DoomGame(): JSX.Element {
         }
         e.preventDefault();
       }
-      if (k === 'r' && stateRef.current.status !== 'playing') restart();
+      if (k === 'r') restart();
     };
     const onUp = (e: KeyboardEvent): void => {
       keysRef.current.delete(e.key.toLowerCase());
@@ -275,73 +276,71 @@ export function DoomGame(): JSX.Element {
       const s = stateRef.current;
       const keys = keysRef.current;
       const audio = audioRef.current;
+      const elapsed = now - s.startTime;
+      const inGrace = elapsed < GAME_GRACE_MS;
 
       if (s.status === 'playing') {
-        let moveX = 0;
-        let moveY = 0;
-        if (keys.has('w') || keys.has('arrowup')) {
-          moveX += s.player.dirX;
-          moveY += s.player.dirY;
-        }
-        if (keys.has('s') || keys.has('arrowdown')) {
-          moveX -= s.player.dirX;
-          moveY -= s.player.dirY;
-        }
-        if (keys.has('a')) {
-          moveX += s.player.dirY;
-          moveY -= s.player.dirX;
-        }
-        if (keys.has('d')) {
-          moveX -= s.player.dirY;
-          moveY += s.player.dirX;
-        }
-        const mag = Math.hypot(moveX, moveY);
+        // Movement
+        let mvForward = 0;
+        let mvStrafe = 0;
+        if (keys.has('w') || keys.has('arrowup')) mvForward += 1;
+        if (keys.has('s') || keys.has('arrowdown')) mvForward -= 1;
+        if (keys.has('d')) mvStrafe += 1;
+        if (keys.has('a')) mvStrafe -= 1;
+
+        const mag = Math.hypot(mvForward, mvStrafe);
         if (mag > 0) {
           const speed = MOVE_SPEED * dt;
-          moveX = (moveX / mag) * speed;
-          moveY = (moveY / mag) * speed;
-          tryMove(s.player, s.player.x + moveX, s.player.y + moveY);
+          const nf = mvForward / mag;
+          const ns = mvStrafe / mag;
+          const mx = (s.player.dirX * nf - s.player.dirY * ns) * speed;
+          const my = (s.player.dirY * nf + s.player.dirX * ns) * speed;
+          tryMove(s.player, mx, my);
           s.player.bobPhase += dt * 9;
         } else {
-          s.player.bobPhase *= 0.92;
+          s.player.bobPhase *= 0.9;
         }
+
         if (keys.has('arrowleft')) rotate(s.player, ROT_SPEED * dt);
         if (keys.has('arrowright')) rotate(s.player, -ROT_SPEED * dt);
 
+        s.player.iframes = Math.max(0, s.player.iframes - dt);
+
         // Enemies
-        s.hurtCooldown = Math.max(0, s.hurtCooldown - dt);
         for (const enemy of s.enemies) {
           enemy.hitFlash = Math.max(0, enemy.hitFlash - dt);
+          enemy.attackCooldown = Math.max(0, enemy.attackCooldown - dt);
           if (!enemy.alive) continue;
+
           const dx = s.player.x - enemy.x;
           const dy = s.player.y - enemy.y;
           const dist = Math.hypot(dx, dy);
-          if (dist > 10 || dist < 0.001) continue;
+          if (dist < 0.001 || dist > ENEMY_AGGRO_RANGE) continue;
+
+          // Only act if enemy has LOS to player (prevents spawn-kills through walls)
+          const sees = hasLineOfSight(enemy.x, enemy.y, s.player.x, s.player.y);
+          if (!sees) continue;
 
           const nx = dx / dist;
           const ny = dy / dist;
 
           if (dist > ENEMY_ATTACK_RANGE) {
+            // Chase — axis-separated move to avoid wall snags
             const step = ENEMY_SPEED * dt;
             const tx = enemy.x + nx * step;
             const ty = enemy.y + ny * step;
             if (!isBlocked(tx, enemy.y)) enemy.x = tx;
             if (!isBlocked(enemy.x, ty)) enemy.y = ty;
-          } else {
+          } else if (!inGrace && enemy.attackCooldown === 0 && s.player.iframes === 0) {
             // Attack
-            const cd = enemyCooldownRef.current.get(enemy.id) ?? 0;
-            const next = cd - dt;
-            if (next <= 0) {
-              s.player.health -= ENEMY_DAMAGE;
-              s.hurtFlash = 1;
-              audio.hurt();
-              enemyCooldownRef.current.set(enemy.id, ENEMY_ATTACK_COOLDOWN);
-              if (s.player.health <= 0) {
-                s.player.health = 0;
-                s.status = 'lost';
-              }
-            } else {
-              enemyCooldownRef.current.set(enemy.id, next);
+            s.player.health -= ENEMY_DAMAGE;
+            s.player.iframes = PLAYER_HURT_IFRAMES;
+            s.hurtFlash = 1;
+            audio.hurt();
+            enemy.attackCooldown = ENEMY_ATTACK_COOLDOWN;
+            if (s.player.health <= 0) {
+              s.player.health = 0;
+              s.status = 'lost';
             }
           }
         }
@@ -358,12 +357,12 @@ export function DoomGame(): JSX.Element {
 
       // Render
       renderFrame(ctx, engineState, s.player, s.enemies, textures, alive, dead);
-      drawOverlay(octx, s);
+      drawOverlay(octx, s, inGrace ? Math.max(0, GAME_GRACE_MS - elapsed) : 0);
 
       // Sync HUD (throttle via react state)
       setHud((prev) => {
         const next: HudSnapshot = {
-          health: Math.round(s.player.health),
+          health: Math.max(0, Math.round(s.player.health)),
           ammo: s.player.ammo,
           kills: s.player.kills,
           totalEnemies: s.enemies.length,
@@ -443,7 +442,11 @@ export function DoomGame(): JSX.Element {
   );
 }
 
-function drawOverlay(ctx: CanvasRenderingContext2D, s: GameState): void {
+function drawOverlay(
+  ctx: CanvasRenderingContext2D,
+  s: GameState,
+  graceMs: number
+): void {
   ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
   // Damage flash
@@ -452,7 +455,7 @@ function drawOverlay(ctx: CanvasRenderingContext2D, s: GameState): void {
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
   }
 
-  // Vignette-ish darken at edges
+  // Vignette
   const gradient = ctx.createRadialGradient(
     WIDTH / 2,
     HEIGHT / 2,
@@ -466,10 +469,22 @@ function drawOverlay(ctx: CanvasRenderingContext2D, s: GameState): void {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-  // Weapon
   drawWeapon(ctx, s);
   drawCrosshair(ctx);
   drawMinimap(ctx, s);
+
+  if (graceMs > 0) {
+    const secs = Math.ceil(graceMs / 1000);
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillRect(WIDTH / 2 - 80, 16, 160, 28);
+    ctx.fillStyle = '#ffee40';
+    ctx.font = 'bold 14px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(`GET READY — ${secs}`, WIDTH / 2, 30);
+    ctx.textAlign = 'start';
+    ctx.textBaseline = 'alphabetic';
+  }
 }
 
 function drawWeapon(ctx: CanvasRenderingContext2D, s: GameState): void {
@@ -479,23 +494,19 @@ function drawWeapon(ctx: CanvasRenderingContext2D, s: GameState): void {
   const baseX = WIDTH / 2 - 48;
   const baseY = HEIGHT - 90 + bobV + kick;
 
-  // Shadow
   ctx.fillStyle = 'rgba(0,0,0,0.4)';
   ctx.fillRect(baseX + 4 + bob, baseY + 4, 96, 80);
 
-  // Barrel
   ctx.fillStyle = '#2a2a2a';
   ctx.fillRect(baseX + 30 + bob, baseY - 10, 36, 20);
   ctx.fillStyle = '#404040';
   ctx.fillRect(baseX + 34 + bob, baseY - 8, 28, 4);
 
-  // Body
   ctx.fillStyle = '#5a3a20';
   ctx.fillRect(baseX + 10 + bob, baseY + 10, 76, 36);
   ctx.fillStyle = '#7a5030';
   ctx.fillRect(baseX + 14 + bob, baseY + 14, 68, 8);
 
-  // Pump
   ctx.fillStyle = '#303030';
   ctx.fillRect(baseX + 20 + bob, baseY + 28, 52, 12);
   ctx.fillStyle = '#1a1a1a';
@@ -503,11 +514,9 @@ function drawWeapon(ctx: CanvasRenderingContext2D, s: GameState): void {
     ctx.fillRect(baseX + 24 + i * 10 + bob, baseY + 30, 6, 8);
   }
 
-  // Stock
   ctx.fillStyle = '#3a2818';
   ctx.fillRect(baseX + 70 + bob, baseY + 40, 26, 24);
 
-  // Muzzle flash
   if (s.muzzleFlash > 0) {
     const f = s.muzzleFlash;
     ctx.fillStyle = `rgba(255,220,80,${f})`;
@@ -563,13 +572,11 @@ function drawMinimap(ctx: CanvasRenderingContext2D, s: GameState): void {
     }
   }
 
-  // Enemies
   for (const e of s.enemies) {
     ctx.fillStyle = e.alive ? '#ff3020' : '#602010';
     ctx.fillRect(x0 + e.x * cell - 1, y0 + e.y * cell - 1, 2, 2);
   }
 
-  // Player
   ctx.fillStyle = '#30ff40';
   ctx.fillRect(x0 + s.player.x * cell - 1, y0 + s.player.y * cell - 1, 2, 2);
   ctx.strokeStyle = '#30ff40';
@@ -606,7 +613,7 @@ function Hud({
         onClick={onRestart}
         className="rounded-lg border border-white/15 bg-white/5 px-4 py-2 text-xs uppercase tracking-widest text-white/80 transition hover:bg-white/10"
       >
-        Restart
+        Restart [R]
       </button>
     </div>
   );

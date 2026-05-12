@@ -25,6 +25,29 @@ export function isBlocked(x: number, y: number): boolean {
   return (row[ix] ?? 1) !== 0;
 }
 
+/**
+ * Ray-marched line of sight between two world points.
+ * Returns true when no wall intersects the segment.
+ */
+export function hasLineOfSight(
+  fromX: number,
+  fromY: number,
+  toX: number,
+  toY: number
+): boolean {
+  const dx = toX - fromX;
+  const dy = toY - fromY;
+  const dist = Math.hypot(dx, dy);
+  if (dist < 0.001) return true;
+  const steps = Math.ceil(dist * 16);
+  const sx = dx / steps;
+  const sy = dy / steps;
+  for (let i = 1; i < steps; i++) {
+    if (isBlocked(fromX + sx * i, fromY + sy * i)) return false;
+  }
+  return true;
+}
+
 function sampleTex(tex: Texture, tx: number, ty: number): number {
   const x = ((tx % tex.width) + tex.width) % tex.width;
   const y = ((ty % tex.height) + tex.height) % tex.height;
