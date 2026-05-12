@@ -91,6 +91,14 @@ export function Hero(): JSX.Element {
           <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
             No credit card · 14-day trial · Cancel anytime
           </p>
+
+          <Link
+            href="/doom"
+            className="group/doom inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/5 px-4 py-1.5 text-xs font-mono uppercase tracking-[0.2em] text-red-300 transition-all hover:border-red-500/60 hover:bg-red-500/10 hover:text-red-200"
+          >
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400" />
+            Play DOOM in your browser →
+          </Link>
         </motion.div>
 
         <HeroDashboardPreview />
