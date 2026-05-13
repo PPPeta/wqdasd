@@ -338,7 +338,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .strength-bar::after {
   content: '';
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
   width: var(--strength, 0%);
   background: linear-gradient(to right, var(--auth-error), var(--auth-warning), var(--auth-success));
   border-radius: 999px;

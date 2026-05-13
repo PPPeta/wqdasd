@@ -19,28 +19,28 @@
         <div class="sidebar-logo-icon">IP</div>
         <span>InsurePro</span>
       </div>
-      <nav class="sidebar-nav">
-        <a href="dashboard.html" class="active">
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <a href="dashboard.html" class="active" data-roles="admin,company_manager,employee">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1V10"/></svg>
           Дашборд
         </a>
-        <a href="employees.html">
+        <a href="employees.html" data-roles="admin,company_manager">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           Сотрудники
         </a>
-        <a href="policies.html">
+        <a href="policies.html" data-roles="admin,company_manager,employee">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>
           Полисы
         </a>
-        <a href="claims.html">
+        <a href="claims.html" data-roles="admin,company_manager,employee">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
           Обращения
         </a>
-        <a href="plans.html">
+        <a href="plans.html" data-roles="admin,company_manager">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
           Планы
         </a>
-        <a href="reports.html">
+        <a href="reports.html" data-roles="admin,company_manager">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V8"/><path d="M12 16V6"/><path d="M17 16v-4"/></svg>
           Отчёты
         </a>
@@ -70,27 +70,254 @@
       </header>
 
       <div class="app-content">
-        <!-- ============== DASHBOARD CONTENT ============== -->
+        <!-- Section header -->
         <div class="section-header">
           <div class="section-header-left">
-            <h1>Дашборд</h1>
+            <h1 id="dash-title">Дашборд</h1>
             <p class="subtitle" id="greeting">Добрый день!</p>
           </div>
-          <div class="section-header-actions">
-            <button class="btn secondary" onclick="location.href='reports.html'">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-              Экспорт
-            </button>
-            <button class="btn primary" onclick="location.href='policies.html'">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-              Новый полис
-            </button>
+          <div class="section-header-actions" id="dash-actions"></div>
+        </div>
+
+        <!-- Widgets -->
+        <div class="grid-4" id="widgets"></div>
+
+        <!-- Secondary area (role-specific) -->
+        <div id="dash-body" class="mt-6"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/mock.js"></script>
+  <script src="../scripts/app.js"></script>
+  <script>
+    /* ============================================================
+       Приветствие
+       ============================================================ */
+    (function () {
+      const h = new Date().getHours();
+      const greet = h < 6 ? 'Доброй ночи' : h < 12 ? 'Доброе утро' : h < 18 ? 'Добрый день' : 'Добрый вечер';
+      document.getElementById('greeting').textContent = `${greet}, ${MOCK_USER.first_name}!`;
+    })();
+
+    /* ============================================================
+       Прячем пункты меню, недоступные текущей роли
+       ============================================================ */
+    (function hideNavByRole() {
+      const role = MOCK_USER.role;
+      document.querySelectorAll('#sidebar-nav a[data-roles]').forEach((a) => {
+        const allowed = a.dataset.roles.split(',').map(s => s.trim());
+        if (!allowed.includes(role)) a.style.display = 'none';
+      });
+    })();
+
+    /* ============================================================
+       SVG-иконки для виджетов
+       ============================================================ */
+    const ICONS = {
+      users: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>',
+      file: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+      clock: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      alert: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>',
+      building: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/><path d="M12 14h.01"/></svg>',
+      wallet: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>',
+      shield: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>',
+      plus: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>',
+      download: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>',
+      arrow: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+    };
+
+    /* ============================================================
+       Шаблон виджета
+       ============================================================ */
+    function widgetCard(w) {
+      const trend = w.trend ? `<div class="widget-trend ${w.trendType || ''}">${w.trend}</div>` : '';
+      return `
+        <div class="widget">
+          <div class="widget-icon ${w.color}">${ICONS[w.icon] || ''}</div>
+          <div class="widget-body">
+            <div class="widget-label">${w.label}</div>
+            <div class="widget-value">${w.value}</div>
+            <div class="widget-hint">${w.hint || ''}</div>
+            ${trend}
+          </div>
+        </div>
+      `;
+    }
+
+    /* ============================================================
+       ДАШБОРД ДЛЯ АДМИНИСТРАТОРА
+       ============================================================ */
+    function renderAdminDashboard() {
+      document.getElementById('dash-title').textContent = 'Панель администратора';
+
+      // Actions
+      document.getElementById('dash-actions').innerHTML = `
+        <button class="btn secondary" onclick="location.href='reports.html'">${ICONS.download} Отчёт</button>
+        <button class="btn primary" onclick="location.href='plans.html'">${ICONS.plus} Новый тариф</button>
+      `;
+
+      const d = MOCK.dashboard.admin;
+
+      // Widgets
+      document.getElementById('widgets').innerHTML = [
+        { label: 'Компаний в системе', value: d.companies, icon: 'building', color: 'blue', hint: 'всего зарегистрировано', trend: '+3 за месяц', trendType: 'up' },
+        { label: 'Активных полисов', value: d.policies, icon: 'file', color: 'green', hint: 'по всей системе', trend: '+12 за месяц', trendType: 'up' },
+        { label: 'Обращений', value: d.claims, icon: 'shield', color: 'amber', hint: 'всего обработано' },
+        { label: 'Выручка', value: formatRub(d.revenue), icon: 'wallet', color: 'purple', hint: 'за текущий год', trend: '+18.4%', trendType: 'up' },
+      ].map(widgetCard).join('');
+
+      // Нижняя часть: компании + график активности
+      const topCompanies = [
+        { name: 'ООО «Прогресс»', policies: 3, employees: 45, revenue: 156800 },
+        { name: 'АО «Меркурий»', policies: 5, employees: 78, revenue: 248400 },
+        { name: 'ООО «Старт»', policies: 2, employees: 22, revenue: 70400 },
+        { name: 'ПАО «Вектор»', policies: 4, employees: 110, revenue: 352000 },
+        { name: 'ООО «Интеграл»', policies: 3, employees: 67, revenue: 214400 },
+      ];
+
+      const audit = [
+        { time: '14:32', user: 'Иван Петров', action: 'Одобрил обращение CLM-2025-015' },
+        { time: '13:18', user: 'Мария Попова', action: 'Подала обращение на медуслуги' },
+        { time: '12:05', user: 'Администратор', action: 'Создал тариф «Премиум+»' },
+        { time: '11:44', user: 'АО «Меркурий»', action: 'Оформил полис POL-2025-088' },
+        { time: '10:12', user: 'Дмитрий Иванов', action: 'Обновил профиль' },
+      ];
+
+      document.getElementById('dash-body').innerHTML = `
+        <div class="grid-2-3">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Топ компаний</div>
+                <div class="card-subtitle">По выручке за месяц</div>
+              </div>
+              <button class="btn ghost btn-sm">Все</button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr><th>Компания</th><th>Полисы</th><th>Сотрудники</th><th class="text-right">Выручка</th></tr>
+              </thead>
+              <tbody>
+                ${topCompanies.map(c => `
+                  <tr>
+                    <td><strong>${esc(c.name)}</strong></td>
+                    <td>${c.policies}</td>
+                    <td>${c.employees}</td>
+                    <td class="text-right"><strong>${formatRub(c.revenue)}</strong></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Журнал действий</div>
+                <div class="card-subtitle">Последние события</div>
+              </div>
+            </div>
+            <div>
+              ${audit.map(a => `
+                <div class="list-item">
+                  <div class="avatar-sm" style="background:linear-gradient(135deg,#94a3b8,#64748b)">${a.time.slice(0, 2)}</div>
+                  <div class="list-item-body">
+                    <div class="list-item-title">${esc(a.action)}</div>
+                    <div class="list-item-meta">${esc(a.user)} · ${esc(a.time)}</div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
           </div>
         </div>
 
-        <div class="grid-4" id="widgets"></div>
+        <div class="grid-3 mt-6">
+          <div class="widget widget-stat">
+            <div class="widget-icon blue">${ICONS.users}</div>
+            <div class="widget-body">
+              <div class="widget-label">Пользователей</div>
+              <div class="widget-value">1 247</div>
+              <div class="widget-hint">активных за 30 дней</div>
+            </div>
+          </div>
+          <div class="widget widget-stat">
+            <div class="widget-icon green">${ICONS.shield}</div>
+            <div class="widget-body">
+              <div class="widget-label">Одобрено обращений</div>
+              <div class="widget-value">94%</div>
+              <div class="widget-hint">среднее по системе</div>
+            </div>
+          </div>
+          <div class="widget widget-stat">
+            <div class="widget-icon amber">${ICONS.clock}</div>
+            <div class="widget-body">
+              <div class="widget-label">Среднее время решения</div>
+              <div class="widget-value">1.4 дн</div>
+              <div class="widget-hint">по обращениям</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
-        <div class="grid-2 mt-6">
+    /* ============================================================
+       ДАШБОРД ДЛЯ РУКОВОДИТЕЛЯ КОМПАНИИ
+       ============================================================ */
+    function renderManagerDashboard() {
+      document.getElementById('dash-title').textContent = 'Дашборд';
+
+      document.getElementById('dash-actions').innerHTML = `
+        <button class="btn secondary" onclick="location.href='reports.html'">${ICONS.download} Экспорт</button>
+        <button class="btn primary" onclick="location.href='policies.html'">${ICONS.plus} Новый полис</button>
+      `;
+
+      const d = MOCK.dashboard.company_manager;
+
+      document.getElementById('widgets').innerHTML = [
+        { label: 'Сотрудников', value: d.employees, icon: 'users', color: 'blue', hint: 'всего в компании' },
+        { label: 'Активных полисов', value: d.active_policies, icon: 'file', color: 'green', hint: 'действующих' },
+        { label: 'Обращений в ожидании', value: d.pending_claims, icon: 'clock', color: 'amber', hint: 'требуют решения' },
+        { label: 'Истекают в 30 дней', value: d.expiring, icon: 'alert', color: 'red', hint: 'нужна пролонгация' },
+      ].map(widgetCard).join('');
+
+      // Последние обращения
+      const claimsHtml = MOCK.claims.slice(0, 4).map((c) => `
+        <a href="claim-detail.html?id=${c.id}" class="list-item" style="text-decoration:none;color:inherit;">
+          <div class="avatar-sm">${c.employee.split(' ').map((s) => s[0]).slice(0, 2).join('')}</div>
+          <div class="list-item-body">
+            <div class="list-item-title">${esc(c.employee)} · ${TYPE_LABELS[c.type]}</div>
+            <div class="list-item-meta">${esc(c.number)} · ${formatDate(c.date)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem;">
+            <span class="badge badge-${c.status}">${STATUS_LABELS[c.status]}</span>
+            <span class="list-item-amount">${formatRub(c.amount)}</span>
+          </div>
+        </a>
+      `).join('') || '<div class="empty-state"><h3>Нет обращений</h3><p>Пока ничего не поступало</p></div>';
+
+      // Истекающие полисы
+      const active = MOCK.policies
+        .filter((p) => p.status === 'active')
+        .sort((a, b) => new Date(a.end) - new Date(b.end))
+        .slice(0, 3);
+
+      const polHtml = active.map((p) => {
+        const days = daysUntil(p.end);
+        return `
+          <a href="policy-detail.html?id=${p.id}" class="list-item" style="text-decoration:none;color:inherit;">
+            <div class="avatar-sm" style="background:linear-gradient(135deg,#22c55e,#16a34a)">${p.plan[0]}</div>
+            <div class="list-item-body">
+              <div class="list-item-title">${esc(p.number)} · ${esc(p.plan)}</div>
+              <div class="list-item-meta">До ${formatDate(p.end)} · ${days != null ? days + ' дн.' : '—'}</div>
+            </div>
+            <div class="list-item-amount">${formatRub(p.monthly)}/мес</div>
+          </a>
+        `;
+      }).join('') || '<div class="empty-state"><h3>Нет активных полисов</h3><p>Оформите первый полис</p></div>';
+
+      document.getElementById('dash-body').innerHTML = `
+        <div class="grid-2">
           <div class="card">
             <div class="card-header">
               <div>
@@ -99,7 +326,7 @@
               </div>
               <a href="claims.html" class="btn ghost btn-sm">Все</a>
             </div>
-            <div id="recent-claims"></div>
+            <div>${claimsHtml}</div>
           </div>
 
           <div class="card">
@@ -110,91 +337,134 @@
               </div>
               <a href="policies.html" class="btn ghost btn-sm">Все</a>
             </div>
-            <div id="expiring-policies"></div>
+            <div>${polHtml}</div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+      `;
+    }
 
-  <script src="../scripts/mock.js"></script>
-  <script src="../scripts/app.js"></script>
-  <script>
-    // Greeting by time of day
-    (function () {
-      const h = new Date().getHours();
-      const greet = h < 6 ? 'Доброй ночи' : h < 12 ? 'Доброе утро' : h < 18 ? 'Добрый день' : 'Добрый вечер';
-      document.getElementById('greeting').textContent = `${greet}, ${MOCK_USER.first_name}!`;
-    })();
+    /* ============================================================
+       ДАШБОРД ДЛЯ СОТРУДНИКА
+       ============================================================ */
+    function renderEmployeeDashboard() {
+      document.getElementById('dash-title').textContent = 'Мой полис';
 
-    // Widgets
-    const d = MOCK.dashboard.company_manager;
-    const widgets = [
-      { label: 'Сотрудников', value: d.employees, icon: 'users', color: 'blue', hint: 'всего в компании' },
-      { label: 'Активных полисов', value: d.active_policies, icon: 'file', color: 'green', hint: 'действующих' },
-      { label: 'Обращений в ожидании', value: d.pending_claims, icon: 'clock', color: 'amber', hint: 'требуют решения' },
-      { label: 'Истекают в 30 дней', value: d.expiring, icon: 'alert', color: 'red', hint: 'нужна пролонгация' },
-    ];
+      document.getElementById('dash-actions').innerHTML = `
+        <button class="btn primary" onclick="location.href='claims.html'">${ICONS.plus} Подать обращение</button>
+      `;
 
-    const icons = {
-      users: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
-      file: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
-      clock: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-      alert: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>',
-    };
+      const d = MOCK.dashboard.employee;
 
-    document.getElementById('widgets').innerHTML = widgets.map((w) => `
-      <div class="widget">
-        <div class="widget-icon ${w.color}">${icons[w.icon]}</div>
-        <div class="widget-body">
-          <div class="widget-label">${w.label}</div>
-          <div class="widget-value">${w.value}</div>
-          <div class="widget-hint">${w.hint}</div>
+      document.getElementById('widgets').innerHTML = [
+        { label: 'Мои полисы', value: d.my_policies, icon: 'file', color: 'blue', hint: 'активных' },
+        { label: 'Мои обращения', value: d.my_claims, icon: 'shield', color: 'green', hint: 'всего подано' },
+      ].map(widgetCard).join('');
+
+      // Моя карточка полиса + история обращений
+      const pol = MOCK.policies.find(p => p.status === 'active') || MOCK.policies[0];
+      const myClaims = MOCK.claims.slice(0, 3);
+
+      document.getElementById('dash-body').innerHTML = `
+        <div class="grid-2-3">
+          <div class="card policy-hero">
+            <div class="policy-hero-head">
+              <div>
+                <div class="policy-hero-lbl">Мой полис</div>
+                <div class="policy-hero-num">${esc(pol.number)}</div>
+              </div>
+              <span class="badge badge-${pol.status}">${STATUS_LABELS[pol.status]}</span>
+            </div>
+
+            <div class="policy-hero-plan">
+              <div class="policy-hero-plan-name">${esc(pol.plan)}</div>
+              <div class="policy-hero-plan-sub">Действует до ${formatDate(pol.end)} · осталось ${daysUntil(pol.end)} дн.</div>
+            </div>
+
+            <div class="policy-hero-coverages">
+              <div class="policy-hero-cov-title">Что входит в мой полис:</div>
+              <ul>
+                <li>✓ Амбулаторная помощь</li>
+                <li>✓ Экстренная стоматология</li>
+                <li>✓ Госпитализация (эконом-палата)</li>
+                <li>✓ Приём узких специалистов</li>
+                <li>✓ МРТ, КТ по показаниям</li>
+                <li>✓ Вызов врача на дом</li>
+              </ul>
+            </div>
+
+            <div class="policy-hero-actions">
+              <button class="btn primary" onclick="location.href='claims.html'">${ICONS.plus} Подать обращение</button>
+              <button class="btn secondary" onclick="location.href='policy-detail.html?id=${pol.id}'">Подробнее</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Мои обращения</div>
+                <div class="card-subtitle">История и статус</div>
+              </div>
+              <a href="claims.html" class="btn ghost btn-sm">Все</a>
+            </div>
+            <div>
+              ${myClaims.map(c => `
+                <a href="claim-detail.html?id=${c.id}" class="list-item" style="text-decoration:none;color:inherit;">
+                  <div class="avatar-sm" style="background:linear-gradient(135deg,#60a5fa,#2563eb)">${TYPE_LABELS[c.type][0]}</div>
+                  <div class="list-item-body">
+                    <div class="list-item-title">${TYPE_LABELS[c.type]}</div>
+                    <div class="list-item-meta">${esc(c.number)} · ${formatDate(c.date)}</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem;">
+                    <span class="badge badge-${c.status}">${STATUS_LABELS[c.status]}</span>
+                    <span class="list-item-amount">${formatRub(c.amount)}</span>
+                  </div>
+                </a>
+              `).join('')}
+            </div>
+          </div>
         </div>
-      </div>
-    `).join('');
 
-    // Recent claims
-    const claimsHtml = MOCK.claims.slice(0, 4).map((c) => {
-      const statusClass = `badge-${c.status}`;
-      return `
-        <a href="claim-detail.html?id=${c.id}" class="list-item" style="text-decoration:none;color:inherit;">
-          <div class="avatar-sm">${c.employee.split(' ').map((s) => s[0]).slice(0, 2).join('')}</div>
-          <div class="list-item-body">
-            <div class="list-item-title">${esc(c.employee)} · ${TYPE_LABELS[c.type]}</div>
-            <div class="list-item-meta">${esc(c.number)} · ${formatDate(c.date)}</div>
+        <div class="card mt-6">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Полезные контакты</div>
+              <div class="card-subtitle">На случай страхового события</div>
+            </div>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem;">
-            <span class="badge ${statusClass}">${STATUS_LABELS[c.status]}</span>
-            <span class="list-item-amount">${formatRub(c.amount)}</span>
+          <div class="contacts-grid">
+            <div class="contact-row">
+              <span class="contact-icon">🚑</span>
+              <div>
+                <div class="contact-label">Скорая медицинская помощь</div>
+                <div class="contact-value">112 · бесплатно</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <span class="contact-icon">📞</span>
+              <div>
+                <div class="contact-label">Координатор InsurePro</div>
+                <div class="contact-value">+7 800 555-00-99 · 24/7</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <span class="contact-icon">✉️</span>
+              <div>
+                <div class="contact-label">Поддержка</div>
+                <div class="contact-value">help@insurepro.ru</div>
+              </div>
+            </div>
           </div>
-        </a>
+        </div>
       `;
-    }).join('') || '<div class="empty-state"><h3>Нет обращений</h3><p>Пока ничего не поступало</p></div>';
+    }
 
-    document.getElementById('recent-claims').innerHTML = claimsHtml;
-
-    // Expiring policies (active, sorted by end date)
-    const active = MOCK.policies
-      .filter((p) => p.status === 'active')
-      .sort((a, b) => new Date(a.end) - new Date(b.end))
-      .slice(0, 3);
-
-    const polHtml = active.map((p) => {
-      const days = daysUntil(p.end);
-      return `
-        <a href="policy-detail.html?id=${p.id}" class="list-item" style="text-decoration:none;color:inherit;">
-          <div class="avatar-sm" style="background:linear-gradient(135deg,#22c55e,#16a34a)">${p.plan[0]}</div>
-          <div class="list-item-body">
-            <div class="list-item-title">${esc(p.number)} · ${esc(p.plan)}</div>
-            <div class="list-item-meta">До ${formatDate(p.end)} · ${days != null ? days + ' дн.' : '—'}</div>
-          </div>
-          <div class="list-item-amount">${formatRub(p.monthly)}/мес</div>
-        </a>
-      `;
-    }).join('') || '<div class="empty-state"><h3>Нет активных полисов</h3><p>Оформите первый полис</p></div>';
-
-    document.getElementById('expiring-policies').innerHTML = polHtml;
+    /* ============================================================
+       Роутинг по роли
+       ============================================================ */
+    const role = MOCK_USER.role;
+    if (role === 'admin') renderAdminDashboard();
+    else if (role === 'employee') renderEmployeeDashboard();
+    else renderManagerDashboard();
   </script>
 </body>
 

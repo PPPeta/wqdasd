@@ -4,11 +4,60 @@
    ========================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+  loadRoleFromStorage();
   initSidebar();
   injectUser();
   wireLogout();
   wireModals();
+  mountRoleSwitcher();
 });
+
+/* ------------------ Role switcher (dev-режим) ------------------ */
+// Читаем сохранённую роль из localStorage (если была выбрана) — ДО injectUser()
+function loadRoleFromStorage() {
+  try {
+    const saved = localStorage.getItem('ip_demo_role');
+    if (saved && window.MOCK_USER && window.MOCK_USER.role !== saved) {
+      // Подменяем роль + ФИО+компанию для наглядности
+      const presets = {
+        admin: { first_name: 'Алексей', last_name: 'Администратор', email: 'admin@insurepro.ru', company: 'InsurePro' },
+        company_manager: { first_name: 'Иван', last_name: 'Петров', email: 'ivan@company.ru', company: 'ООО «Прогресс»' },
+        employee: { first_name: 'Анна', last_name: 'Смирнова', email: 'anna.smirnova@company.ru', company: 'ООО «Прогресс»' },
+      };
+      Object.assign(window.MOCK_USER, presets[saved] || {}, { role: saved });
+    }
+  } catch (e) { /* ignore */ }
+}
+
+function mountRoleSwitcher() {
+  // Только на app-страницах (где есть .app-layout)
+  if (!document.querySelector('.app-layout')) return;
+  if (document.querySelector('.role-switcher')) return;
+
+  const roles = [
+    { key: 'admin', label: 'Админ' },
+    { key: 'company_manager', label: 'Руководитель' },
+    { key: 'employee', label: 'Сотрудник' },
+  ];
+
+  const el = document.createElement('div');
+  el.className = 'role-switcher';
+  el.setAttribute('aria-label', 'Переключатель ролей (демо)');
+  el.innerHTML = `
+    <span class="role-switcher-label">Роль</span>
+    ${roles.map(r => `<button type="button" data-role="${r.key}" class="${(window.MOCK_USER?.role === r.key) ? 'active' : ''}">${r.label}</button>`).join('')}
+  `;
+  document.body.appendChild(el);
+
+  el.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const role = btn.dataset.role;
+      try { localStorage.setItem('ip_demo_role', role); } catch (e) {}
+      location.reload();
+    });
+  });
+}
+
 
 /* ------------------ Sidebar ------------------ */
 function initSidebar() {
@@ -17,6 +66,15 @@ function initSidebar() {
   const backdrop = document.querySelector('.sidebar-backdrop');
 
   if (!sidebar) return;
+
+  // Прячем пункты, недоступные текущей роли (если у ссылок есть data-roles)
+  const role = window.MOCK_USER?.role;
+  if (role) {
+    sidebar.querySelectorAll('a[data-roles]').forEach((a) => {
+      const allowed = a.dataset.roles.split(',').map((s) => s.trim());
+      if (!allowed.includes(role)) a.style.display = 'none';
+    });
+  }
 
   if (toggle) {
     toggle.addEventListener('click', (e) => {
