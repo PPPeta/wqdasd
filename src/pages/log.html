@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsurePro — Вход / Регистрация</title>
+  <link rel="stylesheet" href="../styles/auth/main.css">
+</head>
+
+<body>
+  <div class="animated-bg">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+  </div>
+
+  <div class="reg-auth-divs">
+    <div class="auth-container">
+      <div class="form-toggle">
+        <button class="toggle-btn active" data-form="login">Вход</button>
+        <button class="toggle-btn" data-form="register">Регистрация</button>
+        <div class="toggle-slider"></div>
+      </div>
+
+      <!-- ============== LOGIN ============== -->
+      <div class="form-wrapper active" id="login-form">
+        <div class="logo-container">
+          <div class="logo">
+            <div class="logo-icon">IP</div>
+            <span>InsurePro</span>
+          </div>
+        </div>
+
+        <h2 class="form-title">Добро пожаловать!</h2>
+        <p class="form-subtitle">Войдите в свой аккаунт</p>
+
+        <form id="login-form-el" novalidate>
+          <div class="input-group">
+            <input type="email" id="login-email" placeholder=" " required>
+            <label for="login-email">Email</label>
+            <span class="input-icon">📧</span>
+          </div>
+
+          <div class="input-group">
+            <input type="password" id="login-password" placeholder=" " required minlength="10">
+            <label for="login-password">Пароль</label>
+            <button type="button" class="show-password" data-target="login-password">👁</button>
+          </div>
+
+          <div class="form-options">
+            <label class="checkbox-container">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+              Запомнить меня
+            </label>
+            <a href="#" class="forgot-link">Забыли пароль?</a>
+          </div>
+
+          <button type="submit" class="submit-btn"><span>Войти</span></button>
+        </form>
+
+        <div class="social-login">
+          <div class="divider">или</div>
+          <button class="social-btn" type="button">
+            <svg width="20" height="20" viewBox="0 0 20 20">
+              <path fill="#4285F4"
+                d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z" />
+              <path fill="#34A853"
+                d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z" />
+              <path fill="#FBBC05"
+                d="M3.99 10c0-.69.12-1.35.32-1.97V5.51H1.07A9.973 9.973 0 000 10c0 1.61.39 3.14 1.07 4.49l3.24-2.52c-.2-.62-.32-1.28-.32-1.97z" />
+              <path fill="#EA4335"
+                d="M10 3.88c1.88 0 3.13.81 3.85 1.48l2.84-2.76C14.96.99 12.7 0 10 0 6.09 0 2.72 2.25 1.07 5.51l3.24 2.52C5.12 5.62 7.36 3.88 10 3.88z" />
+            </svg>
+            Войти через Google
+          </button>
+        </div>
+      </div>
+
+      <!-- ============== REGISTER ============== -->
+      <div class="form-wrapper" id="register-form">
+        <div class="logo-container">
+          <div class="logo">
+            <div class="logo-icon">IP</div>
+            <span>InsurePro</span>
+          </div>
+        </div>
+
+        <h2 class="form-title">Создайте аккаунт</h2>
+        <p class="form-subtitle">Начните работу за 2 минуты</p>
+
+        <form id="register-form-el" novalidate>
+          <div class="input-group">
+            <input type="email" id="reg-email" placeholder=" " required>
+            <label for="reg-email">Рабочий Email</label>
+            <span class="input-icon">📧</span>
+          </div>
+
+          <div class="input-group">
+            <input type="text" id="reg-company" placeholder=" " required>
+            <label for="reg-company">Название компании</label>
+            <span class="input-icon">🏢</span>
+          </div>
+
+          <div class="input-group">
+            <input type="text" id="reg-inn" placeholder=" " pattern="[0-9]{10,12}" required>
+            <label for="reg-inn">ИНН организации (10–12 цифр)</label>
+            <span class="input-icon">📋</span>
+          </div>
+
+          <div class="input-group">
+            <input type="tel" id="reg-phone" placeholder=" " pattern="\+7\d{10}" required>
+            <label for="reg-phone">Телефон (+7XXXXXXXXXX)</label>
+            <span class="input-icon">📱</span>
+          </div>
+
+          <div class="input-group">
+            <select id="reg-size" required>
+              <option value="" disabled selected></option>
+              <option value="1-50">До 50 (Стартап)</option>
+              <option value="51-250">51–250 (Бизнес)</option>
+              <option value="251+">Более 250 (Корпоративный)</option>
+            </select>
+            <label for="reg-size">Количество сотрудников</label>
+            <span class="input-icon">👥</span>
+          </div>
+
+          <div class="input-group">
+            <input type="password" id="reg-password" placeholder=" " required minlength="10">
+            <label for="reg-password">Пароль (минимум 10 символов)</label>
+            <button type="button" class="show-password" data-target="reg-password">👁</button>
+          </div>
+
+          <div class="password-strength">
+            <div class="strength-bar" id="strength-bar" style="--strength: 0%"></div>
+            <span class="strength-text" id="strength-text">Введите пароль</span>
+          </div>
+
+          <div class="input-group">
+            <input type="password" id="reg-password-confirm" placeholder=" " required minlength="10">
+            <label for="reg-password-confirm">Повторите пароль</label>
+            <button type="button" class="show-password" data-target="reg-password-confirm">👁</button>
+          </div>
+
+          <label class="checkbox-container">
+            <input type="checkbox" id="reg-agree" required>
+            <span class="checkmark"></span>
+            Согласен с <a href="#">условиями</a> и <a href="#">политикой конфиденциальности</a>
+          </label>
+
+          <button type="submit" class="submit-btn"><span>Создать аккаунт</span></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==================== AUTH SCRIPT (inline) ==================== */
+    // Переключение форм
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+    const slider = document.querySelector('.toggle-slider');
+    const loginFormWrap = document.getElementById('login-form');
+    const regFormWrap = document.getElementById('register-form');
+
+    toggleBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        toggleBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        const target = btn.dataset.form;
+        if (target === 'register') {
+          slider.classList.add('register');
+          loginFormWrap.classList.remove('active');
+          regFormWrap.classList.add('active');
+        } else {
+          slider.classList.remove('register');
+          regFormWrap.classList.remove('active');
+          loginFormWrap.classList.add('active');
+        }
+      });
+    });
+
+    // Показать/скрыть пароль
+    document.querySelectorAll('.show-password').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const input = document.getElementById(btn.dataset.target);
+        if (!input) return;
+        if (input.type === 'password') {
+          input.type = 'text';
+          btn.textContent = '🙈';
+        } else {
+          input.type = 'password';
+          btn.textContent = '👁';
+        }
+      });
+    });
+
+    // Индикатор сложности пароля
+    const regPassword = document.getElementById('reg-password');
+    const strengthBar = document.getElementById('strength-bar');
+    const strengthText = document.getElementById('strength-text');
+
+    function assessPassword(p) {
+      let score = 0;
+      if (p.length >= 10) score++;
+      if (p.length >= 14) score++;
+      if (/[a-z]/.test(p) && /[A-Z]/.test(p)) score++;
+      if (/\d/.test(p)) score++;
+      if (/[^a-zA-Z\d]/.test(p)) score++;
+      return score; // 0..5
+    }
+
+    if (regPassword) {
+      regPassword.addEventListener('input', () => {
+        const v = regPassword.value;
+        if (!v) {
+          strengthBar.style.setProperty('--strength', '0%');
+          strengthText.textContent = 'Введите пароль';
+          strengthText.style.color = '';
+          return;
+        }
+        const s = assessPassword(v);
+        const pct = Math.min(100, (s / 5) * 100);
+        strengthBar.style.setProperty('--strength', pct + '%');
+        if (s <= 2) {
+          strengthText.textContent = 'Слабый пароль';
+          strengthText.style.color = 'var(--auth-error)';
+        } else if (s <= 3) {
+          strengthText.textContent = 'Средний пароль';
+          strengthText.style.color = 'var(--auth-warning)';
+        } else {
+          strengthText.textContent = 'Надёжный пароль';
+          strengthText.style.color = 'var(--auth-success)';
+        }
+      });
+    }
+
+    // Показ ошибки под input-group
+    function setError(inputEl, message) {
+      const group = inputEl.closest('.input-group');
+      if (!group) return;
+      group.classList.add('error');
+      let err = group.querySelector('.error-message');
+      if (!err) {
+        err = document.createElement('span');
+        err.className = 'error-message';
+        group.appendChild(err);
+      }
+      err.textContent = message;
+    }
+    function clearErrors(formEl) {
+      formEl.querySelectorAll('.input-group.error').forEach((g) => g.classList.remove('error'));
+      formEl.querySelectorAll('.error-message').forEach((e) => e.remove());
+    }
+
+    // Отметить селекты с value (для плавающего лейбла)
+    document.querySelectorAll('.input-group select').forEach((s) => {
+      const update = () => {
+        if (s.value) s.classList.add('has-value'); else s.classList.remove('has-value');
+      };
+      update();
+      s.addEventListener('change', update);
+    });
+
+    // Логин
+    document.getElementById('login-form-el').addEventListener('submit', (e) => {
+      e.preventDefault();
+      clearErrors(e.target);
+      const email = document.getElementById('login-email');
+      const pwd = document.getElementById('login-password');
+      let ok = true;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { setError(email, 'Введите корректный email'); ok = false; }
+      if (pwd.value.length < 10) { setError(pwd, 'Минимум 10 символов'); ok = false; }
+      if (!ok) return;
+      // TODO(API): POST /api/auth/login
+      window.location.href = 'dashboard.html';
+    });
+
+    // Регистрация
+    document.getElementById('register-form-el').addEventListener('submit', (e) => {
+      e.preventDefault();
+      clearErrors(e.target);
+      const email = document.getElementById('reg-email');
+      const company = document.getElementById('reg-company');
+      const inn = document.getElementById('reg-inn');
+      const phone = document.getElementById('reg-phone');
+      const size = document.getElementById('reg-size');
+      const pwd = document.getElementById('reg-password');
+      const pwd2 = document.getElementById('reg-password-confirm');
+      const agree = document.getElementById('reg-agree');
+
+      let ok = true;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { setError(email, 'Введите корректный email'); ok = false; }
+      if (!company.value.trim()) { setError(company, 'Укажите компанию'); ok = false; }
+      if (!/^\d{10,12}$/.test(inn.value)) { setError(inn, 'ИНН должен содержать 10–12 цифр'); ok = false; }
+      if (!/^\+7\d{10}$/.test(phone.value)) { setError(phone, 'Формат: +7XXXXXXXXXX'); ok = false; }
+      if (!size.value) { setError(size, 'Выберите размер компании'); ok = false; }
+      if (pwd.value.length < 10) { setError(pwd, 'Минимум 10 символов'); ok = false; }
+      if (pwd.value !== pwd2.value) { setError(pwd2, 'Пароли не совпадают'); ok = false; }
+      if (!agree.checked) {
+        const group = agree.closest('.checkbox-container');
+        if (group) group.style.color = 'var(--auth-error)';
+        ok = false;
+      }
+      if (!ok) return;
+
+      // TODO(API): POST /api/auth/register
+      window.location.href = 'verify-email.html';
+    });
+  </script>
+</body>
+
+</html>

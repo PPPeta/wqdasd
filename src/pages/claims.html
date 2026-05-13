@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsurePro — Обращения</title>
+  <link rel="stylesheet" href="../styles/variables.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">IP</div>
+        <span>InsurePro</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1V10"/></svg> Дашборд</a>
+        <a href="employees.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Сотрудники</a>
+        <a href="policies.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg> Полисы</a>
+        <a href="claims.html" class="active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Обращения</a>
+        <a href="plans.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> Планы</a>
+        <a href="reports.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V8"/><path d="M12 16V6"/><path d="M17 16v-4"/></svg> Отчёты</a>
+      </nav>
+      <div class="sidebar-footer">InsurePro · v1.0</div>
+    </aside>
+    <div class="sidebar-backdrop"></div>
+
+    <div class="app-main">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="sidebar-toggle" aria-label="Меню">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="navbar-right">
+          <div class="navbar-user">
+            <div class="navbar-user-info">
+              <div class="navbar-user-name"></div>
+              <div class="navbar-user-role"></div>
+            </div>
+            <div class="navbar-avatar"></div>
+          </div>
+          <button class="btn ghost btn-sm btn-logout">Выйти</button>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <div class="section-header">
+          <div class="section-header-left">
+            <h1>Страховые обращения</h1>
+            <p class="subtitle">Запросы на выплаты по ДМС</p>
+          </div>
+          <div class="section-header-actions">
+            <button class="btn primary" data-modal-open="modal-claim">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              Подать обращение
+            </button>
+          </div>
+        </div>
+
+        <div class="filter-tabs" id="claim-filters">
+          <button class="filter-tab active" data-filter="all">Все</button>
+          <button class="filter-tab" data-filter="pending">В ожидании</button>
+          <button class="filter-tab" data-filter="approved">Одобренные</button>
+          <button class="filter-tab" data-filter="rejected">Отклонённые</button>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Номер</th>
+                <th>Тип</th>
+                <th>Сотрудник</th>
+                <th>Статус</th>
+                <th>Сумма</th>
+                <th>Дата</th>
+                <th style="text-align:right;">Действия</th>
+              </tr>
+            </thead>
+            <tbody id="claim-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== MODAL: NEW CLAIM ============== -->
+  <div class="modal-overlay" id="modal-claim">
+    <div class="modal large">
+      <div class="modal-header">
+        <div class="modal-title">Подать обращение</div>
+        <button class="modal-close" data-modal-close aria-label="Закрыть">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="claim-form" novalidate>
+          <div class="input-group">
+            <select id="claim-type" required>
+              <option value="" disabled selected></option>
+              <option value="medical">Медуслуга</option>
+              <option value="dental">Стоматология</option>
+              <option value="hospitalization">Госпитализация</option>
+              <option value="medication">Медикаменты</option>
+            </select>
+            <label for="claim-type">Тип обращения</label>
+          </div>
+          <div class="input-group">
+            <textarea id="claim-desc" placeholder=" " rows="4" required></textarea>
+            <label for="claim-desc">Описание услуги</label>
+          </div>
+          <div class="grid-2">
+            <div class="input-group">
+              <input type="date" id="claim-date" placeholder=" " required>
+              <label for="claim-date">Дата услуги</label>
+            </div>
+            <div class="input-group">
+              <input type="number" id="claim-amount" placeholder=" " min="1" required>
+              <label for="claim-amount">Сумма (₽)</label>
+            </div>
+          </div>
+          <div class="input-group">
+            <input type="text" id="claim-place" placeholder=" " required>
+            <label for="claim-place">Медучреждение</label>
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="claim-file" style="position:static;transform:none;background:transparent;padding:0;color:var(--text-muted);font-size:0.85rem;display:block;margin-bottom:0.4rem;">Документы (чек, выписка)</label>
+            <input type="file" id="claim-file" multiple style="padding:0.7rem 0.9rem;min-height:auto;">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn secondary" data-modal-close>Отмена</button>
+        <button class="btn primary" id="claim-save">Отправить</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/mock.js"></script>
+  <script src="../scripts/app.js"></script>
+  <script>
+    let filter = 'all';
+    const body = document.getElementById('claim-body');
+
+    function render() {
+      let list = MOCK.claims.slice();
+      if (filter !== 'all') list = list.filter((c) => c.status === filter);
+
+      if (list.length === 0) {
+        body.innerHTML = tableEmptyRow(7, 'Нет обращений по выбранному фильтру');
+        return;
+      }
+
+      body.innerHTML = list.map((c) => `
+        <tr>
+          <td><strong style="color:var(--text);">${esc(c.number)}</strong></td>
+          <td><span class="chip">${TYPE_LABELS[c.type] || c.type}</span></td>
+          <td>${esc(c.employee)}</td>
+          <td><span class="badge badge-${c.status}">${STATUS_LABELS[c.status]}</span></td>
+          <td><strong>${formatRub(c.amount)}</strong></td>
+          <td>${formatDate(c.date)}</td>
+          <td><div class="cell-actions"><a class="btn ghost btn-sm" href="claim-detail.html?id=${c.id}">Открыть</a></div></td>
+        </tr>
+      `).join('');
+    }
+    render();
+
+    document.getElementById('claim-filters').addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-tab');
+      if (!btn) return;
+      document.querySelectorAll('#claim-filters .filter-tab').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      filter = btn.dataset.filter;
+      render();
+    });
+
+    document.getElementById('claim-save').addEventListener('click', () => {
+      const type = document.getElementById('claim-type').value;
+      const desc = document.getElementById('claim-desc').value.trim();
+      const date = document.getElementById('claim-date').value;
+      const amount = Number(document.getElementById('claim-amount').value);
+      const place = document.getElementById('claim-place').value.trim();
+      if (!type || !desc || !date || !amount || !place) { alert('Заполните все обязательные поля'); return; }
+      // TODO(API): POST /api/claims (multipart с файлами)
+      const id = Math.max(0, ...MOCK.claims.map((c) => c.id)) + 1;
+      const user = `${MOCK_USER.first_name} ${MOCK_USER.last_name}`;
+      MOCK.claims.unshift({
+        id,
+        number: 'CLM-2025-' + String(id).padStart(3, '0'),
+        type, employee: user, status: 'pending', amount, date, place,
+      });
+      closeModal('modal-claim');
+      document.getElementById('claim-form').reset();
+      render();
+    });
+  </script>
+</body>
+
+</html>

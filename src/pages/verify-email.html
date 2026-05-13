@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsurePro — Подтверждение email</title>
+  <link rel="stylesheet" href="../styles/auth/main.css">
+</head>
+
+<body>
+  <div class="animated-bg">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+  </div>
+
+  <div class="reg-auth-divs">
+    <div class="auth-container verify-card">
+      <div class="logo-container">
+        <div class="logo">
+          <div class="logo-icon">IP</div>
+          <span>InsurePro</span>
+        </div>
+      </div>
+
+      <div class="verify-icon">✉️</div>
+
+      <h2 class="form-title">Подтвердите email</h2>
+      <p class="form-subtitle">Мы отправили код на ваш email. Введите его ниже.</p>
+
+      <form id="verify-form" novalidate>
+        <input
+          type="text"
+          id="code"
+          class="code-input"
+          placeholder="000000"
+          maxlength="6"
+          inputmode="numeric"
+          pattern="\d{6}"
+          autocomplete="one-time-code"
+          required>
+
+        <button type="submit" class="submit-btn"><span>Подтвердить</span></button>
+      </form>
+
+      <div class="resend-row">
+        <button type="button" class="resend-btn" id="resend-btn" disabled>
+          Отправить повторно (<span id="countdown">60</span>с)
+        </button>
+      </div>
+
+      <a href="log.html" class="back-link">← Вернуться ко входу</a>
+    </div>
+  </div>
+
+  <script>
+    const codeInput = document.getElementById('code');
+    codeInput.addEventListener('input', () => {
+      codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
+    });
+
+    document.getElementById('verify-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (codeInput.value.length !== 6) {
+        codeInput.style.borderColor = 'var(--auth-error)';
+        codeInput.focus();
+        return;
+      }
+      // TODO(API): POST /api/auth/verify-email { code }
+      window.location.href = 'dashboard.html';
+    });
+
+    // Countdown
+    const resendBtn = document.getElementById('resend-btn');
+    let seconds = 60;
+    let timerId = null;
+
+    function renderCountdown() {
+      if (seconds > 0) {
+        resendBtn.disabled = true;
+        resendBtn.innerHTML = 'Отправить повторно (<span>' + seconds + '</span>с)';
+      } else {
+        resendBtn.disabled = false;
+        resendBtn.innerHTML = 'Отправить повторно';
+      }
+    }
+
+    function startCountdown(from) {
+      seconds = from;
+      renderCountdown();
+      if (timerId) clearInterval(timerId);
+      timerId = setInterval(() => {
+        seconds--;
+        renderCountdown();
+        if (seconds <= 0) clearInterval(timerId);
+      }, 1000);
+    }
+
+    startCountdown(60);
+
+    resendBtn.addEventListener('click', () => {
+      if (resendBtn.disabled) return;
+      // TODO(API): POST /api/auth/resend-code
+      startCountdown(60);
+    });
+  </script>
+</body>
+
+</html>

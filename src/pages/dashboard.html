@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsurePro — Дашборд</title>
+  <link rel="stylesheet" href="../styles/variables.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+  <div class="app-layout">
+    <!-- ============== SIDEBAR ============== -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">IP</div>
+        <span>InsurePro</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="active">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1V10"/></svg>
+          Дашборд
+        </a>
+        <a href="employees.html">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Сотрудники
+        </a>
+        <a href="policies.html">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>
+          Полисы
+        </a>
+        <a href="claims.html">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+          Обращения
+        </a>
+        <a href="plans.html">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          Планы
+        </a>
+        <a href="reports.html">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V8"/><path d="M12 16V6"/><path d="M17 16v-4"/></svg>
+          Отчёты
+        </a>
+      </nav>
+      <div class="sidebar-footer">InsurePro · v1.0</div>
+    </aside>
+    <div class="sidebar-backdrop"></div>
+
+    <!-- ============== MAIN ============== -->
+    <div class="app-main">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="sidebar-toggle" aria-label="Меню">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="navbar-right">
+          <div class="navbar-user">
+            <div class="navbar-user-info">
+              <div class="navbar-user-name"></div>
+              <div class="navbar-user-role"></div>
+            </div>
+            <div class="navbar-avatar"></div>
+          </div>
+          <button class="btn ghost btn-sm btn-logout">Выйти</button>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <!-- ============== DASHBOARD CONTENT ============== -->
+        <div class="section-header">
+          <div class="section-header-left">
+            <h1>Дашборд</h1>
+            <p class="subtitle" id="greeting">Добрый день!</p>
+          </div>
+          <div class="section-header-actions">
+            <button class="btn secondary" onclick="location.href='reports.html'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+              Экспорт
+            </button>
+            <button class="btn primary" onclick="location.href='policies.html'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              Новый полис
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-4" id="widgets"></div>
+
+        <div class="grid-2 mt-6">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Последние обращения</div>
+                <div class="card-subtitle">Недавние запросы сотрудников</div>
+              </div>
+              <a href="claims.html" class="btn ghost btn-sm">Все</a>
+            </div>
+            <div id="recent-claims"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Полисы истекают</div>
+                <div class="card-subtitle">Ближайшие окончания</div>
+              </div>
+              <a href="policies.html" class="btn ghost btn-sm">Все</a>
+            </div>
+            <div id="expiring-policies"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/mock.js"></script>
+  <script src="../scripts/app.js"></script>
+  <script>
+    // Greeting by time of day
+    (function () {
+      const h = new Date().getHours();
+      const greet = h < 6 ? 'Доброй ночи' : h < 12 ? 'Доброе утро' : h < 18 ? 'Добрый день' : 'Добрый вечер';
+      document.getElementById('greeting').textContent = `${greet}, ${MOCK_USER.first_name}!`;
+    })();
+
+    // Widgets
+    const d = MOCK.dashboard.company_manager;
+    const widgets = [
+      { label: 'Сотрудников', value: d.employees, icon: 'users', color: 'blue', hint: 'всего в компании' },
+      { label: 'Активных полисов', value: d.active_policies, icon: 'file', color: 'green', hint: 'действующих' },
+      { label: 'Обращений в ожидании', value: d.pending_claims, icon: 'clock', color: 'amber', hint: 'требуют решения' },
+      { label: 'Истекают в 30 дней', value: d.expiring, icon: 'alert', color: 'red', hint: 'нужна пролонгация' },
+    ];
+
+    const icons = {
+      users: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+      file: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+      clock: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      alert: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>',
+    };
+
+    document.getElementById('widgets').innerHTML = widgets.map((w) => `
+      <div class="widget">
+        <div class="widget-icon ${w.color}">${icons[w.icon]}</div>
+        <div class="widget-body">
+          <div class="widget-label">${w.label}</div>
+          <div class="widget-value">${w.value}</div>
+          <div class="widget-hint">${w.hint}</div>
+        </div>
+      </div>
+    `).join('');
+
+    // Recent claims
+    const claimsHtml = MOCK.claims.slice(0, 4).map((c) => {
+      const statusClass = `badge-${c.status}`;
+      return `
+        <a href="claim-detail.html?id=${c.id}" class="list-item" style="text-decoration:none;color:inherit;">
+          <div class="avatar-sm">${c.employee.split(' ').map((s) => s[0]).slice(0, 2).join('')}</div>
+          <div class="list-item-body">
+            <div class="list-item-title">${esc(c.employee)} · ${TYPE_LABELS[c.type]}</div>
+            <div class="list-item-meta">${esc(c.number)} · ${formatDate(c.date)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem;">
+            <span class="badge ${statusClass}">${STATUS_LABELS[c.status]}</span>
+            <span class="list-item-amount">${formatRub(c.amount)}</span>
+          </div>
+        </a>
+      `;
+    }).join('') || '<div class="empty-state"><h3>Нет обращений</h3><p>Пока ничего не поступало</p></div>';
+
+    document.getElementById('recent-claims').innerHTML = claimsHtml;
+
+    // Expiring policies (active, sorted by end date)
+    const active = MOCK.policies
+      .filter((p) => p.status === 'active')
+      .sort((a, b) => new Date(a.end) - new Date(b.end))
+      .slice(0, 3);
+
+    const polHtml = active.map((p) => {
+      const days = daysUntil(p.end);
+      return `
+        <a href="policy-detail.html?id=${p.id}" class="list-item" style="text-decoration:none;color:inherit;">
+          <div class="avatar-sm" style="background:linear-gradient(135deg,#22c55e,#16a34a)">${p.plan[0]}</div>
+          <div class="list-item-body">
+            <div class="list-item-title">${esc(p.number)} · ${esc(p.plan)}</div>
+            <div class="list-item-meta">До ${formatDate(p.end)} · ${days != null ? days + ' дн.' : '—'}</div>
+          </div>
+          <div class="list-item-amount">${formatRub(p.monthly)}/мес</div>
+        </a>
+      `;
+    }).join('') || '<div class="empty-state"><h3>Нет активных полисов</h3><p>Оформите первый полис</p></div>';
+
+    document.getElementById('expiring-policies').innerHTML = polHtml;
+  </script>
+</body>
+
+</html>

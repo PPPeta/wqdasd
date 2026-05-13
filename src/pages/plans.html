@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsurePro — Планы</title>
+  <link rel="stylesheet" href="../styles/variables.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">IP</div>
+        <span>InsurePro</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1V10"/></svg> Дашборд</a>
+        <a href="employees.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Сотрудники</a>
+        <a href="policies.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg> Полисы</a>
+        <a href="claims.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Обращения</a>
+        <a href="plans.html" class="active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> Планы</a>
+        <a href="reports.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V8"/><path d="M12 16V6"/><path d="M17 16v-4"/></svg> Отчёты</a>
+      </nav>
+      <div class="sidebar-footer">InsurePro · v1.0</div>
+    </aside>
+    <div class="sidebar-backdrop"></div>
+
+    <div class="app-main">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="sidebar-toggle" aria-label="Меню">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="navbar-right">
+          <div class="navbar-user">
+            <div class="navbar-user-info">
+              <div class="navbar-user-name"></div>
+              <div class="navbar-user-role"></div>
+            </div>
+            <div class="navbar-avatar"></div>
+          </div>
+          <button class="btn ghost btn-sm btn-logout">Выйти</button>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <div class="section-header">
+          <div class="section-header-left">
+            <h1>Планы страхования</h1>
+            <p class="subtitle">Выберите подходящий тариф для вашей команды</p>
+          </div>
+          <div class="section-header-actions">
+            <button class="btn secondary" data-modal-open="modal-calc">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="8" x2="10" y1="12" y2="12"/><line x1="12" x2="14" y1="12" y2="12"/><line x1="16" x2="16" y1="12" y2="12"/><line x1="8" x2="10" y1="16" y2="16"/><line x1="12" x2="14" y1="16" y2="16"/><line x1="16" x2="16" y1="16" y2="16"/></svg>
+              Калькулятор
+            </button>
+            <button class="btn primary" onclick="alert('Создание плана доступно администраторам (TODO: API)')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              Создать план
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-3" id="plans-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== MODAL: CALCULATOR ============== -->
+  <div class="modal-overlay" id="modal-calc">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Калькулятор стоимости</div>
+        <button class="modal-close" data-modal-close aria-label="Закрыть">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <select id="calc-plan" required>
+            <option value="" disabled selected></option>
+          </select>
+          <label for="calc-plan">План</label>
+        </div>
+        <div class="input-group">
+          <input type="number" id="calc-count" placeholder=" " min="1" value="10">
+          <label for="calc-count">Количество сотрудников</label>
+        </div>
+        <div class="card" style="background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:1px solid var(--primary-soft);">
+          <div class="card-subtitle">Итого в месяц</div>
+          <div style="font-size:2rem;font-weight:800;color:var(--primary);letter-spacing:-0.02em;" id="calc-total">0 ₽</div>
+          <div class="card-subtitle mt-2">В год: <strong id="calc-year">0 ₽</strong></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn secondary" data-modal-close>Закрыть</button>
+        <button class="btn primary" onclick="location.href='policies.html'">Оформить полис</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/mock.js"></script>
+  <script src="../scripts/app.js"></script>
+  <script>
+    const grid = document.getElementById('plans-grid');
+    const check = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+
+    grid.innerHTML = MOCK.plans.map((p) => `
+      <div class="plan-card ${p.featured ? 'featured' : ''}">
+        <div class="plan-card-name">${esc(p.name)}</div>
+        <div class="plan-card-desc">${esc(p.description)}</div>
+        <div class="plan-card-price">${formatRub(p.price)} <span class="unit">/ сотрудник · мес</span></div>
+        <ul class="check-list">
+          ${p.coverages.map((c) => `<li>${check}<span>${esc(c)}</span></li>`).join('')}
+        </ul>
+        <button class="btn ${p.featured ? 'primary' : 'secondary'} btn-full" onclick="openCalc(${p.id})">
+          Рассчитать стоимость
+        </button>
+      </div>
+    `).join('');
+
+    // Populate plan select
+    const planSelect = document.getElementById('calc-plan');
+    MOCK.plans.forEach((p) => {
+      const opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = p.name + ' — ' + formatRub(p.price) + '/чел';
+      planSelect.appendChild(opt);
+    });
+
+    function recalc() {
+      const id = Number(planSelect.value);
+      const count = Math.max(0, Number(document.getElementById('calc-count').value) || 0);
+      const p = MOCK.plans.find((x) => x.id === id);
+      const price = p ? p.price * count : 0;
+      document.getElementById('calc-total').textContent = formatRub(price);
+      document.getElementById('calc-year').textContent = formatRub(price * 12);
+    }
+    planSelect.addEventListener('change', () => { planSelect.classList.add('has-value'); recalc(); });
+    document.getElementById('calc-count').addEventListener('input', recalc);
+
+    window.openCalc = function (id) {
+      planSelect.value = String(id);
+      planSelect.classList.add('has-value');
+      recalc();
+      openModal('modal-calc');
+    };
+  </script>
+</body>
+
+</html>
