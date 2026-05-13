@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дашборд · InsurePro</title>
+  <link rel="stylesheet" href="../styles/variables.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">IP</div>
+        <span>InsurePro</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="active">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Дашборд
+        </a>
+        <a href="employees.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Сотрудники
+        </a>
+        <a href="policies.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Полисы
+        </a>
+        <a href="claims.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Обращения
+        </a>
+        <a href="plans.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Планы
+        </a>
+        <a href="reports.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Отчёты
+        </a>
+      </nav>
+      <div class="sidebar-footer">InsurePro · v1.0</div>
+    </aside>
+    <div class="sidebar-backdrop"></div>
+
+    <!-- MAIN -->
+    <div class="app-main">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="sidebar-toggle" aria-label="Меню">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+          </button>
+        </div>
+        <div class="navbar-right">
+          <div class="navbar-user">
+            <div class="navbar-user-info">
+              <div class="navbar-user-name"></div>
+              <div class="navbar-user-role"></div>
+            </div>
+            <div class="navbar-avatar"></div>
+          </div>
+          <button class="btn btn-sm ghost btn-logout">Выйти</button>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <div class="section-header">
+          <h1>Дашборд</h1>
+          <p id="greeting"></p>
+        </div>
+
+        <!-- Widgets -->
+        <div class="grid-4" id="widgets"></div>
+
+        <!-- Two column cards -->
+        <div class="grid-2" style="margin-top: 32px;">
+          <div class="card" style="padding: 24px;">
+            <h3 style="margin-bottom: 16px; font-size: 1rem; font-weight: 600;">Последние обращения</h3>
+            <div id="recent-claims"></div>
+          </div>
+          <div class="card" style="padding: 24px;">
+            <h3 style="margin-bottom: 16px; font-size: 1rem; font-weight: 600;">Полисы истекают в 30 дней</h3>
+            <div id="expiring-policies"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/mock.js"></script>
+  <script src="../scripts/app.js"></script>
+  <script>
+    (function() {
+      const data = MOCK.dashboard.company_manager;
+
+      // Greeting
+      document.getElementById('greeting').textContent = 'Добрый день, ' + MOCK_USER.first_name + '!';
+
+      // Widgets
+      const widgets = [
+        { label: 'Сотрудников', value: data.employees, icon: 'blue', svg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>' },
+        { label: 'Активных полисов', value: data.active_policies, icon: 'green', svg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' },
+        { label: 'Обращений в ожидании', value: data.pending_claims, icon: 'amber', svg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' },
+        { label: 'Истекают в 30 дней', value: data.expiring, icon: 'red', svg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' },
+      ];
+
+      const widgetContainer = document.getElementById('widgets');
+      widgets.forEach(w => {
+        widgetContainer.innerHTML += `
+          <div class="card widget">
+            <div class="widget-icon ${w.icon}">${w.svg}</div>
+            <div class="widget-label">${w.label}</div>
+            <div class="widget-value">${w.value}</div>
+          </div>`;
+      });
+
+      // Recent claims
+      const claimsContainer = document.getElementById('recent-claims');
+      const recentClaims = MOCK.claims.slice(0, 4);
+      recentClaims.forEach(c => {
+        const statusClass = 'badge-' + c.status;
+        claimsContainer.innerHTML += `
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--color-border-light);">
+            <div>
+              <span style="font-weight: 500; font-size: 0.875rem;">${c.number}</span>
+              <span style="color: var(--color-text-secondary); font-size: 0.8125rem;"> · ${TYPE_LABELS[c.type]} · ${c.employee}</span>
+            </div>
+            <span class="badge ${statusClass}">${STATUS_LABELS[c.status]}</span>
+          </div>`;
+      });
+
+      // Expiring policies
+      const expiringContainer = document.getElementById('expiring-policies');
+      const expiringPolicies = MOCK.policies.filter(p => p.status === 'active').slice(0, 3);
+      expiringPolicies.forEach(p => {
+        expiringContainer.innerHTML += `
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--color-border-light);">
+            <div>
+              <span style="font-weight: 500; font-size: 0.875rem;">${p.number}</span>
+              <span style="color: var(--color-text-secondary); font-size: 0.8125rem;"> · ${p.company}</span>
+            </div>
+            <span style="font-size: 0.8125rem; color: var(--color-warning); font-weight: 500;">18 дн.</span>
+          </div>`;
+      });
+    })();
+  </script>
+</body>
+</html>

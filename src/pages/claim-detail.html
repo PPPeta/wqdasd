@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Обращение · InsurePro</title>
+  <link rel="stylesheet" href="../styles/variables.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">IP</div>
+        <span>InsurePro</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Дашборд
+        </a>
+        <a href="employees.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Сотрудники
+        </a>
+        <a href="policies.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Полисы
+        </a>
+        <a href="claims.html" class="active">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Обращения
+        </a>
+        <a href="plans.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Планы
+        </a>
+        <a href="reports.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Отчёты
+        </a>
+      </nav>
+      <div class="sidebar-footer">InsurePro · v1.0</div>
+    </aside>
+    <div class="sidebar-backdrop"></div>
+
+    <div class="app-main">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="sidebar-toggle" aria-label="Меню">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+          </button>
+        </div>
+        <div class="navbar-right">
+          <div class="navbar-user">
+            <div class="navbar-user-info">
+              <div class="navbar-user-name"></div>
+              <div class="navbar-user-role"></div>
+            </div>
+            <div class="navbar-avatar"></div>
+          </div>
+          <button class="btn btn-sm ghost btn-logout">Выйти</button>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <!-- Breadcrumb -->
+        <div style="margin-bottom:16px;font-size:0.875rem;">
+          <a href="claims.html" style="color:var(--color-primary);">Обращения</a>
+          <span style="color:var(--color-text-muted);"> → </span>
+          <span id="breadcrumb-number">CL-2024-042</span>
+        </div>
+
+        <!-- Header -->
+        <div class="section-header" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <h1 id="claim-title">CL-2024-042</h1>
+          <span style="font-size:0.9375rem;color:var(--color-text-secondary);" id="claim-type-label">Медуслуга</span>
+          <span class="badge badge-pending" id="claim-status-badge">В ожидании</span>
+        </div>
+
+        <!-- Two column -->
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-top:24px;" class="detail-grid">
+          <!-- Left -->
+          <div>
+            <div class="card" style="padding:24px;margin-bottom:24px;">
+              <h3 style="margin-bottom:16px;font-weight:600;">Детали обращения</h3>
+              <dl id="claim-dl" style="display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;"></dl>
+              <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--color-border-light);">
+                <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:8px;">Описание</h4>
+                <p id="claim-description" style="font-size:0.9375rem;color:var(--color-text-secondary);line-height:1.6;"></p>
+              </div>
+              <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--color-border-light);">
+                <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:8px;">Документы</h4>
+                <div id="claim-documents" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right -->
+          <div>
+            <div class="card" style="padding:24px;margin-bottom:24px;">
+              <h3 style="margin-bottom:16px;font-weight:600;">Решение</h3>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <button class="btn primary btn-full" id="btn-approve">Одобрить</button>
+                <button class="btn danger btn-full" id="btn-reject">Отклонить</button>
+              </div>
+            </div>
+            <div class="card" style="padding:24px;">
+              <h3 style="margin-bottom:16px;font-weight:600;">Таймлайн</h3>
+              <div class="timeline" id="claim-timeline"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @media (max-width: 768px) {
+      .detail-grid { grid-template-columns: 1fr !important; }
+    }
+    #claim-dl dt { font-size: 0.8125rem; color: var(--color-text-secondary); }
+    #claim-dl dd { font-size: 0.9375rem; font-weight: 500; margin: 0; }
+  </style>
+
+  <script src="../scripts/mock.js"></script>
+  <script src="../scripts/app.js"></script>
+  <script>
+    if (!MOCK.claimDetail) {
+      MOCK.claimDetail = {
+        number: 'CL-2024-042',
+        type: 'medical',
+        status: 'pending',
+        employee: 'Анна Смирнова',
+        policy: 'POL-2024-001',
+        date: '2024-10-15',
+        place: 'Клиника «Здоровье», Москва',
+        amount: 12500,
+        submitted: '2024-10-16',
+        description: 'Приём терапевта, анализы крови, консультация кардиолога. Обращение по поводу регулярных головных болей и повышенного давления.',
+        documents: ['Справка_терапевт.pdf', 'Чек_анализы.pdf'],
+        timeline: [
+          { label: 'Обращение подано', date: '16.10.2024', done: true },
+          { label: 'На рассмотрении', date: '17.10.2024', done: true },
+          { label: 'Решение', date: '—', done: false },
+        ]
+      };
+    }
+
+    (function() {
+      const d = MOCK.claimDetail;
+
+      document.getElementById('breadcrumb-number').textContent = d.number;
+      document.getElementById('claim-title').textContent = d.number;
+      document.getElementById('claim-type-label').textContent = TYPE_LABELS[d.type];
+
+      const badge = document.getElementById('claim-status-badge');
+      badge.className = 'badge badge-' + d.status;
+      badge.textContent = STATUS_LABELS[d.status];
+
+      // DL
+      const dl = document.getElementById('claim-dl');
+      const fields = [
+        ['Сотрудник', d.employee],
+        ['Полис', d.policy],
+        ['Дата случая', formatDate(d.date)],
+        ['Место', d.place],
+        ['Сумма', formatRub(d.amount)],
+        ['Подано', formatDate(d.submitted)],
+      ];
+      fields.forEach(([label, val]) => {
+        dl.innerHTML += `<dt>${label}</dt><dd>${val}</dd>`;
+      });
+
+      // Description
+      document.getElementById('claim-description').textContent = d.description;
+
+      // Documents
+      const docsEl = document.getElementById('claim-documents');
+      d.documents.forEach(doc => {
+        docsEl.innerHTML += `
+          <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--color-bg);border-radius:var(--radius-md);border:1px solid var(--color-border-light);font-size:0.8125rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            ${doc}
+          </div>`;
+      });
+
+      // Timeline
+      const tl = document.getElementById('claim-timeline');
+      d.timeline.forEach(item => {
+        tl.innerHTML += `
+          <div class="timeline-item ${item.done ? 'done' : ''}">
+            <div class="timeline-item-label">${item.label}</div>
+            <div class="timeline-item-date">${item.date}</div>
+          </div>`;
+      });
+
+      // Action buttons
+      document.getElementById('btn-approve').addEventListener('click', function() {
+        badge.className = 'badge badge-approved';
+        badge.textContent = STATUS_LABELS['approved'];
+      });
+      document.getElementById('btn-reject').addEventListener('click', function() {
+        badge.className = 'badge badge-rejected';
+        badge.textContent = STATUS_LABELS['rejected'];
+      });
+    })();
+  </script>
+</body>
+</html>

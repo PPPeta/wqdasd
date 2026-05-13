@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отчёты · InsurePro</title>
+  <link rel="stylesheet" href="../styles/variables.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">IP</div>
+        <span>InsurePro</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Дашборд
+        </a>
+        <a href="employees.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Сотрудники
+        </a>
+        <a href="policies.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Полисы
+        </a>
+        <a href="claims.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Обращения
+        </a>
+        <a href="plans.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Планы
+        </a>
+        <a href="reports.html" class="active">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Отчёты
+        </a>
+      </nav>
+      <div class="sidebar-footer">InsurePro · v1.0</div>
+    </aside>
+    <div class="sidebar-backdrop"></div>
+
+    <div class="app-main">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="sidebar-toggle" aria-label="Меню">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+          </button>
+        </div>
+        <div class="navbar-right">
+          <div class="navbar-user">
+            <div class="navbar-user-info">
+              <div class="navbar-user-name"></div>
+              <div class="navbar-user-role"></div>
+            </div>
+            <div class="navbar-avatar"></div>
+          </div>
+          <button class="btn btn-sm ghost btn-logout">Выйти</button>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <div class="section-header">
+          <h1>Отчёты</h1>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="filter-tabs" style="margin-bottom:20px;" id="report-tabs">
+          <button class="filter-tab active" data-type="companies">По организациям</button>
+          <button class="filter-tab" data-type="employees">По сотрудникам</button>
+          <button class="filter-tab" data-type="policies">По полисам</button>
+          <button class="filter-tab" data-type="claims">По обращениям</button>
+          <button class="filter-tab" data-type="financial">Финансовый</button>
+        </div>
+
+        <!-- Form -->
+        <div class="card" style="padding:24px;margin-bottom:24px;">
+          <form id="report-form" onsubmit="generateReport(event)" style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
+            <div class="input-group" style="margin-bottom:0;min-width:180px;">
+              <input type="date" id="report-from" placeholder=" " required>
+              <label>Дата с</label>
+            </div>
+            <div class="input-group" style="margin-bottom:0;min-width:180px;">
+              <input type="date" id="report-to" placeholder=" " required>
+              <label>Дата по</label>
+            </div>
+            <button type="submit" class="btn primary">Сформировать</button>
+          </form>
+        </div>
+
+        <!-- Results -->
+        <div class="card" style="padding:24px;display:none;" id="report-results">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
+            <h3 style="font-weight:600;">Результаты</h3>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-sm secondary" onclick="alert('Экспорт в CSV')">CSV</button>
+              <button class="btn btn-sm secondary" onclick="alert('Экспорт в Excel')">Excel</button>
+              <button class="btn btn-sm secondary" onclick="alert('Экспорт в PDF')">PDF</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="data-table" id="report-table">
+              <thead id="report-thead"></thead>
+              <tbody id="report-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/mock.js"></script>
+  <script src="../scripts/app.js"></script>
+  <script>
+    (function() {
+      let currentType = 'companies';
+
+      const reportData = {
+        companies: {
+          headers: ['Организация', 'Полисов', 'Сотрудников', 'Сумма'],
+          rows: [
+            ['ООО «Ромашка»', '2', '45', formatRub(288000)],
+            ['АО «Вектор»', '1', '120', formatRub(696000)],
+            ['ООО «Альфа»', '1', '12', formatRub(18000)],
+          ]
+        },
+        employees: {
+          headers: ['Сотрудник', 'Компания', 'Полис', 'Статус'],
+          rows: [
+            ['Анна Смирнова', 'ООО «Ромашка»', 'POL-2024-001', 'Активен'],
+            ['Сергей Иванов', 'ООО «Ромашка»', 'POL-2024-001', 'Активен'],
+            ['Мария Петрова', 'АО «Вектор»', 'POL-2024-002', 'Активен'],
+          ]
+        },
+        policies: {
+          headers: ['Номер', 'Компания', 'План', 'Статус', 'Стоимость'],
+          rows: [
+            ['POL-2024-001', 'ООО «Ромашка»', 'Стандарт', 'Активен', formatRub(144000)],
+            ['POL-2024-002', 'АО «Вектор»', 'Премиум', 'Активен', formatRub(696000)],
+            ['POL-2024-003', 'ООО «Альфа»', 'Базовый', 'Черновик', formatRub(18000)],
+          ]
+        },
+        claims: {
+          headers: ['Номер', 'Тип', 'Сотрудник', 'Сумма', 'Статус'],
+          rows: [
+            ['CL-2024-042', 'Медуслуга', 'Анна Смирнова', formatRub(12500), 'В ожидании'],
+            ['CL-2024-043', 'Стоматология', 'Сергей Иванов', formatRub(34000), 'Одобрено'],
+            ['CL-2024-044', 'Госпитализация', 'Мария Петрова', formatRub(185000), 'Одобрено'],
+          ]
+        },
+        financial: {
+          headers: ['Месяц', 'Доход', 'Выплаты', 'Прибыль'],
+          rows: [
+            ['Август 2024', formatRub(980000), formatRub(185000), formatRub(795000)],
+            ['Сентябрь 2024', formatRub(980000), formatRub(34000), formatRub(946000)],
+            ['Октябрь 2024', formatRub(980000), formatRub(17000), formatRub(963000)],
+          ]
+        }
+      };
+
+      // Tab switching
+      document.getElementById('report-tabs').addEventListener('click', function(e) {
+        if (e.target.classList.contains('filter-tab')) {
+          document.querySelectorAll('#report-tabs .filter-tab').forEach(t => t.classList.remove('active'));
+          e.target.classList.add('active');
+          currentType = e.target.dataset.type;
+          document.getElementById('report-results').style.display = 'none';
+        }
+      });
+
+      window.generateReport = function(e) {
+        e.preventDefault();
+        const data = reportData[currentType];
+        const thead = document.getElementById('report-thead');
+        const tbody = document.getElementById('report-tbody');
+
+        thead.innerHTML = '<tr>' + data.headers.map(h => `<th>${h}</th>`).join('') + '</tr>';
+        tbody.innerHTML = data.rows.map(row => '<tr>' + row.map(c => `<td>${c}</td>`).join('') + '</tr>').join('');
+
+        document.getElementById('report-results').style.display = 'block';
+      };
+    })();
+  </script>
+</body>
+</html>

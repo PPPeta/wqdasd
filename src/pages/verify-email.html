@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подтверждение email · InsurePro</title>
+  <link rel="stylesheet" href="../styles/variables.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+  <link rel="stylesheet" href="../styles/auth/main.css">
+</head>
+<body>
+  <div class="animated-bg">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+  </div>
+
+  <div class="reg-auth-divs">
+    <div class="auth-container" style="text-align:center;">
+      <!-- Logo -->
+      <div class="logo-container">
+        <div class="logo">
+          <div class="logo-icon">IP</div>
+          <span>InsurePro</span>
+        </div>
+      </div>
+
+      <!-- Icon -->
+      <div style="font-size:3rem;margin:20px 0;">✉️</div>
+
+      <h1 class="form-title">Подтвердите email</h1>
+      <p class="form-subtitle">Мы отправили код на ваш email</p>
+
+      <!-- Code input -->
+      <div style="margin:30px 0;">
+        <input
+          type="text"
+          id="verify-code"
+          maxlength="6"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          placeholder="000000"
+          style="width:200px;text-align:center;font-size:2rem;font-weight:700;letter-spacing:8px;padding:16px;border:2px solid var(--color-border);border-radius:12px;transition:all 0.3s;"
+        >
+      </div>
+
+      <!-- Submit -->
+      <button class="submit-btn" id="btn-verify" style="margin-bottom:20px;">
+        <span>Подтвердить</span>
+      </button>
+
+      <!-- Resend -->
+      <div style="margin-bottom:16px;">
+        <button id="btn-resend" class="forgot-link" style="border:none;background:none;cursor:pointer;font-size:14px;" disabled>
+          Отправить повторно (<span id="resend-timer">60</span>с)
+        </button>
+      </div>
+
+      <!-- Back link -->
+      <a href="log.html" style="color:var(--color-primary);font-size:14px;text-decoration:none;">← Вернуться ко входу</a>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const codeInput = document.getElementById('verify-code');
+      const verifyBtn = document.getElementById('btn-verify');
+      const resendBtn = document.getElementById('btn-resend');
+      const timerSpan = document.getElementById('resend-timer');
+      let countdown = 60;
+      let timer;
+
+      // Focus style
+      codeInput.addEventListener('focus', function() {
+        this.style.borderColor = '#667eea';
+        this.style.boxShadow = '0 0 0 4px rgba(102,126,234,0.1)';
+      });
+      codeInput.addEventListener('blur', function() {
+        this.style.borderColor = '#e0e0e0';
+        this.style.boxShadow = 'none';
+      });
+
+      // Only allow numbers
+      codeInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+
+      // Verify button
+      verifyBtn.addEventListener('click', function() {
+        const code = codeInput.value.trim();
+        if (code.length === 6) {
+          window.location.href = 'dashboard.html';
+        } else {
+          codeInput.style.borderColor = '#ff4444';
+          codeInput.style.boxShadow = '0 0 0 4px rgba(255,68,68,0.1)';
+        }
+      });
+
+      // Countdown timer
+      function startTimer() {
+        countdown = 60;
+        resendBtn.disabled = true;
+        timerSpan.parentElement.style.display = '';
+        timer = setInterval(function() {
+          countdown--;
+          timerSpan.textContent = countdown;
+          if (countdown <= 0) {
+            clearInterval(timer);
+            resendBtn.disabled = false;
+            resendBtn.innerHTML = 'Отправить повторно';
+          }
+        }, 1000);
+      }
+
+      // Resend click
+      resendBtn.addEventListener('click', function() {
+        if (!this.disabled) {
+          resendBtn.innerHTML = 'Отправить повторно (<span id="resend-timer">60</span>с)';
+          startTimer();
+        }
+      });
+
+      startTimer();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/auth/main.css">
+    <title>InsurePro - Вход</title>
+</head>
+
+<body>
+    <div class="animated-bg">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="reg-auth-divs">
+        <div class="auth-container">
+            <div class="form-toggle">
+                <button class="toggle-btn active" data-form="login">Вход</button>
+                <button class="toggle-btn" data-form="register">Регистрация</button>
+                <div class="toggle-slider"></div>
+            </div>
+
+            <div class="form-wrapper active" id="login-form">
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-icon">IP</div>
+                        <span>InsurePro</span>
+                    </div>
+                </div>
+
+                <h2 class="form-title">Добро пожаловать!</h2>
+                <p class="form-subtitle">Войдите в свой аккаунт</p>
+
+                <form id="loginFormEl">
+                    <div class="input-group">
+                        <input type="email" id="login-email" required>
+                        <label>Email</label>
+                        <span class="input-icon">&#128231;</span>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="login-password" required>
+                        <label>Пароль</label>
+                        <span class="input-icon">&#128274;</span>
+                        <button type="button" class="show-password" id="login-show-pw"></button>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                            Запомнить меня
+                        </label>
+                        <a href="#" class="forgot-link">Забыли пароль?</a>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <span>Войти</span>
+                    </button>
+                </form>
+
+                <div class="social-login">
+                    <div class="divider">или</div>
+                    <button class="social-btn google">
+                        <svg width="20" height="20" viewBox="0 0 20 20">
+                            <path fill="#4285F4" d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z"/>
+                            <path fill="#34A853" d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z"/>
+                            <path fill="#FBBC05" d="M3.99 10c0-.69.12-1.35.32-1.97V5.51H1.07A9.973 9.973 0 000 10c0 1.61.39 3.14 1.07 4.49l3.24-2.52c-.2-.62-.32-1.28-.32-1.97z"/>
+                            <path fill="#EA4335" d="M10 3.88c1.88 0 3.13.81 3.85 1.48l2.84-2.76C14.96.99 12.7 0 10 0 6.09 0 2.72 2.25 1.07 5.51l3.24 2.52C5.12 5.62 7.36 3.88 10 3.88z"/>
+                        </svg>
+                        Войти через Google
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-wrapper" id="register-form">
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-icon">IP</div>
+                        <span>InsurePro</span>
+                    </div>
+                </div>
+
+                <h2 class="form-title">Создайте аккаунт</h2>
+                <p class="form-subtitle">Начните работу за 2 минуты</p>
+
+                <form id="registerFormEl">
+                    <div class="input-group">
+                        <input type="email" id="reg-email" required>
+                        <label>Рабочий Email</label>
+                        <span class="input-icon">&#128231;</span>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="reg-password" required minlength="10">
+                        <label>Пароль (мин. 10 символов)</label>
+                        <span class="input-icon">&#128274;</span>
+                        <button type="button" class="show-password" id="reg-show-pw"></button>
+                    </div>
+
+                    <div class="password-strength">
+                        <div class="strength-bar" id="strength-bar"></div>
+                        <span class="strength-text" id="strength-text">Слабый пароль</span>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="password" id="reg-password-confirm" required>
+                        <label>Подтверждение пароля</label>
+                        <span class="input-icon">&#128274;</span>
+                    </div>
+                    <div class="error-message" id="password-match-error">Пароли не совпадают</div>
+
+                    <div class="input-group">
+                        <input type="text" id="reg-company" required>
+                        <label>Название компании</label>
+                        <span class="input-icon">&#127970;</span>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" id="reg-inn" pattern="[0-9]{10,12}" required>
+                        <label>ИНН организации (10-12 цифр)</label>
+                        <span class="input-icon">&#128203;</span>
+                    </div>
+                    <div class="error-message" id="inn-error">ИНН должен содержать 10-12 цифр</div>
+
+                    <div class="input-group">
+                        <input type="tel" id="reg-phone" placeholder="+7XXXXXXXXXX" required>
+                        <label>Телефон (+7...)</label>
+                        <span class="input-icon">&#128241;</span>
+                    </div>
+                    <div class="error-message" id="phone-error">Формат: +7XXXXXXXXXX</div>
+
+                    <div class="input-group">
+                        <select id="reg-employees" required>
+                            <option value="" disabled selected></option>
+                            <option value="1-50">До 50 (Стартап)</option>
+                            <option value="51-250">51-250 (Бизнес)</option>
+                            <option value="251+">Более 250 (Корпоративный)</option>
+                        </select>
+                        <label>Количество сотрудников</label>
+                        <span class="input-icon">&#128101;</span>
+                    </div>
+
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="reg-agree" required>
+                        <span class="checkmark"></span>
+                        Согласен с <a href="#">условиями</a> и <a href="#">политикой</a>
+                    </label>
+
+                    <button type="submit" class="submit-btn">
+                        <span>Создать аккаунт</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // ============ TOGGLE LOGIN/REGISTER ============
+        const toggleBtns = document.querySelectorAll('.toggle-btn');
+        const toggleSlider = document.querySelector('.toggle-slider');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+
+        toggleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const formType = btn.getAttribute('data-form');
+                toggleBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                if (formType === 'register') {
+                    toggleSlider.classList.add('register');
+                    loginForm.classList.remove('active');
+                    registerForm.classList.add('active');
+                } else {
+                    toggleSlider.classList.remove('register');
+                    registerForm.classList.remove('active');
+                    loginForm.classList.add('active');
+                }
+            });
+        });
+
+        // ============ SHOW/HIDE PASSWORD ============
+        document.querySelectorAll('.show-password').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = btn.parentElement.querySelector('input[type="password"], input[type="text"]');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    btn.classList.add('visible');
+                } else {
+                    input.type = 'password';
+                    btn.classList.remove('visible');
+                }
+            });
+        });
+
+        // ============ PASSWORD STRENGTH ============
+        const regPassword = document.getElementById('reg-password');
+        const strengthBar = document.getElementById('strength-bar');
+        const strengthText = document.getElementById('strength-text');
+
+        if (regPassword) {
+            regPassword.addEventListener('input', (e) => {
+                const password = e.target.value;
+                let strength = 0;
+                if (password.length >= 10) strength += 25;
+                else if (password.length >= 6) strength += 10;
+                if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 25;
+                if (/[0-9]/.test(password)) strength += 25;
+                if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) strength += 25;
+
+                strengthBar.style.setProperty('--strength', strength + '%');
+
+                if (strength <= 25) {
+                    strengthText.textContent = 'Слабый пароль';
+                    strengthText.style.color = 'var(--color-error)';
+                } else if (strength <= 50) {
+                    strengthText.textContent = 'Средний пароль';
+                    strengthText.style.color = 'var(--color-warning)';
+                } else if (strength <= 75) {
+                    strengthText.textContent = 'Хороший пароль';
+                    strengthText.style.color = '#8bc34a';
+                } else {
+                    strengthText.textContent = 'Сильный пароль';
+                    strengthText.style.color = 'var(--color-success)';
+                }
+            });
+        }
+
+        // ============ LOGIN FORM SUBMIT ============
+        document.getElementById('loginFormEl').addEventListener('submit', function(e) {
+            e.preventDefault();
+            window.location.href = 'dashboard.html';
+        });
+
+        // ============ REGISTER FORM SUBMIT ============
+        document.getElementById('registerFormEl').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+
+            // Password length >= 10
+            const pw = document.getElementById('reg-password').value;
+            if (pw.length < 10) {
+                valid = false;
+                alert('Пароль должен содержать минимум 10 символов');
+                return;
+            }
+
+            // Passwords match
+            const pwConfirm = document.getElementById('reg-password-confirm').value;
+            const matchError = document.getElementById('password-match-error');
+            if (pw !== pwConfirm) {
+                valid = false;
+                matchError.classList.add('visible');
+                return;
+            } else {
+                matchError.classList.remove('visible');
+            }
+
+            // INN validation (10-12 digits)
+            const inn = document.getElementById('reg-inn').value;
+            const innError = document.getElementById('inn-error');
+            if (!/^\d{10,12}$/.test(inn)) {
+                valid = false;
+                innError.classList.add('visible');
+                return;
+            } else {
+                innError.classList.remove('visible');
+            }
+
+            // Phone validation (+7XXXXXXXXXX)
+            const phone = document.getElementById('reg-phone').value;
+            const phoneError = document.getElementById('phone-error');
+            if (!/^\+7\d{10}$/.test(phone)) {
+                valid = false;
+                phoneError.classList.add('visible');
+                return;
+            } else {
+                phoneError.classList.remove('visible');
+            }
+
+            if (valid) {
+                window.location.href = 'verify-email.html';
+            }
+        });
+    </script>
+</body>
+
+</html>
