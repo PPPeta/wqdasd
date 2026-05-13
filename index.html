@@ -6,12 +6,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>InsurePro — страхование сотрудников вашей компании</title>
   <meta name="description" content="InsurePro — оформляйте страховые полисы для сотрудников, подавайте обращения и отслеживайте статус выплат в одном личном кабинете.">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link rel="stylesheet" href="src/styles/index/main.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+  <style>
+    /* Локальные анимации — работают без интернета и без JS */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.from-left  { transform: translateX(-40px); }
+    .reveal.from-right { transform: translateX(40px); }
+    .reveal.from-down  { transform: translateY(-30px); }
+    .reveal.fade       { transform: none; }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Без JS — сразу показать (graceful degradation) */
+    .no-js .reveal { opacity: 1; transform: none; }
+
+    /* Уважение к prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
+  </style>
 </head>
 
-<body>
+<body class="no-js">
+  <script>document.body.classList.remove('no-js');</script>
 
   <!-- ========== HEADER ========== -->
   <header>
@@ -54,21 +79,21 @@
     <!-- ========== HERO ========== -->
     <section class="hero" id="top">
       <div class="hero-content">
-        <div class="tech-pill wow animate__animated animate__fadeInLeft" data-wow-delay="0s">
+        <div class="tech-pill reveal from-left" style="transition-delay: 0s">
           <span class="tech-dot"></span>
           Корпоративное страхование сотрудников
         </div>
         <div class="hero-head">
-          <h1 data-wow-delay="0.05s" class="wow animate__animated animate__fadeInLeft">
+          <h1 class="reveal from-left" style="transition-delay: 0.05s">
             Страхование всей <span>команды</span><br>в одном кабинете
           </h1>
         </div>
-        <p data-wow-delay="0.15s" class="wow animate__animated animate__fadeInLeft">
+        <p class="reveal from-left" style="transition-delay: 0.15s">
           Руководитель оформляет полисы для сотрудников за пару кликов.
           Сотрудники подают обращения и видят статус выплат онлайн.
           Больше никакого Excel, звонков менеджеру и «я потом уточню».
         </p>
-        <div class="hero-but wow animate__animated animate__fadeInUp" data-wow-delay="0.25s">
+        <div class="hero-but reveal" style="transition-delay: 0.25s">
           <button class="btn primary" onclick="location.href='src/pages/log.html'">
             Войти в кабинет
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -76,19 +101,19 @@
           <button class="btn secondary" onclick="location.href='#how'">Как это работает</button>
         </div>
         <div class="hero-info">
-          <div data-wow-delay="0s" class="wow animate__animated animate__fadeInUp">
+          <div class="reveal" style="transition-delay: 0.3s">
             <div class="hero-info-text first">
               <p class="important-text">2&nbsp;мин</p>
               <p>Оформить полис</p>
             </div>
           </div>
-          <div data-wow-delay="0.2s" class="wow animate__animated animate__fadeInUp">
+          <div class="reveal" style="transition-delay: 0.4s">
             <div class="hero-info-text second">
               <p class="important-text">24/7</p>
               <p>Доступ онлайн</p>
             </div>
           </div>
-          <div data-wow-delay="0.3s" class="wow animate__animated animate__fadeInUp">
+          <div class="reveal" style="transition-delay: 0.5s">
             <div class="hero-info-text third">
               <p class="important-text">0</p>
               <p>Бумажной волокиты</p>
@@ -97,8 +122,8 @@
         </div>
       </div>
 
-      <!-- UI mockup вместо фото / API-окна -->
-      <div class="hero-photo wow animate__animated animate__fadeInRight" data-wow-delay="0.15s">
+      <!-- UI mockup -->
+      <div class="hero-photo reveal from-right" style="transition-delay: 0.15s">
         <div class="ui-mock">
           <div class="ui-mock-head">
             <div class="ui-mock-avatar">ИП</div>
@@ -150,55 +175,50 @@
       </div>
     </section>
 
-    <!-- ========== PROBLEMS (что было «до» — боль, понятная пользователю) ========== -->
+    <!-- ========== PROBLEMS ========== -->
     <section class="problems" id="problems">
       <div class="features-header">
-        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">Знакомая ситуация?</p>
-        <p class="important-text wow animate__animated animate__fadeInDown" data-wow-delay="0.1s">
+        <p class="tech-label reveal fade">Знакомая ситуация?</p>
+        <p class="important-text reveal from-down" style="transition-delay: 0.1s">
           Как это обычно <span>бывает без InsurePro</span>
         </p>
-        <p class="section-sub wow animate__animated animate__fadeIn" data-wow-delay="0.2s">
+        <p class="section-sub reveal fade" style="transition-delay: 0.2s">
           Если вы хоть раз оформляли страховку на команду — эти проблемы вам знакомы.
         </p>
       </div>
 
       <ul class="problems-grid">
-        <li data-wow-delay="0s" class="wow animate__animated animate__fadeInUp">
+        <li class="reveal" style="transition-delay: 0s">
           <div class="problem-icon red">📋</div>
           <h3>Списки в Excel</h3>
           <p>Один файл у бухгалтера, другой у HR, третий у менеджера компании — и все немного разные.</p>
           <span class="problem-fix">→ Единый список сотрудников</span>
         </li>
-
-        <li data-wow-delay="0.1s" class="wow animate__animated animate__fadeInUp">
+        <li class="reveal" style="transition-delay: 0.1s">
           <div class="problem-icon amber">📞</div>
           <h3>«Позвоните менеджеру»</h3>
           <p>Чтобы узнать, действует ли ваш полис, приходится писать HR, который напишет страховщику.</p>
           <span class="problem-fix">→ Статус виден в кабинете</span>
         </li>
-
-        <li data-wow-delay="0.2s" class="wow animate__animated animate__fadeInUp">
+        <li class="reveal" style="transition-delay: 0.2s">
           <div class="problem-icon blue">📄</div>
           <h3>Бумажные обращения</h3>
           <p>Случай произошёл — собирайте чеки, пишите заявление от руки, носите в офис. Решение через неделю.</p>
           <span class="problem-fix">→ Подача за 1 минуту онлайн</span>
         </li>
-
-        <li data-wow-delay="0.3s" class="wow animate__animated animate__fadeInUp">
+        <li class="reveal" style="transition-delay: 0.3s">
           <div class="problem-icon green">💸</div>
           <h3>«А кому и сколько заплатили?»</h3>
           <p>Чтобы понять, кто из сотрудников получал выплаты и на какую сумму, надо поднимать всю переписку.</p>
           <span class="problem-fix">→ История всех выплат под рукой</span>
         </li>
-
-        <li data-wow-delay="0.4s" class="wow animate__animated animate__fadeInUp">
+        <li class="reveal" style="transition-delay: 0.4s">
           <div class="problem-icon purple">⏰</div>
           <h3>Полис истёк внезапно</h3>
           <p>Никто не напомнил, дата прошла — сотрудники остались без страховки, а вы узнали последним.</p>
           <span class="problem-fix">→ Напоминания и автопродление</span>
         </li>
-
-        <li data-wow-delay="0.5s" class="wow animate__animated animate__fadeInUp">
+        <li class="reveal" style="transition-delay: 0.5s">
           <div class="problem-icon dark">🤷</div>
           <h3>«Что входит в мой полис?»</h3>
           <p>Сотрудник не помнит, покрывает ли его полис стоматологию. Снова звонок, снова уточнение.</p>
@@ -210,35 +230,32 @@
     <!-- ========== HOW IT WORKS ========== -->
     <section class="how-section" id="how">
       <div class="features-header">
-        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">Как это работает</p>
-        <p class="important-text wow animate__animated animate__fadeInDown" data-wow-delay="0.1s">
+        <p class="tech-label reveal fade">Как это работает</p>
+        <p class="important-text reveal from-down" style="transition-delay: 0.1s">
           От регистрации до <span>первой выплаты</span>
         </p>
-        <p class="section-sub wow animate__animated animate__fadeIn" data-wow-delay="0.2s">
+        <p class="section-sub reveal fade" style="transition-delay: 0.2s">
           Четыре шага, чтобы компания была полностью застрахована и могла пользоваться сервисом.
         </p>
       </div>
 
       <div class="how-steps">
-        <div class="how-step wow animate__animated animate__fadeInUp" data-wow-delay="0s">
+        <div class="how-step reveal" style="transition-delay: 0s">
           <div class="how-step-num">01</div>
           <h3>Руководитель регистрирует компанию</h3>
           <p>Название, ИНН, телефон — и аккаунт создан. На почту приходит код подтверждения.</p>
         </div>
-
-        <div class="how-step wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">
+        <div class="how-step reveal" style="transition-delay: 0.1s">
           <div class="how-step-num">02</div>
           <h3>Добавляет сотрудников</h3>
           <p>Вручную или списком. Каждому приходит приглашение — они создают свой личный кабинет.</p>
         </div>
-
-        <div class="how-step wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+        <div class="how-step reveal" style="transition-delay: 0.2s">
           <div class="how-step-num">03</div>
           <h3>Выбирает тариф и оформляет полис</h3>
           <p>Базовый, Стандарт или Премиум — рассчитайте стоимость на всю команду в калькуляторе.</p>
         </div>
-
-        <div class="how-step wow animate__animated animate__fadeInUp" data-wow-delay="0.3s">
+        <div class="how-step reveal" style="transition-delay: 0.3s">
           <div class="how-step-num">04</div>
           <h3>Сотрудники пользуются</h3>
           <p>Видят своё покрытие, подают обращения, прикрепляют чеки. Руководитель одобряет выплаты.</p>
@@ -246,77 +263,54 @@
       </div>
     </section>
 
-    <!-- ========== FEATURES — что даёт сервис ========== -->
+    <!-- ========== FEATURES ========== -->
     <section class="features" id="features">
       <div class="features-header">
-        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">Возможности</p>
-        <p class="important-text wow animate__animated animate__fadeInDown" data-wow-delay="0.1s">
+        <p class="tech-label reveal fade">Возможности</p>
+        <p class="important-text reveal from-down" style="transition-delay: 0.1s">
           Что можно делать <span>в InsurePro</span>
         </p>
       </div>
       <div class="features-proposal">
         <ul>
-          <li data-wow-delay="0s" class="wow animate__animated animate__fadeInDown">
+          <li class="reveal from-down" style="transition-delay: 0s">
             <div class="feature-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             </div>
             <h3>Полисы и тарифы</h3>
             <p>Выбор тарифного плана, автоматический расчёт стоимости по количеству сотрудников, продление в один клик.</p>
           </li>
-          <li data-wow-delay="0.1s" class="wow animate__animated animate__fadeInDown">
+          <li class="reveal from-down" style="transition-delay: 0.1s">
             <div class="feature-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
             </div>
             <h3>Список сотрудников</h3>
             <p>Добавление поштучно или списком, активация/деактивация, история полисов у каждого.</p>
           </li>
-          <li data-wow-delay="0.2s" class="wow animate__animated animate__fadeInDown">
+          <li class="reveal from-down" style="transition-delay: 0.2s">
             <div class="feature-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/>
-              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
             </div>
             <h3>Обращения за выплатами</h3>
             <p>Сотрудник подаёт заявку с чеками, руководитель одобряет или отклоняет — всё с историей решений.</p>
           </li>
-          <li data-wow-delay="0.3s" class="wow animate__animated animate__fadeInDown">
+          <li class="reveal from-down" style="transition-delay: 0.3s">
             <div class="feature-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="#9333ea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
-              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
             </div>
             <h3>Калькулятор стоимости</h3>
             <p>Выберите тариф и укажите число сотрудников — увидите сумму в месяц и за год ещё до оформления.</p>
           </li>
-          <li data-wow-delay="0.4s" class="wow animate__animated animate__fadeInDown">
+          <li class="reveal from-down" style="transition-delay: 0.4s">
             <div class="feature-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V8"/><path d="M12 16V6"/><path d="M17 16v-4"/>
-              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V8"/><path d="M12 16V6"/><path d="M17 16v-4"/></svg>
             </div>
             <h3>Отчёты и выгрузки</h3>
             <p>Сколько выплачено, кому, за какой период — готовые отчёты в CSV, Excel или PDF.</p>
           </li>
-          <li data-wow-delay="0.5s" class="wow animate__animated animate__fadeInDown">
+          <li class="reveal from-down" style="transition-delay: 0.5s">
             <div class="feature-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                <line x1="12" y1="9" x2="12" y2="13"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
-              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
             <h3>Уведомления и напоминания</h3>
             <p>Полис истекает через 30 дней? Пришло новое обращение? Система напомнит — вы ничего не пропустите.</p>
@@ -327,10 +321,10 @@
 
     <!-- ========== NUMBERS ========== -->
     <section class="guarantees" id="numbers">
-      <div class="guarantees-blur wow animate__animated animate__fadeInUp">
+      <div class="guarantees-blur reveal">
         <p class="important-text">InsurePro закрывает всё</p>
         <div class="guarantees-content">
-          <ul data-wow-delay="0.3s" class="wow animate__animated animate__fadeInUp">
+          <ul>
             <li>
               <h3>3</h3>
               <p>тарифных плана</p>
@@ -353,7 +347,7 @@
     </section>
 
     <!-- ========== CTA ========== -->
-    <section data-wow-delay="0s" class="question-the-user wow animate__animated animate__fadeInUp" id="cta">
+    <section class="question-the-user reveal" id="cta">
       <div class="question-the-user-content">
         <div>
           <h1>Попробуйте InsurePro</h1>
@@ -408,9 +402,43 @@
   </footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      new WOW({ offset: 50, mobile: true, live: false }).init();
-    });
+    // Локальный аналог WOW.js на IntersectionObserver.
+    // Не требует CDN, работает офлайн, умеет data-uri, быстрый.
+    (function () {
+      var items = document.querySelectorAll('.reveal');
+
+      // Если браузер слишком старый — просто показываем всё
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(function (el) { el.classList.add('in-view'); });
+        return;
+      }
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+      items.forEach(function (el) {
+        // Если элемент уже в зоне видимости на момент загрузки — показать сразу
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.95) {
+          el.classList.add('in-view');
+        } else {
+          io.observe(el);
+        }
+      });
+
+      // Safety-net: через 3 секунды принудительно показать всё, что осталось
+      setTimeout(function () {
+        document.querySelectorAll('.reveal:not(.in-view)').forEach(function (el) {
+          el.classList.add('in-view');
+        });
+      }, 3000);
+    })();
   </script>
 </body>
 
