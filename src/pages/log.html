@@ -90,42 +90,13 @@
         </div>
 
         <h2 class="form-title">Создайте аккаунт</h2>
-        <p class="form-subtitle">Начните работу за 2 минуты</p>
+        <p class="form-subtitle">Понадобятся только email и пароль</p>
 
         <form id="register-form-el" novalidate>
           <div class="input-group">
             <input type="email" id="reg-email" placeholder=" " required>
-            <label for="reg-email">Рабочий Email</label>
+            <label for="reg-email">Email</label>
             <span class="input-icon">📧</span>
-          </div>
-
-          <div class="input-group">
-            <input type="text" id="reg-company" placeholder=" " required>
-            <label for="reg-company">Название компании</label>
-            <span class="input-icon">🏢</span>
-          </div>
-
-          <div class="input-group">
-            <input type="text" id="reg-inn" placeholder=" " pattern="[0-9]{10,12}" required>
-            <label for="reg-inn">ИНН организации (10–12 цифр)</label>
-            <span class="input-icon">📋</span>
-          </div>
-
-          <div class="input-group">
-            <input type="tel" id="reg-phone" placeholder=" " pattern="\+7\d{10}" required>
-            <label for="reg-phone">Телефон (+7XXXXXXXXXX)</label>
-            <span class="input-icon">📱</span>
-          </div>
-
-          <div class="input-group">
-            <select id="reg-size" required>
-              <option value="" disabled selected></option>
-              <option value="1-50">До 50 (Стартап)</option>
-              <option value="51-250">51–250 (Бизнес)</option>
-              <option value="251+">Более 250 (Корпоративный)</option>
-            </select>
-            <label for="reg-size">Количество сотрудников</label>
-            <span class="input-icon">👥</span>
           </div>
 
           <div class="input-group">
@@ -283,20 +254,12 @@
       e.preventDefault();
       clearErrors(e.target);
       const email = document.getElementById('reg-email');
-      const company = document.getElementById('reg-company');
-      const inn = document.getElementById('reg-inn');
-      const phone = document.getElementById('reg-phone');
-      const size = document.getElementById('reg-size');
       const pwd = document.getElementById('reg-password');
       const pwd2 = document.getElementById('reg-password-confirm');
       const agree = document.getElementById('reg-agree');
 
       let ok = true;
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { setError(email, 'Введите корректный email'); ok = false; }
-      if (!company.value.trim()) { setError(company, 'Укажите компанию'); ok = false; }
-      if (!/^\d{10,12}$/.test(inn.value)) { setError(inn, 'ИНН должен содержать 10–12 цифр'); ok = false; }
-      if (!/^\+7\d{10}$/.test(phone.value)) { setError(phone, 'Формат: +7XXXXXXXXXX'); ok = false; }
-      if (!size.value) { setError(size, 'Выберите размер компании'); ok = false; }
       if (pwd.value.length < 10) { setError(pwd, 'Минимум 10 символов'); ok = false; }
       if (pwd.value !== pwd2.value) { setError(pwd2, 'Пароли не совпадают'); ok = false; }
       if (!agree.checked) {
@@ -306,7 +269,8 @@
       }
       if (!ok) return;
 
-      // TODO(API): POST /api/auth/register
+      // TODO(API): POST /auth/reg/user/  (для сотрудника) или
+      //            POST /auth/reg/company/ (для компании — админ решает роль после)
       window.location.href = 'verify-email.html';
     });
   </script>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsurePro — Пользователь</title>
+  <link rel="stylesheet" href="../styles/variables.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">IP</div>
+        <span>InsurePro</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" data-roles="admin,company_manager,employee"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1V10"/></svg> Дашборд</a>
+        <a href="employees.html" data-roles="admin,company_manager"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Сотрудники</a>
+        <a href="policies.html" data-roles="admin,company_manager,employee"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg> Полисы</a>
+        <a href="claims.html" data-roles="admin,company_manager,employee"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Обращения</a>
+        <a href="plans.html" data-roles="admin,company_manager"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> Планы</a>
+        <a href="reports.html" data-roles="admin,company_manager"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V8"/><path d="M12 16V6"/><path d="M17 16v-4"/></svg> Отчёты</a>
+        <a href="organizations.html" data-roles="admin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/><path d="M12 14h.01"/></svg> Организации</a>
+        <a href="users.html" data-roles="admin" class="active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-3-3.87"/><path d="M4 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Пользователи</a>
+        <a href="audit-log.html" data-roles="admin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10l4 2"/><circle cx="12" cy="12" r="10"/></svg> Журнал действий</a>
+      </nav>
+      <div class="sidebar-footer">InsurePro · v1.0</div>
+    </aside>
+    <div class="sidebar-backdrop"></div>
+
+    <div class="app-main">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="sidebar-toggle" aria-label="Меню">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="navbar-right">
+          <div class="navbar-user">
+            <div class="navbar-user-info">
+              <div class="navbar-user-name"></div>
+              <div class="navbar-user-role"></div>
+            </div>
+            <div class="navbar-avatar"></div>
+          </div>
+          <button class="btn ghost btn-sm btn-logout">Выйти</button>
+        </div>
+      </header>
+
+      <div class="app-content" id="user-content">
+        <nav class="breadcrumbs" aria-label="Навигация">
+          <a href="users.html">Пользователи</a>
+          <span class="sep">/</span>
+          <span class="current" id="bc-user">—</span>
+        </nav>
+
+        <div id="user-root"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== MODAL: CHANGE ROLE ============== -->
+  <div class="modal-overlay" id="modal-role">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Изменить роль</div>
+        <button class="modal-close" data-modal-close aria-label="Закрыть">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-soft);margin-bottom:1rem;">Изменение роли влияет на права доступа пользователя ко всей системе.</p>
+        <div class="input-group">
+          <select id="new-role" required>
+            <option value="admin">Администратор</option>
+            <option value="company_manager">Менеджер компании</option>
+            <option value="employee">Сотрудник</option>
+          </select>
+          <label for="new-role">Новая роль</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn secondary" data-modal-close>Отмена</button>
+        <button class="btn primary" id="role-save">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/mock.js"></script>
+  <script src="../scripts/app.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = Number(params.get('id'));
+    const root = document.getElementById('user-root');
+    // TODO(API): GET /users/{id}
+    const user = MOCK.users.find((u) => u.id === id);
+
+    if (!user) {
+      root.innerHTML = `
+        <div class="empty-state">
+          <h3>Пользователь не найден</h3>
+          <p>Запись с ID ${id} не существует или была удалена.</p>
+          <a href="users.html" class="btn primary" style="margin-top:1rem;">← К списку</a>
+        </div>`;
+    } else {
+      const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email;
+      document.getElementById('bc-user').textContent = fullName;
+
+      const roleBadge =
+        user.role === 'admin'     ? '<span class="badge badge-info">Администратор</span>' :
+        user.role === 'company_manager' ? '<span class="badge badge-active">Менеджер компании</span>' :
+        '<span class="badge badge-pending">Сотрудник</span>';
+      const statusBadge = user.is_active
+        ? '<span class="badge badge-active">Активен</span>'
+        : '<span class="badge badge-expired">Заблокирован</span>';
+
+      // Активность пользователя
+      const activity = MOCK.auditLog.filter((e) => e.user === fullName).slice(0, 10);
+      const activityHtml = activity.length
+        ? activity.map((a) => `
+            <tr>
+              <td style="font-family:monospace;font-size:.85rem;white-space:nowrap;">${esc(a.at)}</td>
+              <td>${esc(a.details)}</td>
+              <td style="font-family:monospace;">${esc(a.entity)}</td>
+              <td style="font-family:monospace;color:var(--text-muted);">${esc(a.ip)}</td>
+            </tr>
+          `).join('')
+        : '<tr><td colspan="4" style="text-align:center;padding:1.5rem;color:var(--text-muted);">Активности ещё нет</td></tr>';
+
+      root.innerHTML = `
+        <div class="section-header">
+          <div class="section-header-left" style="flex-direction:row;align-items:center;gap:1rem;">
+            <div class="avatar-sm" style="width:56px;height:56px;font-size:1.1rem;">${esc(getInitials(user.first_name, user.last_name))}</div>
+            <div>
+              <h1 style="margin-bottom:.25rem;">${esc(fullName)}</h1>
+              <p class="subtitle">${esc(user.email)} · ID ${user.id}</p>
+            </div>
+          </div>
+          <div class="section-header-actions">
+            <button class="btn ${user.is_active ? 'secondary' : 'success'}" id="btn-toggle">
+              ${user.is_active ? 'Заблокировать' : 'Активировать'}
+            </button>
+            <button class="btn secondary" data-modal-open="modal-role" id="btn-role">Изменить роль</button>
+            <button class="btn danger" id="btn-del">Удалить</button>
+          </div>
+        </div>
+
+        <div class="grid-2-3">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Информация</div>
+                <div class="card-subtitle">Данные пользователя из системы</div>
+              </div>
+              <a href="profile.html" class="btn ghost btn-sm">Профиль (мой)</a>
+            </div>
+            <dl class="dl">
+              <dt>Email</dt><dd>${esc(user.email)}</dd>
+              <dt>Имя</dt><dd>${esc(user.first_name || '—')}</dd>
+              <dt>Фамилия</dt><dd>${esc(user.last_name || '—')}</dd>
+              <dt>Роль</dt><dd>${roleBadge}</dd>
+              <dt>Компания</dt><dd>${esc(user.company || '—')}</dd>
+              <dt>Статус</dt><dd>${statusBadge}</dd>
+              <dt>Email подтверждён</dt><dd>${user.email_verified ? 'Да' : '<span style="color:var(--warning-strong);">Нет</span>'}</dd>
+              <dt>Дата регистрации</dt><dd>${formatDate(user.created_at)}</dd>
+            </dl>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Быстрые действия</div>
+                <div class="card-subtitle">Для администратора</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.5rem;">
+              <button class="btn secondary btn-sm" id="btn-send-verify">Отправить код подтверждения</button>
+              <button class="btn secondary btn-sm" id="btn-reset-pwd">Сбросить пароль</button>
+              <button class="btn secondary btn-sm" id="btn-force-logout">Разлогинить все сессии</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-6">
+          <div class="card-header">
+            <div>
+              <div class="card-title">История активности</div>
+              <div class="card-subtitle">Последние 10 операций этого пользователя</div>
+            </div>
+            <a href="audit-log.html" class="btn ghost btn-sm">Весь журнал</a>
+          </div>
+          <div class="table-wrapper" style="box-shadow:none;border:none;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Время</th>
+                  <th>Действие</th>
+                  <th>Объект</th>
+                  <th>IP-адрес</th>
+                </tr>
+              </thead>
+              <tbody>${activityHtml}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      // Обработчики действий
+      document.getElementById('btn-toggle').addEventListener('click', () => {
+        // TODO(API): PATCH /users/{id}  { is_active }
+        user.is_active = !user.is_active;
+        location.reload();
+      });
+      document.getElementById('btn-del').addEventListener('click', () => {
+        if (!confirm(`Удалить пользователя «${fullName}»? Действие обратимо только через поддержку.`)) return;
+        // TODO(API): DELETE /users/{id}
+        const idx = MOCK.users.findIndex((u) => u.id === id);
+        if (idx > -1) MOCK.users.splice(idx, 1);
+        window.location.href = 'users.html';
+      });
+      document.getElementById('btn-send-verify').addEventListener('click', () => {
+        // TODO(API): POST /auth/send-verify-email/?email=...
+        alert(`Письмо с кодом отправлено на ${user.email}`);
+      });
+      document.getElementById('btn-reset-pwd').addEventListener('click', () => {
+        // TODO(API): POST /users/{id}/reset-password (или PATCH /users/{id}/password)
+        alert('Временный пароль сгенерирован и отправлен пользователю на email.');
+      });
+      document.getElementById('btn-force-logout').addEventListener('click', () => {
+        // TODO(API): POST /auth/logout/ (принудительно от имени пользователя) — через Redis delete_session
+        alert('Все сессии пользователя завершены.');
+      });
+
+      // Модалка смены роли
+      document.querySelector('[data-modal-open="modal-role"]').addEventListener('click', () => {
+        document.getElementById('new-role').value = user.role;
+        markSelectsWithValue(document.getElementById('modal-role'));
+      });
+      document.getElementById('role-save').addEventListener('click', () => {
+        const newRole = document.getElementById('new-role').value;
+        // TODO(API): PATCH /users/{id}/role  { role_id }
+        user.role = newRole;
+        closeModal('modal-role');
+        location.reload();
+      });
+    }
+  </script>
+</body>
+
+</html>

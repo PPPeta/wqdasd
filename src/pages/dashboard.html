@@ -44,6 +44,18 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V8"/><path d="M12 16V6"/><path d="M17 16v-4"/></svg>
           Отчёты
         </a>
+        <a href="organizations.html" data-roles="admin">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/><path d="M12 14h.01"/></svg>
+          Организации
+        </a>
+        <a href="users.html" data-roles="admin">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-3-3.87"/><path d="M4 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Пользователи
+        </a>
+        <a href="audit-log.html" data-roles="admin">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10l4 2"/><circle cx="12" cy="12" r="10"/></svg>
+          Журнал действий
+        </a>
       </nav>
       <div class="sidebar-footer">InsurePro · v1.0</div>
     </aside>
@@ -153,54 +165,85 @@
 
       // Actions
       document.getElementById('dash-actions').innerHTML = `
+        <button class="btn secondary" onclick="location.href='audit-log.html'">Журнал действий</button>
         <button class="btn secondary" onclick="location.href='reports.html'">${ICONS.download} Отчёт</button>
-        <button class="btn primary" onclick="location.href='plans.html'">${ICONS.plus} Новый тариф</button>
+        <button class="btn primary" onclick="location.href='organizations.html'">${ICONS.plus} Новая компания</button>
       `;
 
       const d = MOCK.dashboard.admin;
 
-      // Widgets
+      // Widgets — теперь кликабельные
       document.getElementById('widgets').innerHTML = [
-        { label: 'Компаний в системе', value: d.companies, icon: 'building', color: 'blue', hint: 'всего зарегистрировано', trend: '+3 за месяц', trendType: 'up' },
-        { label: 'Активных полисов', value: d.policies, icon: 'file', color: 'green', hint: 'по всей системе', trend: '+12 за месяц', trendType: 'up' },
-        { label: 'Обращений', value: d.claims, icon: 'shield', color: 'amber', hint: 'всего обработано' },
-        { label: 'Выручка', value: formatRub(d.revenue), icon: 'wallet', color: 'purple', hint: 'за текущий год', trend: '+18.4%', trendType: 'up' },
-      ].map(widgetCard).join('');
+        { label: 'Компаний в системе', value: d.companies, icon: 'building', color: 'blue', hint: 'всего зарегистрировано', trend: '+3 за месяц', trendType: 'up', href: 'organizations.html' },
+        { label: 'Активных полисов', value: d.policies, icon: 'file', color: 'green', hint: 'по всей системе', trend: '+12 за месяц', trendType: 'up', href: 'policies.html' },
+        { label: 'Обращений', value: d.claims, icon: 'shield', color: 'amber', hint: 'всего обработано', href: 'claims.html' },
+        { label: 'Выручка', value: formatRub(d.revenue), icon: 'wallet', color: 'purple', hint: 'за текущий год', trend: '+18.4%', trendType: 'up', href: 'reports.html' },
+      ].map((w) => {
+        const card = widgetCard(w);
+        return w.href ? `<a href="${w.href}" style="text-decoration:none;color:inherit;">${card}</a>` : card;
+      }).join('');
 
-      // Нижняя часть: компании + график активности
-      const topCompanies = [
-        { name: 'ООО «Прогресс»', policies: 3, employees: 45, revenue: 156800 },
-        { name: 'АО «Меркурий»', policies: 5, employees: 78, revenue: 248400 },
-        { name: 'ООО «Старт»', policies: 2, employees: 22, revenue: 70400 },
-        { name: 'ПАО «Вектор»', policies: 4, employees: 110, revenue: 352000 },
-        { name: 'ООО «Интеграл»', policies: 3, employees: 67, revenue: 214400 },
-      ];
+      // Алёрты — блок с важными уведомлениями
+      const alertsHtml = MOCK.alerts.map((a) => {
+        const icon = a.severity === 'danger' ? '⚠️' : a.severity === 'warning' ? '⏰' : a.severity === 'success' ? '✅' : 'ℹ️';
+        return `
+          <a href="${esc(a.link || '#')}" class="alert-item alert-${esc(a.severity)}" style="text-decoration:none;color:inherit;">
+            <div class="alert-icon">${icon}</div>
+            <div class="alert-body">
+              <div class="alert-title">${esc(a.title)}</div>
+              <div class="alert-text">${esc(a.body)}</div>
+            </div>
+            <div class="alert-arrow">→</div>
+          </a>
+        `;
+      }).join('');
 
-      const audit = [
-        { time: '14:32', user: 'Иван Петров', action: 'Одобрил обращение CLM-2025-015' },
-        { time: '13:18', user: 'Мария Попова', action: 'Подала обращение на медуслуги' },
-        { time: '12:05', user: 'Администратор', action: 'Создал тариф «Премиум+»' },
-        { time: '11:44', user: 'АО «Меркурий»', action: 'Оформил полис POL-2025-088' },
-        { time: '10:12', user: 'Дмитрий Иванов', action: 'Обновил профиль' },
-      ];
+      // Топ-компании из MOCK.organizations
+      const topCompanies = MOCK.organizations
+        .slice()
+        .sort((a, b) => b.policies - a.policies)
+        .slice(0, 5)
+        .map((o) => ({
+          id: o.id,
+          name: o.company_name,
+          policies: o.policies,
+          employees: o.employees,
+          // примерная выручка — зависит от числа сотрудников и полисов
+          revenue: o.employees * o.policies * 3200,
+        }));
+
+      // Журнал действий (админ) — из MOCK.auditLog
+      const audit = MOCK.auditLog.slice(0, 6);
 
       document.getElementById('dash-body').innerHTML = `
-        <div class="grid-2-3">
+        ${alertsHtml ? `
+          <div class="card mt-6">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Важные уведомления</div>
+                <div class="card-subtitle">${MOCK.alerts.length} событий требуют внимания</div>
+              </div>
+            </div>
+            <div class="alerts-list">${alertsHtml}</div>
+          </div>
+        ` : ''}
+
+        <div class="grid-2-3 mt-6">
           <div class="card">
             <div class="card-header">
               <div>
                 <div class="card-title">Топ компаний</div>
-                <div class="card-subtitle">По выручке за месяц</div>
+                <div class="card-subtitle">По количеству полисов</div>
               </div>
-              <button class="btn ghost btn-sm">Все</button>
+              <a href="organizations.html" class="btn ghost btn-sm">Все</a>
             </div>
             <table class="data-table">
               <thead>
-                <tr><th>Компания</th><th>Полисы</th><th>Сотрудники</th><th class="text-right">Выручка</th></tr>
+                <tr><th>Компания</th><th>Полисы</th><th>Сотрудники</th><th class="text-right">Выручка/год</th></tr>
               </thead>
               <tbody>
                 ${topCompanies.map(c => `
-                  <tr>
+                  <tr onclick="location.href='organizations.html'" style="cursor:pointer;">
                     <td><strong>${esc(c.name)}</strong></td>
                     <td>${c.policies}</td>
                     <td>${c.employees}</td>
@@ -217,14 +260,15 @@
                 <div class="card-title">Журнал действий</div>
                 <div class="card-subtitle">Последние события</div>
               </div>
+              <a href="audit-log.html" class="btn ghost btn-sm">Все</a>
             </div>
             <div>
               ${audit.map(a => `
                 <div class="list-item">
-                  <div class="avatar-sm" style="background:linear-gradient(135deg,#94a3b8,#64748b)">${a.time.slice(0, 2)}</div>
+                  <div class="avatar-sm" style="background:linear-gradient(135deg,#94a3b8,#64748b);font-size:.7rem;">${esc(a.at.slice(11, 16))}</div>
                   <div class="list-item-body">
-                    <div class="list-item-title">${esc(a.action)}</div>
-                    <div class="list-item-meta">${esc(a.user)} · ${esc(a.time)}</div>
+                    <div class="list-item-title">${esc(a.details)}</div>
+                    <div class="list-item-meta">${esc(a.user)} · ${esc(a.at.slice(0, 10))}</div>
                   </div>
                 </div>
               `).join('')}
@@ -233,15 +277,17 @@
         </div>
 
         <div class="grid-3 mt-6">
-          <div class="widget widget-stat">
-            <div class="widget-icon blue">${ICONS.users}</div>
-            <div class="widget-body">
-              <div class="widget-label">Пользователей</div>
-              <div class="widget-value">1 247</div>
-              <div class="widget-hint">активных за 30 дней</div>
+          <a href="users.html" style="text-decoration:none;color:inherit;">
+            <div class="widget">
+              <div class="widget-icon blue">${ICONS.users}</div>
+              <div class="widget-body">
+                <div class="widget-label">Пользователей</div>
+                <div class="widget-value">${MOCK.users.length}</div>
+                <div class="widget-hint">всего в системе</div>
+              </div>
             </div>
-          </div>
-          <div class="widget widget-stat">
+          </a>
+          <div class="widget">
             <div class="widget-icon green">${ICONS.shield}</div>
             <div class="widget-body">
               <div class="widget-label">Одобрено обращений</div>
@@ -249,7 +295,7 @@
               <div class="widget-hint">среднее по системе</div>
             </div>
           </div>
-          <div class="widget widget-stat">
+          <div class="widget">
             <div class="widget-icon amber">${ICONS.clock}</div>
             <div class="widget-body">
               <div class="widget-label">Среднее время решения</div>

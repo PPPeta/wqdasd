@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsurePro — Журнал действий</title>
+  <link rel="stylesheet" href="../styles/variables.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">IP</div>
+        <span>InsurePro</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" data-roles="admin,company_manager,employee"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1V10"/></svg> Дашборд</a>
+        <a href="employees.html" data-roles="admin,company_manager"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Сотрудники</a>
+        <a href="policies.html" data-roles="admin,company_manager,employee"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg> Полисы</a>
+        <a href="claims.html" data-roles="admin,company_manager,employee"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Обращения</a>
+        <a href="plans.html" data-roles="admin,company_manager"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> Планы</a>
+        <a href="reports.html" data-roles="admin,company_manager"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V8"/><path d="M12 16V6"/><path d="M17 16v-4"/></svg> Отчёты</a>
+        <a href="organizations.html" data-roles="admin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/><path d="M12 14h.01"/></svg> Организации</a>
+        <a href="users.html" data-roles="admin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-3-3.87"/><path d="M4 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Пользователи</a>
+        <a href="audit-log.html" data-roles="admin" class="active"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10l4 2"/><circle cx="12" cy="12" r="10"/></svg> Журнал действий</a>
+      </nav>
+      <div class="sidebar-footer">InsurePro · v1.0</div>
+    </aside>
+    <div class="sidebar-backdrop"></div>
+
+    <div class="app-main">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="sidebar-toggle" aria-label="Меню">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="navbar-right">
+          <div class="navbar-user">
+            <div class="navbar-user-info">
+              <div class="navbar-user-name"></div>
+              <div class="navbar-user-role"></div>
+            </div>
+            <div class="navbar-avatar"></div>
+          </div>
+          <button class="btn ghost btn-sm btn-logout">Выйти</button>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <div class="section-header">
+          <div class="section-header-left">
+            <h1>Журнал действий</h1>
+            <p class="subtitle">Все операции пользователей в системе · <span id="audit-total">0</span> записей</p>
+          </div>
+          <div class="section-header-actions">
+            <button class="btn secondary" id="audit-export">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+              Экспорт CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-input">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="search" id="audit-search" placeholder="Поиск по пользователю, действию или объекту">
+          </div>
+          <div class="filter-tabs" id="audit-filters">
+            <button class="filter-tab active" data-filter="all">Все</button>
+            <button class="filter-tab" data-filter="login">Входы</button>
+            <button class="filter-tab" data-filter="policy">Полисы</button>
+            <button class="filter-tab" data-filter="claim">Обращения</button>
+            <button class="filter-tab" data-filter="user">Пользователи</button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Время</th>
+                <th>Пользователь</th>
+                <th>Действие</th>
+                <th>Объект</th>
+                <th>IP-адрес</th>
+                <th>Подробности</th>
+              </tr>
+            </thead>
+            <tbody id="audit-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/mock.js"></script>
+  <script src="../scripts/app.js"></script>
+  <script>
+    let filter = 'all';
+    let query = '';
+    const body = document.getElementById('audit-body');
+    const totalEl = document.getElementById('audit-total');
+
+    const ACTION_LABELS = {
+      'LOGIN': { text: 'Вход', badge: 'info' },
+      'user.update': { text: 'Обновление профиля', badge: 'info' },
+      'user.deactivate': { text: 'Деактивация пользователя', badge: 'suspended' },
+      'user.activate': { text: 'Активация пользователя', badge: 'active' },
+      'policy.create': { text: 'Создание полиса', badge: 'info' },
+      'policy.activate': { text: 'Активация полиса', badge: 'active' },
+      'policy.suspend': { text: 'Приостановка полиса', badge: 'suspended' },
+      'policy.cancel': { text: 'Отмена полиса', badge: 'expired' },
+      'policy.renew': { text: 'Продление полиса', badge: 'active' },
+      'claim.submit': { text: 'Подача обращения', badge: 'pending' },
+      'claim.approve': { text: 'Одобрение обращения', badge: 'approved' },
+      'claim.reject': { text: 'Отклонение обращения', badge: 'rejected' },
+      'plan.create': { text: 'Создание плана', badge: 'info' },
+    };
+
+    function matchesFilter(entry) {
+      if (filter === 'all') return true;
+      if (filter === 'login') return entry.action === 'LOGIN';
+      if (filter === 'policy') return entry.action.startsWith('policy.');
+      if (filter === 'claim') return entry.action.startsWith('claim.');
+      if (filter === 'user') return entry.action.startsWith('user.');
+      return true;
+    }
+
+    function render() {
+      let list = MOCK.auditLog.slice();
+      list = list.filter(matchesFilter);
+      if (query) {
+        const q = query.toLowerCase();
+        list = list.filter((e) =>
+          (e.user || '').toLowerCase().includes(q) ||
+          (e.action || '').toLowerCase().includes(q) ||
+          (e.entity || '').toLowerCase().includes(q) ||
+          (e.details || '').toLowerCase().includes(q)
+        );
+      }
+      totalEl.textContent = list.length;
+
+      if (list.length === 0) {
+        body.innerHTML = tableEmptyRow(6, 'По выбранным фильтрам ничего не найдено');
+        return;
+      }
+
+      body.innerHTML = list.map((e) => {
+        const meta = ACTION_LABELS[e.action] || { text: e.action, badge: 'info' };
+        return `
+          <tr>
+            <td style="font-family:monospace;font-size:.85rem;white-space:nowrap;">${esc(e.at)}</td>
+            <td style="font-weight:500;color:var(--text);">${esc(e.user)}</td>
+            <td><span class="badge badge-${meta.badge}">${meta.text}</span></td>
+            <td style="font-family:monospace;">${esc(e.entity)}</td>
+            <td style="font-family:monospace;color:var(--text-muted);">${esc(e.ip)}</td>
+            <td style="color:var(--text-soft);">${esc(e.details)}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+    render();
+
+    // Filters
+    document.getElementById('audit-filters').addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-tab');
+      if (!btn) return;
+      document.querySelectorAll('#audit-filters .filter-tab').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      filter = btn.dataset.filter;
+      render();
+    });
+    document.getElementById('audit-search').addEventListener('input', (e) => {
+      query = e.target.value;
+      render();
+    });
+
+    // Export (fake CSV)
+    document.getElementById('audit-export').addEventListener('click', () => {
+      // TODO(API): GET /reports/export/csv?type=audit
+      alert('Экспорт журнала в CSV будет реализован после интеграции бэкенда.');
+    });
+  </script>
+</body>
+
+</html>

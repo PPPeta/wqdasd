@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadRoleFromStorage();
   initSidebar();
   injectUser();
+  mountUserMenu();
   wireLogout();
   wireModals();
   mountRoleSwitcher();
@@ -116,13 +117,78 @@ function injectUser() {
   }
 }
 
-/* ------------------ Logout ------------------ */
+/* ------------------ User menu (dropdown на навбаре) ------------------ */
+function mountUserMenu() {
+  const userBlock = document.querySelector('.navbar-user');
+  if (!userBlock) return;
+  if (document.querySelector('.user-menu-dropdown')) return;
+
+  // Делаем блок интерактивным
+  userBlock.style.cursor = 'pointer';
+  userBlock.setAttribute('role', 'button');
+  userBlock.setAttribute('tabindex', '0');
+  userBlock.setAttribute('aria-haspopup', 'menu');
+  userBlock.setAttribute('aria-expanded', 'false');
+
+  // Проверяем, мы в папке pages или в корне (для относительного пути)
+  const dropdown = document.createElement('div');
+  dropdown.className = 'user-menu-dropdown';
+  dropdown.setAttribute('role', 'menu');
+  dropdown.innerHTML = `
+    <a href="profile.html" role="menuitem">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Мой профиль
+    </a>
+    <a href="profile.html#password" role="menuitem">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Сменить пароль
+    </a>
+    <div class="user-menu-divider"></div>
+    <button type="button" class="user-menu-logout" role="menuitem">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+      Выйти
+    </button>
+  `;
+  userBlock.appendChild(dropdown);
+
+  const open = () => {
+    userBlock.classList.add('open');
+    userBlock.setAttribute('aria-expanded', 'true');
+  };
+  const close = () => {
+    userBlock.classList.remove('open');
+    userBlock.setAttribute('aria-expanded', 'false');
+  };
+
+  userBlock.addEventListener('click', (e) => {
+    // Клик по самому dropdown не должен триггерить toggle
+    if (e.target.closest('.user-menu-dropdown')) return;
+    userBlock.classList.contains('open') ? close() : open();
+    e.stopPropagation();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!userBlock.contains(e.target)) close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+
+  // Выход через menu
+  dropdown.querySelector('.user-menu-logout').addEventListener('click', () => {
+    // TODO(API): POST /auth/logout/ { access_token, refresh_token }
+    window.location.href = 'log.html';
+  });
+}
+
+/* ------------------ Logout (старая кнопка в навбаре) ------------------ */
 function wireLogout() {
   const logoutBtn = document.querySelector('.btn-logout');
   if (!logoutBtn) return;
   logoutBtn.addEventListener('click', () => {
-    // TODO(API): POST /api/auth/logout
-    window.location.href = '../pages/log.html';
+    // TODO(API): POST /auth/logout/
+    window.location.href = 'log.html';
   });
 }
 

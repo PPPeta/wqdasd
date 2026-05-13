@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsurePro — Мой профиль</title>
+  <link rel="stylesheet" href="../styles/variables.css">
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">IP</div>
+        <span>InsurePro</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" data-roles="admin,company_manager,employee"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1V10"/></svg> Дашборд</a>
+        <a href="employees.html" data-roles="admin,company_manager"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Сотрудники</a>
+        <a href="policies.html" data-roles="admin,company_manager,employee"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg> Полисы</a>
+        <a href="claims.html" data-roles="admin,company_manager,employee"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Обращения</a>
+        <a href="plans.html" data-roles="admin,company_manager"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> Планы</a>
+        <a href="reports.html" data-roles="admin,company_manager"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V8"/><path d="M12 16V6"/><path d="M17 16v-4"/></svg> Отчёты</a>
+        <a href="organizations.html" data-roles="admin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/><path d="M12 14h.01"/></svg> Организации</a>
+        <a href="users.html" data-roles="admin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-3-3.87"/><path d="M4 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Пользователи</a>
+        <a href="audit-log.html" data-roles="admin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10l4 2"/><circle cx="12" cy="12" r="10"/></svg> Журнал действий</a>
+      </nav>
+      <div class="sidebar-footer">InsurePro · v1.0</div>
+    </aside>
+    <div class="sidebar-backdrop"></div>
+
+    <div class="app-main">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="sidebar-toggle" aria-label="Меню">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="navbar-right">
+          <div class="navbar-user">
+            <div class="navbar-user-info">
+              <div class="navbar-user-name"></div>
+              <div class="navbar-user-role"></div>
+            </div>
+            <div class="navbar-avatar"></div>
+          </div>
+          <button class="btn ghost btn-sm btn-logout">Выйти</button>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <div class="section-header">
+          <div class="section-header-left">
+            <h1>Мой профиль</h1>
+            <p class="subtitle" id="profile-sub">—</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- Левая колонка: профиль + смена пароля -->
+          <div style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Личные данные</div>
+                  <div class="card-subtitle">Имя, фамилия, отчество — отображаются на всех страницах</div>
+                </div>
+              </div>
+              <form id="profile-form" novalidate>
+                <div class="input-group">
+                  <input type="text" id="pf-first" placeholder=" " required>
+                  <label for="pf-first">Имя</label>
+                </div>
+                <div class="input-group">
+                  <input type="text" id="pf-last" placeholder=" " required>
+                  <label for="pf-last">Фамилия</label>
+                </div>
+                <div class="input-group">
+                  <input type="text" id="pf-middle" placeholder=" ">
+                  <label for="pf-middle">Отчество</label>
+                </div>
+                <div class="input-group">
+                  <input type="url" id="pf-avatar" placeholder=" ">
+                  <label for="pf-avatar">Ссылка на аватар (URL)</label>
+                </div>
+                <div class="input-group">
+                  <input type="email" id="pf-email" placeholder=" " readonly>
+                  <label for="pf-email">Email (неизменяем)</label>
+                </div>
+                <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem;">
+                  <button type="button" class="btn primary" id="pf-save">Сохранить</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Смена пароля</div>
+                  <div class="card-subtitle">Минимум 10 символов, включая заглавную букву и цифру</div>
+                </div>
+              </div>
+              <form id="pwd-form" novalidate>
+                <div class="input-group">
+                  <input type="password" id="pwd-old" placeholder=" " required autocomplete="current-password">
+                  <label for="pwd-old">Текущий пароль</label>
+                </div>
+                <div class="input-group">
+                  <input type="password" id="pwd-new" placeholder=" " required minlength="10" autocomplete="new-password">
+                  <label for="pwd-new">Новый пароль</label>
+                </div>
+                <div class="input-group">
+                  <input type="password" id="pwd-confirm" placeholder=" " required minlength="10" autocomplete="new-password">
+                  <label for="pwd-confirm">Повторите новый пароль</label>
+                </div>
+                <div style="display:flex;gap:.5rem;justify-content:flex-end;">
+                  <button type="button" class="btn primary" id="pwd-save">Сменить пароль</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="card" style="border-color:rgba(220,38,38,.25);background:#fff5f5;">
+              <div class="card-header" style="border-color:rgba(220,38,38,.15);">
+                <div>
+                  <div class="card-title" style="color:var(--danger);">Опасная зона</div>
+                  <div class="card-subtitle">Действие обратимо только через поддержку</div>
+                </div>
+              </div>
+              <p style="color:var(--text-soft);margin-bottom:1rem;">Ваш аккаунт будет мягко удалён (soft delete). Полисы и обращения сохранятся, но доступ к системе будет закрыт.</p>
+              <button class="btn danger" data-modal-open="modal-delete-me">Удалить мой аккаунт</button>
+            </div>
+          </div>
+
+          <!-- Правая колонка: карточка юзера + активность -->
+          <div style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div class="card policy-hero">
+              <div class="policy-hero-head">
+                <div>
+                  <div class="policy-hero-lbl">Аккаунт</div>
+                  <div class="policy-hero-num" id="pf-display-name">—</div>
+                </div>
+                <span class="badge badge-active" id="pf-role-badge">—</span>
+              </div>
+              <dl class="dl">
+                <dt>Email</dt><dd id="pf-display-email">—</dd>
+                <dt>Роль</dt><dd id="pf-display-role">—</dd>
+                <dt>Компания</dt><dd id="pf-display-company">—</dd>
+                <dt>ID пользователя</dt><dd id="pf-display-id">—</dd>
+                <dt>Email подтверждён</dt><dd id="pf-display-verified">—</dd>
+                <dt>Создан</dt><dd id="pf-display-created">—</dd>
+              </dl>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Моя активность</div>
+                  <div class="card-subtitle">Последние действия в системе</div>
+                </div>
+              </div>
+              <div id="pf-activity"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== MODAL: DELETE ACCOUNT ============== -->
+  <div class="modal-overlay" id="modal-delete-me">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Удалить аккаунт?</div>
+        <button class="modal-close" data-modal-close aria-label="Закрыть">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-soft);margin-bottom:1rem;">Для подтверждения введите слово <b>УДАЛИТЬ</b> заглавными буквами.</p>
+        <div class="input-group">
+          <input type="text" id="delete-confirm-word" placeholder=" ">
+          <label for="delete-confirm-word">Введите УДАЛИТЬ</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn secondary" data-modal-close>Отмена</button>
+        <button class="btn danger" id="delete-me-btn" disabled>Удалить навсегда</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../scripts/mock.js"></script>
+  <script src="../scripts/app.js"></script>
+  <script>
+    // Показать данные пользователя
+    function loadProfile() {
+      const u = MOCK_USER;
+      document.getElementById('profile-sub').textContent = `${u.email} · ${ROLE_LABELS[u.role] || u.role}`;
+
+      // форма
+      document.getElementById('pf-first').value = u.first_name || '';
+      document.getElementById('pf-last').value = u.last_name || '';
+      document.getElementById('pf-middle').value = u.middle_name || '';
+      document.getElementById('pf-avatar').value = u.avatar_url || '';
+      document.getElementById('pf-email').value = u.email;
+
+      // карточка
+      const fullName = `${u.first_name || ''} ${u.last_name || ''}`.trim() || u.email;
+      document.getElementById('pf-display-name').textContent = fullName;
+      document.getElementById('pf-display-email').textContent = u.email;
+      document.getElementById('pf-display-role').textContent = ROLE_LABELS[u.role] || u.role;
+      document.getElementById('pf-display-company').textContent = u.company || '—';
+      document.getElementById('pf-display-id').textContent = u.id || '—';
+      document.getElementById('pf-display-verified').textContent = u.email_verified === false ? 'Нет' : 'Да';
+      document.getElementById('pf-display-created').textContent = formatDate(u.created_at);
+
+      const roleBadge = document.getElementById('pf-role-badge');
+      roleBadge.textContent = ROLE_LABELS[u.role] || u.role;
+      roleBadge.className = 'badge ' + (u.role === 'admin' ? 'badge-info' : u.role === 'company_manager' ? 'badge-active' : 'badge-pending');
+    }
+    loadProfile();
+
+    // Моя активность — последние 5 записей, где user соответствует текущему имени (или любой, если не совпало)
+    (function renderActivity() {
+      const el = document.getElementById('pf-activity');
+      const fullName = `${MOCK_USER.first_name || ''} ${MOCK_USER.last_name || ''}`.trim();
+      let list = MOCK.auditLog.filter((e) => e.user === fullName);
+      if (list.length === 0) list = MOCK.auditLog.slice(0, 5); // fallback на последние
+      list = list.slice(0, 6);
+
+      el.innerHTML = list.map((a) => `
+        <div class="list-item">
+          <div class="avatar-sm" style="background:linear-gradient(135deg,#94a3b8,#64748b);font-size:.7rem;">${esc(a.at.slice(11, 16))}</div>
+          <div class="list-item-body">
+            <div class="list-item-title">${esc(a.details)}</div>
+            <div class="list-item-meta">${esc(a.at)} · IP ${esc(a.ip)}</div>
+          </div>
+        </div>
+      `).join('') || '<div class="empty-state"><h3>Нет активности</h3><p>Последние действия появятся здесь</p></div>';
+    })();
+
+    // Сохранение профиля
+    document.getElementById('pf-save').addEventListener('click', () => {
+      const first = document.getElementById('pf-first').value.trim();
+      const last = document.getElementById('pf-last').value.trim();
+      const middle = document.getElementById('pf-middle').value.trim();
+      const avatar = document.getElementById('pf-avatar').value.trim();
+      if (!first || !last) { alert('Заполните имя и фамилию'); return; }
+      // TODO(API): PATCH /users/me  { first_name, last_name, middle_name, avatar_url }
+      Object.assign(MOCK_USER, { first_name: first, last_name: last, middle_name: middle, avatar_url: avatar });
+      loadProfile();
+      injectUser?.();
+      // инжект через app.js — вызываем публичный API:
+      const nameEl = document.querySelector('.navbar-user-name');
+      const avatarEl = document.querySelector('.navbar-avatar');
+      if (nameEl) nameEl.textContent = `${first} ${last}`;
+      if (avatarEl) avatarEl.textContent = getInitials(first, last);
+      alert('Профиль сохранён');
+    });
+
+    // Смена пароля
+    document.getElementById('pwd-save').addEventListener('click', () => {
+      const oldP = document.getElementById('pwd-old').value;
+      const newP = document.getElementById('pwd-new').value;
+      const conf = document.getElementById('pwd-confirm').value;
+      if (!oldP) { alert('Введите текущий пароль'); return; }
+      if (newP.length < 10) { alert('Новый пароль: минимум 10 символов'); return; }
+      if (!/[A-ZА-Я]/.test(newP) || !/\d/.test(newP)) { alert('Пароль должен содержать заглавную букву и цифру'); return; }
+      if (newP !== conf) { alert('Пароли не совпадают'); return; }
+      // TODO(API): PATCH /users/me/password  { old_password, new_password }
+      document.getElementById('pwd-form').reset();
+      alert('Пароль изменён');
+    });
+
+    // Удаление аккаунта
+    const deleteBtn = document.getElementById('delete-me-btn');
+    const deleteInput = document.getElementById('delete-confirm-word');
+    deleteInput.addEventListener('input', () => {
+      deleteBtn.disabled = deleteInput.value.trim() !== 'УДАЛИТЬ';
+    });
+    deleteBtn.addEventListener('click', () => {
+      // TODO(API): DELETE /users/me
+      alert('Аккаунт удалён. Выход из системы...');
+      window.location.href = 'log.html';
+    });
+  </script>
+</body>
+
+</html>

@@ -187,6 +187,56 @@ const MOCK_DASHBOARD = {
   employee: { my_policies: 1, my_claims: 2 },
 };
 
+// TODO(API): /organization/get/
+const MOCK_ORGANIZATIONS = [
+  { id: 1, company_name: 'ООО «Прогресс»', company_inn: '7712345678', size: '51-250', employees: 45, policies: 3, manager: 'Иван Петров', status: 'active', created_at: '2024-02-14' },
+  { id: 2, company_name: 'АО «Меркурий»', company_inn: '7799001122', size: '251+', employees: 78, policies: 5, manager: 'Ольга Смирнова', status: 'active', created_at: '2024-03-20' },
+  { id: 3, company_name: 'ООО «Старт»', company_inn: '7811222333', size: '1-50', employees: 22, policies: 2, manager: 'Павел Иванов', status: 'active', created_at: '2024-04-05' },
+  { id: 4, company_name: 'ПАО «Вектор»', company_inn: '7700112233', size: '251+', employees: 110, policies: 4, manager: 'Елена Козлова', status: 'active', created_at: '2024-05-10' },
+  { id: 5, company_name: 'ООО «Интеграл»', company_inn: '7822445566', size: '51-250', employees: 67, policies: 3, manager: 'Дмитрий Орлов', status: 'active', created_at: '2024-06-18' },
+  { id: 6, company_name: 'ООО «Флагман»', company_inn: '7733556677', size: '51-250', employees: 54, policies: 2, manager: 'Михаил Соколов', status: 'suspended', created_at: '2024-07-22' },
+  { id: 7, company_name: 'ООО «Сфера»', company_inn: '7744667788', size: '1-50', employees: 18, policies: 1, manager: 'Татьяна Морозова', status: 'active', created_at: '2024-09-01' },
+  { id: 8, company_name: 'АО «Ориент»', company_inn: '7755778899', size: '251+', employees: 140, policies: 6, manager: 'Сергей Белов', status: 'active', created_at: '2024-10-14' },
+];
+
+// TODO(API): /users/ (все пользователи системы)
+const MOCK_USERS = [
+  { id: 1, email: 'admin@insurepro.ru',    first_name: 'Алексей', last_name: 'Администратор', role: 'admin',           company: 'InsurePro',          is_active: true,  email_verified: true,  created_at: '2024-01-15' },
+  { id: 2, email: 'ivan@company.ru',       first_name: 'Иван',    last_name: 'Петров',         role: 'company_manager', company: 'ООО «Прогресс»',    is_active: true,  email_verified: true,  created_at: '2024-02-14' },
+  { id: 3, email: 'olga@mercury.ru',       first_name: 'Ольга',   last_name: 'Смирнова',       role: 'company_manager', company: 'АО «Меркурий»',     is_active: true,  email_verified: true,  created_at: '2024-03-20' },
+  { id: 4, email: 'pavel@start.ru',        first_name: 'Павел',   last_name: 'Иванов',         role: 'company_manager', company: 'ООО «Старт»',       is_active: true,  email_verified: true,  created_at: '2024-04-05' },
+  { id: 5, email: 'elena@vector.ru',       first_name: 'Елена',   last_name: 'Козлова',        role: 'company_manager', company: 'ПАО «Вектор»',      is_active: true,  email_verified: false, created_at: '2024-05-10' },
+  { id: 6, email: 'anna.smirnova@company.ru', first_name: 'Анна', last_name: 'Смирнова',       role: 'employee',        company: 'ООО «Прогресс»',    is_active: true,  email_verified: true,  created_at: '2024-06-12' },
+  { id: 7, email: 'd.ivanov@company.ru',   first_name: 'Дмитрий', last_name: 'Иванов',         role: 'employee',        company: 'ООО «Прогресс»',    is_active: true,  email_verified: true,  created_at: '2024-07-02' },
+  { id: 8, email: 'm.popova@company.ru',   first_name: 'Мария',   last_name: 'Попова',         role: 'employee',        company: 'ООО «Прогресс»',    is_active: true,  email_verified: true,  created_at: '2024-07-15' },
+  { id: 9, email: 'a.kuznetsov@company.ru',first_name: 'Алексей', last_name: 'Кузнецов',       role: 'employee',        company: 'ООО «Прогресс»',    is_active: true,  email_verified: true,  created_at: '2024-08-01' },
+  { id: 10, email: 'e.volkova@company.ru', first_name: 'Екатерина', last_name: 'Волкова',      role: 'employee',        company: 'ООО «Прогресс»',    is_active: false, email_verified: true,  created_at: '2024-08-20' },
+  { id: 11, email: 's.sokolov@company.ru', first_name: 'Сергей',  last_name: 'Соколов',        role: 'employee',        company: 'ООО «Прогресс»',    is_active: true,  email_verified: true,  created_at: '2024-09-05' },
+  { id: 12, email: 'o.mikhailova@company.ru', first_name: 'Ольга', last_name: 'Михайлова',     role: 'employee',        company: 'ООО «Прогресс»',    is_active: true,  email_verified: true,  created_at: '2024-09-22' },
+];
+
+// TODO(API): /users/{id}/activity  и  /dashboard/widgets/recent-activity
+const MOCK_AUDIT_LOG = [
+  { id: 1, at: '2025-01-14 14:32', user: 'Иван Петров',       action: 'policy.activate',  entity: 'POL-2024-001',  ip: '192.168.1.24',  details: 'Активирован полис' },
+  { id: 2, at: '2025-01-14 13:18', user: 'Мария Попова',      action: 'claim.submit',     entity: 'CLM-2025-013',  ip: '192.168.1.37',  details: 'Подача обращения на медуслуги' },
+  { id: 3, at: '2025-01-14 12:05', user: 'Администратор',     action: 'plan.create',      entity: 'ДМС Премиум+',  ip: '10.0.0.1',      details: 'Создан тарифный план' },
+  { id: 4, at: '2025-01-14 11:44', user: 'Ольга Смирнова',    action: 'policy.create',    entity: 'POL-2025-088',  ip: '192.168.1.50',  details: 'Оформлен полис' },
+  { id: 5, at: '2025-01-14 10:12', user: 'Дмитрий Иванов',    action: 'user.update',      entity: 'Профиль',       ip: '192.168.1.38',  details: 'Обновлён профиль' },
+  { id: 6, at: '2025-01-14 09:46', user: 'Иван Петров',       action: 'claim.approve',    entity: 'CLM-2025-014',  ip: '192.168.1.24',  details: 'Одобрено обращение, выплата 22 500 ₽' },
+  { id: 7, at: '2025-01-14 09:12', user: 'Анна Смирнова',     action: 'claim.submit',     entity: 'CLM-2025-015',  ip: '192.168.1.41',  details: 'Подача обращения на медуслуги' },
+  { id: 8, at: '2025-01-13 18:22', user: 'Иван Петров',       action: 'LOGIN',            entity: '—',             ip: '192.168.1.24',  details: 'Вход в систему' },
+  { id: 9, at: '2025-01-13 17:05', user: 'Администратор',     action: 'user.deactivate',  entity: 'Павел Фёдоров', ip: '10.0.0.1',      details: 'Деактивирован пользователь' },
+  { id: 10, at: '2025-01-13 15:30', user: 'Елена Козлова',    action: 'policy.renew',     entity: 'POL-2024-076',  ip: '192.168.3.12',  details: 'Полис продлён на год' },
+];
+
+// TODO(API): /dashboard/widgets/alerts
+const MOCK_ALERTS = [
+  { type: 'policy_expiring', title: 'Полис истекает', body: 'POL-2024-001 истекает через 12 дней', severity: 'warning', link: 'policy-detail.html?id=1' },
+  { type: 'claim_pending',   title: 'Ожидают решения', body: '3 обращения ждут одобрения больше 2 дней', severity: 'danger', link: 'claims.html' },
+  { type: 'user_new',        title: 'Новая регистрация', body: 'ООО «Ориент» подключилось к сервису', severity: 'info', link: 'organizations.html' },
+  { type: 'payment_success', title: 'Поступление', body: 'ПАО «Вектор» — оплата 352 000 ₽', severity: 'success', link: 'reports.html' },
+];
+
 // Экспорт в глобальный объект, общий для всех страниц
 window.MOCK = {
   plans: MOCK_PLANS,
@@ -196,6 +246,10 @@ window.MOCK = {
   policyDetail: MOCK_POLICY_DETAIL,
   claimDetail: MOCK_CLAIM_DETAIL,
   dashboard: MOCK_DASHBOARD,
+  organizations: MOCK_ORGANIZATIONS,
+  users: MOCK_USERS,
+  auditLog: MOCK_AUDIT_LOG,
+  alerts: MOCK_ALERTS,
 };
 
 window.MOCK_USER = MOCK_USER;
