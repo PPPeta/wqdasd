@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InsurePro — автоматизация работы страховой компании</title>
-  <meta name="description" content="InsurePro — веб-приложение с REST API для автоматизации операционных процессов страховой компании: полисы, обращения, агентская сеть, платежи, отчётность.">
+  <title>InsurePro — страхование сотрудников вашей компании</title>
+  <meta name="description" content="InsurePro — оформляйте страховые полисы для сотрудников, подавайте обращения и отслеживайте статус выплат в одном личном кабинете.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link rel="stylesheet" href="src/styles/index/main.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
@@ -29,24 +29,22 @@
       </label>
 
       <div class="nav-link">
-        <a href="#problems">Проблемы</a>
-        <a href="#modules">Модули</a>
-        <a href="#roles">Роли</a>
-        <a href="#stack">Технологии</a>
-        <a href="#about">О проекте</a>
+        <a href="#how">Как это работает</a>
+        <a href="#roles">Для кого</a>
+        <a href="#features">Возможности</a>
+        <a href="#about">О сервисе</a>
       </div>
 
       <div class="nav-but">
         <button onclick="location.href='src/pages/log.html'" class="but-light-hed">Войти</button>
-        <button onclick="location.href='#about'" class="but-bleak-hed">О проекте</button>
+        <button onclick="location.href='src/pages/log.html'" class="but-bleak-hed">Начать</button>
       </div>
 
       <div class="nav-mobile">
-        <a href="#problems">Проблемы</a>
-        <a href="#modules">Модули</a>
-        <a href="#roles">Роли</a>
-        <a href="#stack">Технологии</a>
-        <a href="#about">О проекте</a>
+        <a href="#how">Как это работает</a>
+        <a href="#roles">Для кого</a>
+        <a href="#features">Возможности</a>
+        <a href="#about">О сервисе</a>
         <a href="src/pages/log.html">Войти</a>
       </div>
     </nav>
@@ -58,160 +56,253 @@
       <div class="hero-content">
         <div class="tech-pill wow animate__animated animate__fadeInLeft" data-wow-delay="0s">
           <span class="tech-dot"></span>
-          Дипломный проект · 09.02.07 «Информационные системы и программирование»
+          Корпоративное страхование сотрудников
         </div>
         <div class="hero-head">
           <h1 data-wow-delay="0.05s" class="wow animate__animated animate__fadeInLeft">
-            Автоматизация работы <span>страховой компании</span>
+            Страхование всей <span>команды</span><br>в одном кабинете
           </h1>
         </div>
         <p data-wow-delay="0.15s" class="wow animate__animated animate__fadeInLeft">
-          InsurePro — REST API-сервис и веб-приложение для малых и средних страховщиков.
-          Единая база полисов, прозрачная обработка обращений, автоматический расчёт
-          комиссий агентов, учёт платежей и журнал действий — вместо Excel и ручных операций.
+          Руководитель оформляет полисы для сотрудников за пару кликов.
+          Сотрудники подают обращения и видят статус выплат онлайн.
+          Больше никакого Excel, звонков менеджеру и «я потом уточню».
         </p>
         <div class="hero-but wow animate__animated animate__fadeInUp" data-wow-delay="0.25s">
           <button class="btn primary" onclick="location.href='src/pages/log.html'">
-            Войти в систему
+            Войти в кабинет
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </button>
-          <button class="btn secondary" onclick="location.href='#modules'">Обзор модулей</button>
+          <button class="btn secondary" onclick="location.href='#how'">Как это работает</button>
         </div>
         <div class="hero-info">
           <div data-wow-delay="0s" class="wow animate__animated animate__fadeInUp">
             <div class="hero-info-text first">
-              <p class="important-text">6</p>
-              <p>Модулей системы</p>
+              <p class="important-text">2&nbsp;мин</p>
+              <p>Оформить полис</p>
             </div>
           </div>
           <div data-wow-delay="0.2s" class="wow animate__animated animate__fadeInUp">
             <div class="hero-info-text second">
-              <p class="important-text">4</p>
-              <p>Роли пользователей</p>
+              <p class="important-text">24/7</p>
+              <p>Доступ онлайн</p>
             </div>
           </div>
           <div data-wow-delay="0.3s" class="wow animate__animated animate__fadeInUp">
             <div class="hero-info-text third">
-              <p class="important-text">REST</p>
-              <p>API-архитектура</p>
+              <p class="important-text">0</p>
+              <p>Бумажной волокиты</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="hero-photo wow animate__animated animate__fadeInRight" data-wow-delay="0.15s">
-        <!-- Ascii-mockup API terminal -->
-        <div class="api-window">
-          <div class="api-window-head">
-            <span class="api-dot red"></span>
-            <span class="api-dot yellow"></span>
-            <span class="api-dot green"></span>
-            <span class="api-window-title">POST /api/policies/</span>
-          </div>
-          <pre class="api-window-body"><span class="c-key">{</span>
-  <span class="c-str">"client_id"</span>: <span class="c-num">1042</span>,
-  <span class="c-str">"plan"</span>: <span class="c-val">"Стандарт"</span>,
-  <span class="c-str">"start_date"</span>: <span class="c-val">"2025-03-01"</span>,
-  <span class="c-str">"employees_count"</span>: <span class="c-num">32</span>,
-  <span class="c-str">"agent_id"</span>: <span class="c-num">7</span>
-<span class="c-key">}</span>
 
-<span class="c-com">// HTTP/1.1 201 Created</span>
-<span class="c-key">{</span>
-  <span class="c-str">"id"</span>: <span class="c-num">2048</span>,
-  <span class="c-str">"number"</span>: <span class="c-val">"POL-2025-042"</span>,
-  <span class="c-str">"status"</span>: <span class="c-val">"active"</span>,
-  <span class="c-str">"monthly_cost"</span>: <span class="c-num">102400</span>,
-  <span class="c-str">"agent_commission"</span>: <span class="c-num">10240</span>
-<span class="c-key">}</span></pre>
+      <!-- UI mockup вместо фото / API-окна -->
+      <div class="hero-photo wow animate__animated animate__fadeInRight" data-wow-delay="0.15s">
+        <div class="ui-mock">
+          <div class="ui-mock-head">
+            <div class="ui-mock-avatar">ИП</div>
+            <div class="ui-mock-head-text">
+              <div class="ui-mock-hello">Добрый день, Иван!</div>
+              <div class="ui-mock-sub">Руководитель · ООО «Прогресс»</div>
+            </div>
+          </div>
+          <div class="ui-mock-grid">
+            <div class="ui-mock-stat">
+              <div class="ui-mock-stat-num">45</div>
+              <div class="ui-mock-stat-lbl">сотрудников</div>
+            </div>
+            <div class="ui-mock-stat">
+              <div class="ui-mock-stat-num">3</div>
+              <div class="ui-mock-stat-lbl">активных полиса</div>
+            </div>
+          </div>
+          <div class="ui-mock-row">
+            <div class="ui-mock-row-icon green">✓</div>
+            <div class="ui-mock-row-body">
+              <div class="ui-mock-row-title">Полис продлён</div>
+              <div class="ui-mock-row-sub">Стандарт · до 15.01.2026</div>
+            </div>
+          </div>
+          <div class="ui-mock-row">
+            <div class="ui-mock-row-icon blue">₽</div>
+            <div class="ui-mock-row-body">
+              <div class="ui-mock-row-title">Выплата одобрена</div>
+              <div class="ui-mock-row-sub">Анна Смирнова · 22 500 ₽</div>
+            </div>
+          </div>
+          <div class="ui-mock-row">
+            <div class="ui-mock-row-icon amber">!</div>
+            <div class="ui-mock-row-body">
+              <div class="ui-mock-row-title">Новое обращение</div>
+              <div class="ui-mock-row-sub">Сергей Иванов · стоматология</div>
+            </div>
+          </div>
         </div>
+
         <div class="badge">
           <div class="badge-status"></div>
           <div class="badge-text">
-            <div class="badge-title">Полис оформлен</div>
-            <div class="badge-amount">POL-2025-042</div>
+            <div class="badge-title">Всё под контролем</div>
+            <div class="badge-amount">45 сотрудников</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ========== PROBLEMS ========== -->
+    <!-- ========== PROBLEMS (что было «до» — боль, понятная пользователю) ========== -->
     <section class="problems" id="problems">
       <div class="features-header">
-        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">Проблематика</p>
+        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">Знакомая ситуация?</p>
         <p class="important-text wow animate__animated animate__fadeInDown" data-wow-delay="0.1s">
-          Что мешает работать <span>без InsurePro</span>
+          Как это обычно <span>бывает без InsurePro</span>
         </p>
         <p class="section-sub wow animate__animated animate__fadeIn" data-wow-delay="0.2s">
-          Малые и средние страховщики сталкиваются с набором типовых проблем. Каждая из них решается отдельным модулем системы.
+          Если вы хоть раз оформляли страховку на команду — эти проблемы вам знакомы.
         </p>
       </div>
 
       <ul class="problems-grid">
         <li data-wow-delay="0s" class="wow animate__animated animate__fadeInUp">
-          <div class="problem-icon red">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M3 9h18"/></svg>
-          </div>
-          <h3>Учёт в Excel</h3>
-          <p>Данные клиентов, полисов и договоров дублируются, теряются, устаревают между вкладками и копиями файлов.</p>
-          <span class="problem-fix">→ Модуль «Полисы» с единой базой</span>
+          <div class="problem-icon red">📋</div>
+          <h3>Списки в Excel</h3>
+          <p>Один файл у бухгалтера, другой у HR, третий у менеджера компании — и все немного разные.</p>
+          <span class="problem-fix">→ Единый список сотрудников</span>
         </li>
 
         <li data-wow-delay="0.1s" class="wow animate__animated animate__fadeInUp">
-          <div class="problem-icon amber">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          </div>
-          <h3>Непрозрачные обращения</h3>
-          <p>Не фиксируется, кто, когда и почему принял решение по страховому случаю — теряется цепочка ответственности.</p>
-          <span class="problem-fix">→ Модуль «Обращения» + таймлайн</span>
+          <div class="problem-icon amber">📞</div>
+          <h3>«Позвоните менеджеру»</h3>
+          <p>Чтобы узнать, действует ли ваш полис, приходится писать HR, который напишет страховщику.</p>
+          <span class="problem-fix">→ Статус виден в кабинете</span>
         </li>
 
         <li data-wow-delay="0.2s" class="wow animate__animated animate__fadeInUp">
-          <div class="problem-icon blue">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap=" round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          </div>
-          <h3>Клиент без доступа</h3>
-          <p>Чтобы узнать статус полиса или подать заявку, клиент звонит менеджеру. Каждое обращение — это ручная работа.</p>
-          <span class="problem-fix">→ Личный кабинет сотрудника</span>
+          <div class="problem-icon blue">📄</div>
+          <h3>Бумажные обращения</h3>
+          <p>Случай произошёл — собирайте чеки, пишите заявление от руки, носите в офис. Решение через неделю.</p>
+          <span class="problem-fix">→ Подача за 1 минуту онлайн</span>
         </li>
 
         <li data-wow-delay="0.3s" class="wow animate__animated animate__fadeInUp">
-          <div class="problem-icon green">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          </div>
-          <h3>Ручные комиссии агентам</h3>
-          <p>Бухгалтер каждый месяц сводит премии и проценты в таблицах — медленно и содержит ошибки.</p>
-          <span class="problem-fix">→ Автоматический расчёт по правилам</span>
+          <div class="problem-icon green">💸</div>
+          <h3>«А кому и сколько заплатили?»</h3>
+          <p>Чтобы понять, кто из сотрудников получал выплаты и на какую сумму, надо поднимать всю переписку.</p>
+          <span class="problem-fix">→ История всех выплат под рукой</span>
         </li>
 
         <li data-wow-delay="0.4s" class="wow animate__animated animate__fadeInUp">
-          <div class="problem-icon purple">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-          </div>
-          <h3>Платежи не связаны с полисами</h3>
-          <p>Финансовые транзакции живут отдельно от договоров — сверка поступлений превращается в аудит.</p>
-          <span class="problem-fix">→ Модуль платежей с привязкой к полисам</span>
+          <div class="problem-icon purple">⏰</div>
+          <h3>Полис истёк внезапно</h3>
+          <p>Никто не напомнил, дата прошла — сотрудники остались без страховки, а вы узнали последним.</p>
+          <span class="problem-fix">→ Напоминания и автопродление</span>
         </li>
 
         <li data-wow-delay="0.5s" class="wow animate__animated animate__fadeInUp">
-          <div class="problem-icon dark">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          </div>
-          <h3>Нет журнала действий</h3>
-          <p>Невозможно восстановить, кто изменил данные и когда — особенно важно при претензиях или аудите.</p>
-          <span class="problem-fix">→ Audit log всех операций</span>
+          <div class="problem-icon dark">🤷</div>
+          <h3>«Что входит в мой полис?»</h3>
+          <p>Сотрудник не помнит, покрывает ли его полис стоматологию. Снова звонок, снова уточнение.</p>
+          <span class="problem-fix">→ Покрытия у каждого в кабинете</span>
         </li>
       </ul>
     </section>
 
-    <!-- ========== MODULES ========== -->
-    <section class="features" id="modules">
+    <!-- ========== HOW IT WORKS ========== -->
+    <section class="how-section" id="how">
       <div class="features-header">
-        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">Архитектура</p>
+        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">Как это работает</p>
         <p class="important-text wow animate__animated animate__fadeInDown" data-wow-delay="0.1s">
-          Модули <span>системы</span>
+          От регистрации до <span>первой выплаты</span>
         </p>
         <p class="section-sub wow animate__animated animate__fadeIn" data-wow-delay="0.2s">
-          Каждый модуль покрывает отдельный бизнес-процесс. Все модули связаны через единую базу и общий API.
+          Четыре шага, чтобы компания была полностью застрахована и могла пользоваться сервисом.
+        </p>
+      </div>
+
+      <div class="how-steps">
+        <div class="how-step wow animate__animated animate__fadeInUp" data-wow-delay="0s">
+          <div class="how-step-num">01</div>
+          <h3>Руководитель регистрирует компанию</h3>
+          <p>Название, ИНН, телефон — и аккаунт создан. На почту приходит код подтверждения.</p>
+        </div>
+
+        <div class="how-step wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">
+          <div class="how-step-num">02</div>
+          <h3>Добавляет сотрудников</h3>
+          <p>Вручную или списком. Каждому приходит приглашение — они создают свой личный кабинет.</p>
+        </div>
+
+        <div class="how-step wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+          <div class="how-step-num">03</div>
+          <h3>Выбирает тариф и оформляет полис</h3>
+          <p>Базовый, Стандарт или Премиум — рассчитайте стоимость на всю команду в калькуляторе.</p>
+        </div>
+
+        <div class="how-step wow animate__animated animate__fadeInUp" data-wow-delay="0.3s">
+          <div class="how-step-num">04</div>
+          <h3>Сотрудники пользуются</h3>
+          <p>Видят своё покрытие, подают обращения, прикрепляют чеки. Руководитель одобряет выплаты.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ROLES — 3 роли из ТЗ ========== -->
+    <section class="roles-section" id="roles">
+      <div class="features-header">
+        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">Для кого</p>
+        <p class="important-text wow animate__animated animate__fadeInDown" data-wow-delay="0.1s">
+          Три роли — <span>каждому своё</span>
+        </p>
+        <p class="section-sub wow animate__animated animate__fadeIn" data-wow-delay="0.2s">
+          У каждой роли свой интерфейс и права. Никто не видит лишнего.
+        </p>
+      </div>
+
+      <div class="roles-grid three">
+        <div class="role-card wow animate__animated animate__fadeInUp" data-wow-delay="0s">
+          <div class="role-emoji">👔</div>
+          <h3>Руководитель</h3>
+          <p class="role-desc">Оформляет полисы на всю компанию, управляет сотрудниками, одобряет обращения.</p>
+          <ul class="role-perms">
+            <li>Оформление и продление полисов</li>
+            <li>Управление списком сотрудников</li>
+            <li>Одобрение/отклонение обращений</li>
+            <li>Отчёты и выгрузки</li>
+          </ul>
+        </div>
+
+        <div class="role-card wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">
+          <div class="role-emoji">👤</div>
+          <h3>Сотрудник</h3>
+          <p class="role-desc">Видит свой полис и покрытия, подаёт обращения, следит за статусом выплат.</p>
+          <ul class="role-perms">
+            <li>Свой полис и покрытия</li>
+            <li>Подача обращения с документами</li>
+            <li>История своих выплат</li>
+            <li>Уведомления по статусу</li>
+          </ul>
+        </div>
+
+        <div class="role-card wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+          <div class="role-emoji">👑</div>
+          <h3>Администратор</h3>
+          <p class="role-desc">Следит за всей системой: компании, тарифные планы, глобальные отчёты.</p>
+          <ul class="role-perms">
+            <li>Управление компаниями и пользователями</li>
+            <li>Настройка тарифных планов</li>
+            <li>Все отчёты по системе</li>
+            <li>Журнал действий</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FEATURES — что даёт сервис ========== -->
+    <section class="features" id="features">
+      <div class="features-header">
+        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">Возможности</p>
+        <p class="important-text wow animate__animated animate__fadeInDown" data-wow-delay="0.1s">
+          Что можно делать <span>в InsurePro</span>
         </p>
       </div>
       <div class="features-proposal">
@@ -225,29 +316,29 @@
               </svg>
             </div>
             <h3>Полисы и тарифы</h3>
-            <p>CRUD страховых продуктов, тарифных планов и полисов. Статусы: черновик, активен, приостановлен, истёк.</p>
+            <p>Выбор тарифного плана, автоматический расчёт стоимости по количеству сотрудников, продление в один клик.</p>
           </li>
           <li data-wow-delay="0.1s" class="wow animate__animated animate__fadeInDown">
             <div class="feature-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/>
-              </svg>
-            </div>
-            <h3>Страховые обращения</h3>
-            <p>Подача заявок клиентами, проверка документов, одобрение/отклонение с фиксацией автора и причины.</p>
-          </li>
-          <li data-wow-delay="0.2s" class="wow animate__animated animate__fadeInDown">
-            <div class="feature-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
                 <circle cx="9" cy="7" r="4"/>
                 <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
               </svg>
             </div>
-            <h3>Агентская сеть</h3>
-            <p>Реестр агентов, расчёт комиссий по настраиваемым правилам, отчёт по продажам и начислениям.</p>
+            <h3>Список сотрудников</h3>
+            <p>Добавление поштучно или списком, активация/деактивация, история полисов у каждого.</p>
+          </li>
+          <li data-wow-delay="0.2s" class="wow animate__animated animate__fadeInDown">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/>
+              </svg>
+            </div>
+            <h3>Обращения за выплатами</h3>
+            <p>Сотрудник подаёт заявку с чеками, руководитель одобряет или отклоняет — всё с историей решений.</p>
           </li>
           <li data-wow-delay="0.3s" class="wow animate__animated animate__fadeInDown">
             <div class="feature-icon">
@@ -256,8 +347,8 @@
                 <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
               </svg>
             </div>
-            <h3>Платежи и сверка</h3>
-            <p>Учёт поступлений с привязкой к полису, автоматический статус оплаты, экспорт для бухгалтерии.</p>
+            <h3>Калькулятор стоимости</h3>
+            <p>Выберите тариф и укажите число сотрудников — увидите сумму в месяц и за год ещё до оформления.</p>
           </li>
           <li data-wow-delay="0.4s" class="wow animate__animated animate__fadeInDown">
             <div class="feature-icon">
@@ -266,121 +357,65 @@
                 <path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16V8"/><path d="M12 16V6"/><path d="M17 16v-4"/>
               </svg>
             </div>
-            <h3>Отчётность</h3>
-            <p>Сводные отчёты по организациям, сотрудникам, полисам, обращениям и финансам. Экспорт в CSV/Excel/PDF.</p>
+            <h3>Отчёты и выгрузки</h3>
+            <p>Сколько выплачено, кому, за какой период — готовые отчёты в CSV, Excel или PDF.</p>
           </li>
           <li data-wow-delay="0.5s" class="wow animate__animated animate__fadeInDown">
             <div class="feature-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2a5 5 0 0 0-5 5v6a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z"/>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                <line x1="12" y1="19" x2="12" y2="23"/>
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
               </svg>
             </div>
-            <h3>Журнал действий</h3>
-            <p>Audit log всех операций — кто, когда, что изменил. Защита при спорах, аудите и проверках.</p>
+            <h3>Уведомления и напоминания</h3>
+            <p>Полис истекает через 30 дней? Пришло новое обращение? Система напомнит — вы ничего не пропустите.</p>
           </li>
         </ul>
       </div>
     </section>
 
-    <!-- ========== ROLES ========== -->
-    <section class="roles-section" id="roles">
+    <!-- ========== TRIPTYCH — что внутри у каждой роли ========== -->
+    <section class="triptych-section">
       <div class="features-header">
-        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">Пользователи</p>
+        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">В личном кабинете</p>
         <p class="important-text wow animate__animated animate__fadeInDown" data-wow-delay="0.1s">
-          Четыре <span>роли доступа</span>
-        </p>
-        <p class="section-sub wow animate__animated animate__fadeIn" data-wow-delay="0.2s">
-          Разные интерфейсы и права для каждой группы пользователей. Проверка прав — на уровне API.
+          Разные интерфейсы <span>для разных задач</span>
         </p>
       </div>
 
-      <div class="roles-grid">
-        <div class="role-card wow animate__animated animate__fadeInUp" data-wow-delay="0s">
-          <div class="role-emoji">👑</div>
-          <h3>Администратор</h3>
-          <p class="role-desc">Полный доступ: пользователи, тарифы, настройки комиссий, audit log.</p>
-          <ul class="role-perms">
-            <li>Управление пользователями</li>
-            <li>Настройка тарифных планов</li>
-            <li>Все отчёты</li>
-          </ul>
-        </div>
-
-        <div class="role-card wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">
-          <div class="role-emoji">💼</div>
-          <h3>Менеджер компании</h3>
-          <p class="role-desc">Оформление полисов для своих сотрудников, управление обращениями.</p>
-          <ul class="role-perms">
-            <li>Полисы компании</li>
-            <li>Решения по обращениям</li>
-            <li>Отчёты по сотрудникам</li>
-          </ul>
-        </div>
-
-        <div class="role-card wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
-          <div class="role-emoji">🤝</div>
-          <h3>Агент</h3>
-          <p class="role-desc">Продажа полисов, отслеживание своих сделок и комиссий в личном кабинете.</p>
-          <ul class="role-perms">
-            <li>Оформление полисов</li>
-            <li>Свои комиссии</li>
-            <li>Клиентская база</li>
-          </ul>
-        </div>
-
-        <div class="role-card wow animate__animated animate__fadeInUp" data-wow-delay="0.3s">
-          <div class="role-emoji">👤</div>
-          <h3>Клиент / сотрудник</h3>
-          <p class="role-desc">Свой полис, подача обращений, просмотр статуса без звонка менеджеру.</p>
-          <ul class="role-perms">
-            <li>Свой полис и покрытия</li>
-            <li>Подача обращения</li>
-            <li>История выплат</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========== STACK ========== -->
-    <section class="stack-section" id="stack">
-      <div class="features-header">
-        <p class="tech-label wow animate__animated animate__fadeIn" data-wow-delay="0s">Технологический стек</p>
-        <p class="important-text wow animate__animated animate__fadeInDown" data-wow-delay="0.1s">
-          На чём <span>построено</span>
-        </p>
-      </div>
-
-      <div class="stack-grid">
-        <div class="stack-col wow animate__animated animate__fadeInLeft" data-wow-delay="0s">
-          <h4>Backend</h4>
+      <div class="triptych">
+        <div class="triptych-card wow animate__animated animate__fadeInUp" data-wow-delay="0s">
+          <div class="triptych-tag">Руководитель</div>
+          <h4>Управление компанией</h4>
           <ul>
-            <li><span class="stack-tag py">Py</span> Python 3.11 + Django / DRF</li>
-            <li><span class="stack-tag api">API</span> REST, OpenAPI / Swagger</li>
-            <li><span class="stack-tag jwt">JWT</span> Аутентификация по токенам</li>
-            <li><span class="stack-tag role">ROLE</span> Ролевая модель доступа</li>
+            <li>✓ Список сотрудников</li>
+            <li>✓ Активные полисы</li>
+            <li>✓ Очередь обращений</li>
+            <li>✓ Финансовые отчёты</li>
           </ul>
         </div>
 
-        <div class="stack-col wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">
-          <h4>База данных</h4>
+        <div class="triptych-card wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">
+          <div class="triptych-tag">Сотрудник</div>
+          <h4>Свой полис и выплаты</h4>
           <ul>
-            <li><span class="stack-tag pg">PG</span> PostgreSQL 15</li>
-            <li><span class="stack-tag orm">ORM</span> Django ORM, миграции</li>
-            <li><span class="stack-tag idx">IDX</span> Индексы и транзакции</li>
-            <li><span class="stack-tag log">LOG</span> Таблица audit_log</li>
+            <li>✓ Мой полис и покрытия</li>
+            <li>✓ Подать обращение</li>
+            <li>✓ История выплат</li>
+            <li>✓ Статус заявок</li>
           </ul>
         </div>
 
-        <div class="stack-col wow animate__animated animate__fadeInRight" data-wow-delay="0.2s">
-          <h4>Frontend</h4>
+        <div class="triptych-card wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
+          <div class="triptych-tag">Администратор</div>
+          <h4>Весь сервис целиком</h4>
           <ul>
-            <li><span class="stack-tag html">HTML</span> HTML5, CSS3</li>
-            <li><span class="stack-tag js">JS</span> Vanilla JavaScript</li>
-            <li><span class="stack-tag anim">CSS</span> CSS-анимации, WOW.js</li>
-            <li><span class="stack-tag resp">RWD</span> Адаптивная вёрстка</li>
+            <li>✓ Все компании</li>
+            <li>✓ Тарифные планы</li>
+            <li>✓ Глобальные отчёты</li>
+            <li>✓ Журнал действий</li>
           </ul>
         </div>
       </div>
@@ -389,24 +424,24 @@
     <!-- ========== NUMBERS ========== -->
     <section class="guarantees" id="numbers">
       <div class="guarantees-blur wow animate__animated animate__fadeInUp">
-        <p class="important-text">InsurePro в цифрах</p>
+        <p class="important-text">InsurePro закрывает всё</p>
         <div class="guarantees-content">
           <ul data-wow-delay="0.3s" class="wow animate__animated animate__fadeInUp">
             <li>
-              <h3>6</h3>
-              <p>Модулей системы</p>
+              <h3>3</h3>
+              <p>тарифных плана</p>
             </li>
             <li>
-              <h3>4</h3>
-              <p>Роли с разными правами</p>
+              <h3>24/7</h3>
+              <p>доступ из любой точки</p>
             </li>
             <li>
-              <h3>30+</h3>
-              <p>API-эндпоинтов</p>
+              <h3>2&nbsp;мин</h3>
+              <p>подача обращения</p>
             </li>
             <li>
               <h3>100%</h3>
-              <p>Аудит операций</p>
+              <p>истории действий</p>
             </li>
           </ul>
         </div>
@@ -417,18 +452,18 @@
     <section data-wow-delay="0s" class="question-the-user wow animate__animated animate__fadeInUp" id="cta">
       <div class="question-the-user-content">
         <div>
-          <h1>Готовы попробовать систему?</h1>
-          <p>Войдите под любой из ролей и посмотрите, как InsurePro закрывает реальные задачи страховой компании.</p>
+          <h1>Попробуйте InsurePro</h1>
+          <p>Войдите в тестовый кабинет, создайте компанию, добавьте сотрудников — и увидите, как быстро всё работает.</p>
           <div class="question-buttons">
-            <button class="btn primary" onclick="location.href='src/pages/log.html'">Войти в систему</button>
-            <button class="btn glass" onclick="location.href='#modules'">Обзор модулей</button>
+            <button class="btn primary" onclick="location.href='src/pages/log.html'">Войти в кабинет</button>
+            <button class="btn glass" onclick="location.href='#how'">Как это работает</button>
           </div>
         </div>
         <div class="cta-mockup">
-          <div class="cta-stat"><span class="cta-num">201</span><span class="cta-txt">Created</span></div>
-          <div class="cta-stat"><span class="cta-num">200</span><span class="cta-txt">OK</span></div>
-          <div class="cta-stat"><span class="cta-num">403</span><span class="cta-txt">Forbidden</span></div>
-          <div class="cta-stat"><span class="cta-num">401</span><span class="cta-txt">Unauthorized</span></div>
+          <div class="cta-stat"><span class="cta-emoji">👔</span><span class="cta-txt">Руководитель</span></div>
+          <div class="cta-stat"><span class="cta-emoji">👤</span><span class="cta-txt">Сотрудник</span></div>
+          <div class="cta-stat"><span class="cta-emoji">👑</span><span class="cta-txt">Администратор</span></div>
+          <div class="cta-stat"><span class="cta-emoji">✨</span><span class="cta-txt">3 роли</span></div>
         </div>
       </div>
     </section>
@@ -439,44 +474,40 @@
     <div class="information-blok-1">
       <div>
         <h2>InsurePro</h2>
-        <p>Веб-приложение для автоматизации деятельности страховой компании.</p>
-        <p>Дипломный проект · 09.02.07</p>
-        <p>ОГБПОУ «Ивановский промышленно-экономический колледж»</p>
+        <p>Сервис страхования сотрудников. Руководители оформляют полисы, сотрудники пользуются — всё в одном кабинете.</p>
+        <p>Учебный проект</p>
       </div>
       <div>
-        <h3>Модули</h3>
+        <h3>Возможности</h3>
         <ul>
-          <li><a href="#modules">Полисы и тарифы</a></li>
-          <li><a href="#modules">Обращения</a></li>
-          <li><a href="#modules">Агентская сеть</a></li>
-          <li><a href="#modules">Платежи</a></li>
-          <li><a href="#modules">Отчётность</a></li>
-          <li><a href="#modules">Audit log</a></li>
+          <li><a href="#features">Полисы и тарифы</a></li>
+          <li><a href="#features">Список сотрудников</a></li>
+          <li><a href="#features">Обращения</a></li>
+          <li><a href="#features">Отчёты</a></li>
         </ul>
       </div>
       <div>
-        <h3>Роли</h3>
+        <h3>Для кого</h3>
         <ul>
+          <li><a href="#roles">Руководитель</a></li>
+          <li><a href="#roles">Сотрудник</a></li>
           <li><a href="#roles">Администратор</a></li>
-          <li><a href="#roles">Менеджер компании</a></li>
-          <li><a href="#roles">Агент</a></li>
-          <li><a href="#roles">Клиент / сотрудник</a></li>
         </ul>
       </div>
       <div>
-        <h3>Проект</h3>
+        <h3>Начать</h3>
         <ul>
-          <li><a href="#problems">Проблематика</a></li>
-          <li><a href="#stack">Стек технологий</a></li>
-          <li><a href="src/pages/log.html">Войти в систему</a></li>
-          <li><a href="#about">О проекте</a></li>
+          <li><a href="src/pages/log.html">Войти</a></li>
+          <li><a href="src/pages/log.html">Регистрация</a></li>
+          <li><a href="#how">Как это работает</a></li>
+          <li><a href="#problems">Зачем нужно</a></li>
         </ul>
       </div>
     </div>
 
     <div class="information-blok-2">
-      <div>© 2025 InsurePro · Дипломный проект</div>
-      <div>Специальность 09.02.07 «Информационные системы и программирование»</div>
+      <div>© 2025 InsurePro</div>
+      <div>Сервис корпоративного страхования сотрудников</div>
     </div>
   </footer>
 
