@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Отчёты · InsurePro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="css/app.css">
+  <script src="js/mock.js"></script>
+  <script src="js/layout.js"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+  <a href="#main" class="skip-link">К содержимому</a>
+  <header class="sticky top-0 z-30 bg-white border-b border-slate-200 h-16 flex items-center px-4 sm:px-6 justify-between" data-chrome-navbar></header>
+  <div class="flex">
+    <aside data-chrome-sidebar class="w-64 shrink-0 bg-white"></aside>
+    <div data-chrome-backdrop aria-hidden="true"></div>
+
+    <main id="main" class="flex-1 p-4 sm:p-8 max-w-full" x-data="reportsPage()">
+      <header class="mb-6">
+        <h1 class="text-2xl sm:text-3xl font-bold">Отчёты</h1>
+        <p class="text-sm text-slate-500 mt-1">Выгрузка данных по организации</p>
+      </header>
+
+      <nav class="card p-2 mb-6 flex gap-1 overflow-x-auto" role="tablist" aria-label="Тип отчёта">
+        <template x-for="r in reports" :key="r.value">
+          <button type="button" role="tab" :aria-selected="type === r.value"
+                  class="px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap"
+                  :class="type === r.value ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100'"
+                  @click="type = r.value; rows = []" x-text="r.label"></button>
+        </template>
+      </nav>
+
+      <form class="card p-6 mb-6 grid gap-4 sm:grid-cols-[1fr_1fr_auto]" @submit.prevent="generate()">
+        <div class="field"><label for="from">От</label><input id="from" type="date" x-model="from" required></div>
+        <div class="field"><label for="to">До</label><input id="to" type="date" x-model="to" required></div>
+        <button type="submit" class="btn btn-primary self-end">Сформировать</button>
+      </form>
+
+      <div x-show="rows.length" class="card overflow-hidden">
+        <header class="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-3">
+          <h2 class="font-semibold">Результаты (<span x-text="rows.length"></span>)</h2>
+          <div class="flex gap-2">
+            <button type="button" class="btn btn-secondary text-sm" @click="exportFile('csv')">CSV</button>
+            <button type="button" class="btn btn-secondary text-sm" @click="exportFile('xlsx')">Excel</button>
+            <button type="button" class="btn btn-secondary text-sm" @click="exportFile('pdf')">PDF</button>
+          </div>
+        </header>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead><tr><template x-for="col in columns" :key="col"><th x-text="col"></th></template></tr></thead>
+            <tbody>
+              <template x-for="(row, i) in rows" :key="i">
+                <tr><template x-for="col in columns" :key="col"><td x-text="row[col]"></td></template></tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div x-show="!rows.length" class="card p-12 text-center text-slate-400">
+        <p class="text-lg">Выберите тип отчёта и период, затем нажмите «Сформировать».</p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    InsurePro.mountChrome('reports');
+
+    function reportsPage() {
+      return {
+        type: 'organizations',
+        from: '', to: '',
+        rows: [], columns: [],
+        reports: [
+          { value: 'organizations', label: 'По организациям' },
+          { value: 'employees', label: 'По сотрудникам' },
+          { value: 'policies', label: 'По полисам' },
+          { value: 'claims', label: 'По обращениям' },
+          { value: 'financial', label: 'Финансовый' },
+        ],
+
+        generate() {
+          // TODO(API): GET /reports/?type=...&from=...&to=...
+          const samples = {
+            organizations: [
+              { 'Компания': 'ООО «Ромашка»', 'Сотрудников': 45, 'Полисов': 1, 'Сумма, ₽': '144 000' },
+              { 'Компания': 'АО «Вектор»', 'Сотрудников': 120, 'Полисов': 2, 'Сумма, ₽': '696 000' },
+              { 'Компания': 'ООО «Альфа»', 'Сотрудников': 12, 'Полисов': 1, 'Сумма, ₽': '18 000' },
+            ],
+            employees: [
+              { 'Сотрудник': 'Анна Смирнова', 'Полисов': 1, 'Обращений': 2, 'Сумма возмещений, ₽': '46 500' },
+              { 'Сотрудник': 'Сергей Иванов', 'Полисов': 2, 'Обращений': 1, 'Сумма возмещений, ₽': '34 000' },
+            ],
+            policies: [
+              { 'Номер': 'POL-2024-001', 'Компания': 'ООО «Ромашка»', 'Статус': 'Активен', 'Начало': '15.01.2024', 'Конец': '14.01.2025' },
+              { 'Номер': 'POL-2024-002', 'Компания': 'АО «Вектор»', 'Статус': 'Активен', 'Начало': '01.03.2024', 'Конец': '28.02.2025' },
+            ],
+            claims: [
+              { 'Номер': 'CL-2024-042', 'Тип': 'Медуслуга', 'Статус': 'В ожидании', 'Сумма, ₽': '12 500', 'Дата': '15.10.2024' },
+              { 'Номер': 'CL-2024-043', 'Тип': 'Стоматология', 'Статус': 'Одобрено', 'Сумма, ₽': '34 000', 'Дата': '28.09.2024' },
+            ],
+            financial: [
+              { 'Месяц': 'Август 2024', 'Премии, ₽': '12 800 000', 'Возмещения, ₽': '4 200 000', 'Прибыль, ₽': '8 600 000' },
+              { 'Месяц': 'Сентябрь 2024', 'Премии, ₽': '13 400 000', 'Возмещения, ₽': '4 500 000', 'Прибыль, ₽': '8 900 000' },
+              { 'Месяц': 'Октябрь 2024', 'Премии, ₽': '14 800 000', 'Возмещения, ₽': '4 100 000', 'Прибыль, ₽': '10 700 000' },
+            ],
+          };
+          this.rows = samples[this.type] || [];
+          this.columns = this.rows[0] ? Object.keys(this.rows[0]) : [];
+        },
+
+        exportFile(format) {
+          // TODO(API): GET /reports/export/?type=...&format=... (открыть в новой вкладке)
+          alert(`Экспорт в ${format.toUpperCase()} будет доступен после подключения API`);
+        },
+      };
+    }
+  </script>
+</body>
+</html>

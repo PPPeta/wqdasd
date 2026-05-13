@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Регистрация · InsurePro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 text-slate-900 antialiased">
+  <main class="min-h-screen grid place-items-center p-4 py-12">
+    <section class="w-full max-w-2xl" x-data="registerForm()" x-cloak>
+      <header class="mb-6 flex flex-col items-center gap-2">
+        <span class="grid h-12 w-12 place-items-center rounded-xl bg-blue-600 text-white font-bold">IP</span>
+        <h1 class="text-2xl font-bold">Регистрация компании</h1>
+        <p class="text-sm text-slate-500">Создайте аккаунт для вашей организации</p>
+      </header>
+
+      <form class="card p-8 space-y-5" @submit.prevent="submit" novalidate>
+        <fieldset class="grid gap-4 sm:grid-cols-2">
+          <legend class="sr-only">Данные аккаунта</legend>
+
+          <div class="field sm:col-span-2">
+            <label for="company">Название компании <span class="text-red-500">*</span></label>
+            <input id="company" required x-model.trim="form.company_name" :aria-invalid="!!errors.company_name" placeholder="ООО «Ромашка»">
+            <p class="error" x-text="errors.company_name" x-show="errors.company_name"></p>
+          </div>
+
+          <div class="field">
+            <label for="inn">ИНН <span class="text-red-500">*</span></label>
+            <input id="inn" inputmode="numeric" maxlength="12" required x-model="form.inn" :aria-invalid="!!errors.inn" placeholder="10 или 12 цифр">
+            <p class="error" x-text="errors.inn" x-show="errors.inn"></p>
+          </div>
+
+          <div class="field">
+            <label for="employees">Количество сотрудников <span class="text-red-500">*</span></label>
+            <input id="employees" type="number" min="1" required x-model.number="form.employees_count" :aria-invalid="!!errors.employees_count">
+            <p class="error" x-text="errors.employees_count" x-show="errors.employees_count"></p>
+          </div>
+
+          <div class="field sm:col-span-2">
+            <label for="phone">Телефон <span class="text-red-500">*</span></label>
+            <input id="phone" type="tel" required x-model="form.phone" :aria-invalid="!!errors.phone" placeholder="+7XXXXXXXXXX">
+            <p class="hint">Формат: +7 и 10 цифр без пробелов</p>
+            <p class="error" x-text="errors.phone" x-show="errors.phone"></p>
+          </div>
+
+          <div class="field sm:col-span-2">
+            <label for="email">Email <span class="text-red-500">*</span></label>
+            <input id="email" type="email" autocomplete="email" required x-model.trim="form.email" :aria-invalid="!!errors.email" placeholder="admin@company.ru">
+            <p class="error" x-text="errors.email" x-show="errors.email"></p>
+          </div>
+
+          <div class="field">
+            <label for="password">Пароль <span class="text-red-500">*</span></label>
+            <input id="password" type="password" autocomplete="new-password" required x-model="form.password" :aria-invalid="!!errors.password" @input="updateStrength">
+            <div class="h-1.5 rounded-full bg-slate-100 overflow-hidden mt-1">
+              <div class="h-full transition-all duration-300" :class="strengthColor" :style="`width: ${strength * 25}%`"></div>
+            </div>
+            <p class="hint" x-text="strengthLabel"></p>
+            <p class="error" x-text="errors.password" x-show="errors.password"></p>
+          </div>
+
+          <div class="field">
+            <label for="password2">Подтверждение пароля <span class="text-red-500">*</span></label>
+            <input id="password2" type="password" autocomplete="new-password" required x-model="form.password2" :aria-invalid="!!errors.password2">
+            <p class="error" x-text="errors.password2" x-show="errors.password2"></p>
+          </div>
+        </fieldset>
+
+        <label class="flex items-start gap-2 text-sm">
+          <input type="checkbox" required x-model="form.agree" class="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600">
+          <span class="text-slate-600">
+            Я согласен с <a href="#" class="text-blue-600 hover:underline">условиями использования</a>
+            и <a href="#" class="text-blue-600 hover:underline">политикой конфиденциальности</a>
+          </span>
+        </label>
+
+        <button type="submit" class="btn btn-primary w-full">Зарегистрировать</button>
+
+        <p class="error text-center" x-show="errors.form" x-text="errors.form" role="alert"></p>
+      </form>
+
+      <p class="mt-6 text-center text-sm text-slate-600">
+        Уже есть аккаунт?
+        <a href="login.html" class="font-medium text-blue-600 hover:underline">Войти</a>
+      </p>
+    </section>
+  </main>
+
+  <script>
+    function registerForm() {
+      return {
+        strength: 0,
+        strengthLabel: 'Минимум 10 символов, буквы и цифры',
+        strengthColor: 'bg-slate-300',
+        form: {
+          email: '', password: '', password2: '', company_name: '',
+          inn: '', phone: '', employees_count: 1, agree: false,
+        },
+        errors: {},
+
+        updateStrength() {
+          const p = this.form.password;
+          let s = 0;
+          if (p.length >= 10) s++;
+          if (/[A-Z]/.test(p) && /[a-z]/.test(p)) s++;
+          if (/\d/.test(p)) s++;
+          if (/[^A-Za-z0-9]/.test(p)) s++;
+          this.strength = s;
+          const labels = ['Слишком слабый', 'Слабый', 'Средний', 'Хороший', 'Отличный'];
+          const colors = ['bg-slate-300', 'bg-red-400', 'bg-amber-400', 'bg-lime-400', 'bg-green-500'];
+          this.strengthLabel = labels[s] || '';
+          this.strengthColor = colors[s] || 'bg-slate-300';
+        },
+
+        validate() {
+          const e = {};
+          const f = this.form;
+          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) e.email = 'Некорректный email';
+          if (f.password.length < 10) e.password = 'Минимум 10 символов';
+          if (f.password !== f.password2) e.password2 = 'Пароли не совпадают';
+          if (!f.company_name || f.company_name.length < 2) e.company_name = 'Укажите название компании';
+          if (!/^\d{10}$|^\d{12}$/.test(f.inn)) e.inn = 'ИНН должен содержать 10 или 12 цифр';
+          if (!/^\+7\d{10}$/.test(f.phone)) e.phone = 'Формат: +7XXXXXXXXXX';
+          if (!f.employees_count || f.employees_count < 1) e.employees_count = 'Укажите количество сотрудников';
+          if (!f.agree) e.form = 'Необходимо согласие с условиями';
+          this.errors = e;
+          return Object.keys(e).length === 0;
+        },
+
+        submit() {
+          if (!this.validate()) return;
+          // TODO(API): POST /auth/reg/company/ с данными формы
+          // При успехе — редирект на verify-email.html
+          sessionStorage.setItem('pending_verify_email', this.form.email);
+          window.location.href = 'verify-email.html';
+        },
+      };
+    }
+  </script>
+</body>
+</html>
