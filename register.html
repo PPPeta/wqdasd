@@ -2,141 +2,205 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Регистрация · InsurePro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация — InsurePro</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link rel="stylesheet" href="/css/app.css">
+  <script src="/js/api.js"></script>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 text-slate-900 antialiased">
-  <main class="min-h-screen grid place-items-center p-4 py-12">
-    <section class="w-full max-w-2xl" x-data="registerForm()" x-cloak>
-      <header class="mb-6 flex flex-col items-center gap-2">
-        <span class="grid h-12 w-12 place-items-center rounded-xl bg-blue-600 text-white font-bold">IP</span>
-        <h1 class="text-2xl font-bold">Регистрация компании</h1>
-        <p class="text-sm text-slate-500">Создайте аккаунт для вашей организации</p>
-      </header>
+<body class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
 
-      <form class="card p-8 space-y-5" @submit.prevent="submit" novalidate>
-        <fieldset class="grid gap-4 sm:grid-cols-2">
-          <legend class="sr-only">Данные аккаунта</legend>
+  <div class="w-full max-w-lg" x-data="registerForm()" x-cloak>
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 text-blue-600 mb-2">
+        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span class="text-2xl font-bold">InsurePro</span>
+      </div>
+      <p class="text-slate-500 text-sm">Регистрация компании</p>
+    </div>
 
-          <div class="field sm:col-span-2">
-            <label for="company">Название компании <span class="text-red-500">*</span></label>
-            <input id="company" required x-model.trim="form.company_name" :aria-invalid="!!errors.company_name" placeholder="ООО «Ромашка»">
-            <p class="error" x-text="errors.company_name" x-show="errors.company_name"></p>
+    <!-- Card -->
+    <div class="card p-8">
+      <h1 class="text-xl font-semibold text-slate-800 mb-6">Создание аккаунта</h1>
+
+      <!-- Error -->
+      <div x-show="error" x-transition class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700" role="alert">
+        <span x-text="error"></span>
+      </div>
+
+      <form @submit.prevent="submit" novalidate>
+        <!-- Email -->
+        <div class="field mb-4">
+          <label for="email">Корпоративная почта <span class="text-red-500">*</span></label>
+          <input type="email" id="email" x-model="form.email" :aria-invalid="errors.email ? 'true' : 'false'" autocomplete="email" placeholder="admin@company.ru">
+          <span class="error" x-show="errors.email" x-text="errors.email"></span>
+        </div>
+
+        <!-- Password -->
+        <div class="field mb-4">
+          <label for="password">Пароль <span class="text-red-500">*</span></label>
+          <div class="relative">
+            <input :type="showPassword ? 'text' : 'password'" id="password" x-model="form.password" @input="checkStrength()" :aria-invalid="errors.password ? 'true' : 'false'" autocomplete="new-password" placeholder="Минимум 8 символов">
+            <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600" @click="showPassword = !showPassword" :aria-label="showPassword ? 'Скрыть' : 'Показать'">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </button>
           </div>
-
-          <div class="field">
-            <label for="inn">ИНН <span class="text-red-500">*</span></label>
-            <input id="inn" inputmode="numeric" maxlength="12" required x-model="form.inn" :aria-invalid="!!errors.inn" placeholder="10 или 12 цифр">
-            <p class="error" x-text="errors.inn" x-show="errors.inn"></p>
+          <!-- Strength indicator -->
+          <div class="flex gap-1 mt-2" x-show="form.password.length > 0">
+            <div class="h-1 flex-1 rounded-full transition-colors" :class="strength >= 1 ? (strength >= 3 ? 'bg-green-500' : strength >= 2 ? 'bg-yellow-500' : 'bg-red-500') : 'bg-slate-200'"></div>
+            <div class="h-1 flex-1 rounded-full transition-colors" :class="strength >= 2 ? (strength >= 3 ? 'bg-green-500' : 'bg-yellow-500') : 'bg-slate-200'"></div>
+            <div class="h-1 flex-1 rounded-full transition-colors" :class="strength >= 3 ? 'bg-green-500' : 'bg-slate-200'"></div>
+            <div class="h-1 flex-1 rounded-full transition-colors" :class="strength >= 4 ? 'bg-green-500' : 'bg-slate-200'"></div>
           </div>
+          <span class="hint" x-show="form.password.length > 0" x-text="strengthLabel"></span>
+          <span class="error" x-show="errors.password" x-text="errors.password"></span>
+        </div>
 
-          <div class="field">
-            <label for="employees">Количество сотрудников <span class="text-red-500">*</span></label>
-            <input id="employees" type="number" min="1" required x-model.number="form.employees_count" :aria-invalid="!!errors.employees_count">
-            <p class="error" x-text="errors.employees_count" x-show="errors.employees_count"></p>
-          </div>
+        <!-- Confirm Password -->
+        <div class="field mb-4">
+          <label for="password_confirm">Подтверждение пароля <span class="text-red-500">*</span></label>
+          <input type="password" id="password_confirm" x-model="form.password_confirm" :aria-invalid="errors.password_confirm ? 'true' : 'false'" autocomplete="new-password" placeholder="Повторите пароль">
+          <span class="error" x-show="errors.password_confirm" x-text="errors.password_confirm"></span>
+        </div>
 
-          <div class="field sm:col-span-2">
-            <label for="phone">Телефон <span class="text-red-500">*</span></label>
-            <input id="phone" type="tel" required x-model="form.phone" :aria-invalid="!!errors.phone" placeholder="+7XXXXXXXXXX">
-            <p class="hint">Формат: +7 и 10 цифр без пробелов</p>
-            <p class="error" x-text="errors.phone" x-show="errors.phone"></p>
-          </div>
+        <hr class="my-6 border-slate-200">
 
-          <div class="field sm:col-span-2">
-            <label for="email">Email <span class="text-red-500">*</span></label>
-            <input id="email" type="email" autocomplete="email" required x-model.trim="form.email" :aria-invalid="!!errors.email" placeholder="admin@company.ru">
-            <p class="error" x-text="errors.email" x-show="errors.email"></p>
-          </div>
+        <!-- Company Name -->
+        <div class="field mb-4">
+          <label for="company_name">Название компании <span class="text-red-500">*</span></label>
+          <input type="text" id="company_name" x-model="form.company_name" :aria-invalid="errors.company_name ? 'true' : 'false'" placeholder="ООО «Компания»">
+          <span class="error" x-show="errors.company_name" x-text="errors.company_name"></span>
+        </div>
 
-          <div class="field">
-            <label for="password">Пароль <span class="text-red-500">*</span></label>
-            <input id="password" type="password" autocomplete="new-password" required x-model="form.password" :aria-invalid="!!errors.password" @input="updateStrength">
-            <div class="h-1.5 rounded-full bg-slate-100 overflow-hidden mt-1">
-              <div class="h-full transition-all duration-300" :class="strengthColor" :style="`width: ${strength * 25}%`"></div>
-            </div>
-            <p class="hint" x-text="strengthLabel"></p>
-            <p class="error" x-text="errors.password" x-show="errors.password"></p>
-          </div>
+        <!-- INN -->
+        <div class="field mb-4">
+          <label for="inn">ИНН <span class="text-red-500">*</span></label>
+          <input type="text" id="inn" x-model="form.inn" :aria-invalid="errors.inn ? 'true' : 'false'" placeholder="10 или 12 цифр" maxlength="12" @input="form.inn = form.inn.replace(/\D/g, '')">
+          <span class="error" x-show="errors.inn" x-text="errors.inn"></span>
+        </div>
 
-          <div class="field">
-            <label for="password2">Подтверждение пароля <span class="text-red-500">*</span></label>
-            <input id="password2" type="password" autocomplete="new-password" required x-model="form.password2" :aria-invalid="!!errors.password2">
-            <p class="error" x-text="errors.password2" x-show="errors.password2"></p>
-          </div>
-        </fieldset>
+        <!-- Phone -->
+        <div class="field mb-4">
+          <label for="phone">Телефон <span class="text-red-500">*</span></label>
+          <input type="tel" id="phone" x-model="form.phone" :aria-invalid="errors.phone ? 'true' : 'false'" placeholder="+7XXXXXXXXXX">
+          <span class="error" x-show="errors.phone" x-text="errors.phone"></span>
+        </div>
 
-        <label class="flex items-start gap-2 text-sm">
-          <input type="checkbox" required x-model="form.agree" class="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600">
-          <span class="text-slate-600">
-            Я согласен с <a href="#" class="text-blue-600 hover:underline">условиями использования</a>
-            и <a href="#" class="text-blue-600 hover:underline">политикой конфиденциальности</a>
-          </span>
-        </label>
+        <!-- Employee Count -->
+        <div class="field mb-4">
+          <label for="employee_count">Количество сотрудников</label>
+          <select id="employee_count" x-model="form.employee_count">
+            <option value="">Выберите</option>
+            <option value="1-10">1–10</option>
+            <option value="11-50">11–50</option>
+            <option value="51-200">51–200</option>
+            <option value="201-500">201–500</option>
+            <option value="500+">500+</option>
+          </select>
+        </div>
 
-        <button type="submit" class="btn btn-primary w-full">Зарегистрировать</button>
+        <!-- Agreement -->
+        <div class="flex items-start gap-2 mb-6">
+          <input type="checkbox" id="agree" x-model="form.agree" class="mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+          <label for="agree" class="text-sm text-slate-600">
+            Я согласен с <a href="#" class="text-blue-600 hover:underline">условиями использования</a> и <a href="#" class="text-blue-600 hover:underline">политикой конфиденциальности</a>
+          </label>
+        </div>
+        <span class="error block -mt-4 mb-4" x-show="errors.agree" x-text="errors.agree"></span>
 
-        <p class="error text-center" x-show="errors.form" x-text="errors.form" role="alert"></p>
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary w-full" :disabled="loading">
+          <svg x-show="loading" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+          <span x-text="loading ? 'Регистрация...' : 'Зарегистрироваться'"></span>
+        </button>
       </form>
+    </div>
 
-      <p class="mt-6 text-center text-sm text-slate-600">
-        Уже есть аккаунт?
-        <a href="login.html" class="font-medium text-blue-600 hover:underline">Войти</a>
-      </p>
-    </section>
-  </main>
+    <!-- Login link -->
+    <p class="text-center mt-6 text-sm text-slate-500">
+      Уже есть аккаунт?
+      <a href="/login.html" class="text-blue-600 hover:text-blue-800 font-medium">Войти</a>
+    </p>
+  </div>
 
   <script>
     function registerForm() {
       return {
-        strength: 0,
-        strengthLabel: 'Минимум 10 символов, буквы и цифры',
-        strengthColor: 'bg-slate-300',
         form: {
-          email: '', password: '', password2: '', company_name: '',
-          inn: '', phone: '', employees_count: 1, agree: false,
+          email: '', password: '', password_confirm: '',
+          company_name: '', inn: '', phone: '',
+          employee_count: '', agree: false
         },
         errors: {},
+        error: '',
+        loading: false,
+        showPassword: false,
+        strength: 0,
+        strengthLabel: '',
 
-        updateStrength() {
+        checkStrength() {
           const p = this.form.password;
           let s = 0;
-          if (p.length >= 10) s++;
-          if (/[A-Z]/.test(p) && /[a-z]/.test(p)) s++;
-          if (/\d/.test(p)) s++;
+          if (p.length >= 8) s++;
+          if (/[A-Z]/.test(p)) s++;
+          if (/[0-9]/.test(p)) s++;
           if (/[^A-Za-z0-9]/.test(p)) s++;
           this.strength = s;
-          const labels = ['Слишком слабый', 'Слабый', 'Средний', 'Хороший', 'Отличный'];
-          const colors = ['bg-slate-300', 'bg-red-400', 'bg-amber-400', 'bg-lime-400', 'bg-green-500'];
+          const labels = ['', 'Слабый', 'Средний', 'Хороший', 'Отличный'];
           this.strengthLabel = labels[s] || '';
-          this.strengthColor = colors[s] || 'bg-slate-300';
         },
 
         validate() {
-          const e = {};
-          const f = this.form;
-          if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) e.email = 'Некорректный email';
-          if (f.password.length < 10) e.password = 'Минимум 10 символов';
-          if (f.password !== f.password2) e.password2 = 'Пароли не совпадают';
-          if (!f.company_name || f.company_name.length < 2) e.company_name = 'Укажите название компании';
-          if (!/^\d{10}$|^\d{12}$/.test(f.inn)) e.inn = 'ИНН должен содержать 10 или 12 цифр';
-          if (!/^\+7\d{10}$/.test(f.phone)) e.phone = 'Формат: +7XXXXXXXXXX';
-          if (!f.employees_count || f.employees_count < 1) e.employees_count = 'Укажите количество сотрудников';
-          if (!f.agree) e.form = 'Необходимо согласие с условиями';
-          this.errors = e;
-          return Object.keys(e).length === 0;
+          this.errors = {};
+          if (!this.form.email.trim()) this.errors.email = 'Введите почту';
+          else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email)) this.errors.email = 'Некорректный формат';
+
+          if (!this.form.password) this.errors.password = 'Введите пароль';
+          else if (this.form.password.length < 8) this.errors.password = 'Минимум 8 символов';
+
+          if (!this.form.password_confirm) this.errors.password_confirm = 'Подтвердите пароль';
+          else if (this.form.password !== this.form.password_confirm) this.errors.password_confirm = 'Пароли не совпадают';
+
+          if (!this.form.company_name.trim()) this.errors.company_name = 'Введите название компании';
+          if (!this.form.inn) this.errors.inn = 'Введите ИНН';
+          else if (!/^\d{10}$|^\d{12}$/.test(this.form.inn)) this.errors.inn = 'ИНН должен содержать 10 или 12 цифр';
+
+          if (!this.form.phone) this.errors.phone = 'Введите телефон';
+          else if (!/^\+7\d{10}$/.test(this.form.phone)) this.errors.phone = 'Формат: +7XXXXXXXXXX';
+
+          if (!this.form.agree) this.errors.agree = 'Необходимо принять условия';
+
+          return Object.keys(this.errors).length === 0;
         },
 
-        submit() {
+        async submit() {
+          this.error = '';
           if (!this.validate()) return;
-          // TODO(API): POST /auth/reg/company/ с данными формы
-          // При успехе — редирект на verify-email.html
-          sessionStorage.setItem('pending_verify_email', this.form.email);
-          window.location.href = 'verify-email.html';
-        },
+          this.loading = true;
+          try {
+            await window.InsurePro.apiFetch('/auth/reg/company/', {
+              method: 'POST',
+              body: {
+                email: this.form.email,
+                password: this.form.password,
+                company_name: this.form.company_name,
+                inn: this.form.inn,
+                phone: this.form.phone,
+                employee_count: this.form.employee_count
+              }
+            });
+            window.InsurePro.toast('Регистрация прошла успешно!', 'success');
+            setTimeout(() => { window.location.href = '/verify-email.html?email=' + encodeURIComponent(this.form.email); }, 300);
+          } catch (err) {
+            this.error = err.message || 'Ошибка при регистрации';
+          } finally {
+            this.loading = false;
+          }
+        }
       };
     }
   </script>

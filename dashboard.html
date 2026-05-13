@@ -2,237 +2,320 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Дашборд · InsurePro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Панель управления — InsurePro</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link rel="stylesheet" href="/css/app.css">
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="css/app.css">
-  <script src="js/mock.js"></script>
-  <script src="js/layout.js"></script>
 </head>
-<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
-  <a href="#main" class="skip-link">К содержимому</a>
+<body class="bg-gray-50">
 
-  <header class="sticky top-0 z-30 bg-white border-b border-slate-200 h-16 flex items-center px-4 sm:px-6 justify-between" data-chrome-navbar></header>
+  <main x-data="dashboardApp()" x-init="init()" x-cloak>
+    <!-- Page header -->
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-slate-800">Панель управления</h1>
+      <p class="text-sm text-slate-500 mt-1">Обзор ключевых показателей</p>
+    </div>
 
-  <div class="flex">
-    <aside data-chrome-sidebar class="w-64 shrink-0 bg-white"></aside>
-    <div data-chrome-backdrop aria-hidden="true"></div>
+    <!-- ═══ ADMIN DASHBOARD ═══ -->
+    <template x-if="role === 'admin'">
+      <div>
+        <!-- Widgets -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="card p-5">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-slate-500">Всего организаций</p>
+                <p class="text-2xl font-bold text-slate-800 mt-1" x-text="stats.organizations"></p>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="card p-5">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-slate-500">Активных полисов</p>
+                <p class="text-2xl font-bold text-slate-800 mt-1" x-text="stats.activePolicies"></p>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="card p-5">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-slate-500">Открытых заявок</p>
+                <p class="text-2xl font-bold text-slate-800 mt-1" x-text="stats.openClaims"></p>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="card p-5">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-slate-500">Доход за месяц</p>
+                <p class="text-2xl font-bold text-slate-800 mt-1" x-text="formatCurrency(stats.monthRevenue)"></p>
+              </div>
+              <div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <main id="main" class="flex-1 p-4 sm:p-8 max-w-full" x-data="dashboardPage()" x-init="init()">
-      <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>
-          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Дашборд</h1>
-          <p class="text-sm text-slate-500 mt-1" x-text="greeting"></p>
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <div class="card p-6">
+            <h2 class="text-lg font-semibold text-slate-800 mb-4">Статусы полисов</h2>
+            <div class="relative h-64 flex items-center justify-center">
+              <canvas id="policyStatusChart"></canvas>
+            </div>
+          </div>
+          <div class="card p-6">
+            <h2 class="text-lg font-semibold text-slate-800 mb-4">Доход по месяцам</h2>
+            <div class="relative h-64">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
         </div>
       </div>
+    </template>
 
-      <!-- Widgets -->
-      <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8" aria-label="Ключевые показатели">
-        <template x-for="w in widgets" :key="w.label">
+    <!-- ═══ MANAGER DASHBOARD ═══ -->
+    <template x-if="role === 'manager'">
+      <div>
+        <!-- Widgets -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="card p-5">
+            <p class="text-sm text-slate-500">Сотрудников</p>
+            <p class="text-2xl font-bold text-slate-800 mt-1" x-text="stats.employees"></p>
+          </div>
+          <div class="card p-5">
+            <p class="text-sm text-slate-500">Активных полисов</p>
+            <p class="text-2xl font-bold text-slate-800 mt-1" x-text="stats.activePolicies"></p>
+          </div>
+          <div class="card p-5">
+            <p class="text-sm text-slate-500">Открытых заявок</p>
+            <p class="text-2xl font-bold text-slate-800 mt-1" x-text="stats.openClaims"></p>
+          </div>
+          <div class="card p-5">
+            <p class="text-sm text-slate-500">Расходы за месяц</p>
+            <p class="text-2xl font-bold text-slate-800 mt-1" x-text="formatCurrency(stats.monthExpenses)"></p>
+          </div>
+        </div>
+
+        <!-- Lists -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Recent claims -->
           <div class="card p-6">
-            <div class="flex items-center justify-between mb-3">
-              <span class="grid h-10 w-10 place-items-center rounded-lg" :class="w.iconBg">
-                <span x-html="w.icon"></span>
-              </span>
-            </div>
-            <p class="text-sm text-slate-500" x-text="w.label"></p>
-            <p class="text-3xl font-bold mt-1" :class="w.valueColor" x-text="w.value"></p>
-            <p x-show="w.trend" class="text-xs mt-1" :class="w.trendColor" x-text="w.trend"></p>
-          </div>
-        </template>
-      </section>
-
-      <!-- Charts (admin) -->
-      <section x-show="isAdmin" class="grid gap-6 lg:grid-cols-2 mb-8">
-        <div class="card p-6">
-          <h2 class="font-semibold mb-4">Полисы по статусам</h2>
-          <div class="relative h-64"><canvas id="chartStatuses" aria-label="Полисы по статусам"></canvas></div>
-        </div>
-        <div class="card p-6">
-          <h2 class="font-semibold mb-4">Выручка по месяцам, млн ₽</h2>
-          <div class="relative h-64"><canvas id="chartRevenue" aria-label="Выручка по месяцам"></canvas></div>
-        </div>
-      </section>
-
-      <!-- Recent claims + expiring policies (manager) -->
-      <section x-show="isManager" class="grid gap-6 lg:grid-cols-2 mb-8">
-        <div class="card overflow-hidden">
-          <header class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-            <h2 class="font-semibold">Последние обращения</h2>
-            <a href="claims.html" class="text-sm text-blue-600 hover:underline">Все →</a>
-          </header>
-          <ul class="divide-y divide-slate-100">
-            <template x-for="c in recentClaims" :key="c.id">
-              <li class="px-6 py-4 flex items-center justify-between gap-3">
-                <div class="min-w-0 flex-1">
-                  <p class="font-medium truncate" x-text="c.number + ' · ' + (TYPE_LABELS[c.type] || c.type)"></p>
-                  <p class="text-xs text-slate-500 mt-0.5" x-text="c.employee_name"></p>
+            <h2 class="text-lg font-semibold text-slate-800 mb-4">Последние заявки</h2>
+            <div class="space-y-3">
+              <template x-for="claim in recentClaims" :key="claim.id">
+                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                  <div>
+                    <p class="text-sm font-medium text-slate-800" x-text="claim.type"></p>
+                    <p class="text-xs text-slate-500" x-text="claim.employee"></p>
+                  </div>
+                  <span class="badge" :class="'badge-' + claim.status" x-text="statusLabels[claim.status]"></span>
                 </div>
-                <span class="badge" :class="`badge-${c.status}`" x-text="STATUS_LABELS[c.status] || c.status"></span>
-              </li>
-            </template>
-          </ul>
-        </div>
-
-        <div class="card overflow-hidden">
-          <header class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-            <h2 class="font-semibold">Полисы истекают в 30 дней</h2>
-            <a href="policies.html" class="text-sm text-blue-600 hover:underline">Все →</a>
-          </header>
-          <ul class="divide-y divide-slate-100">
-            <template x-for="p in expiringPolicies" :key="p.id">
-              <li class="px-6 py-4 flex items-center justify-between gap-3">
-                <div class="min-w-0 flex-1">
-                  <p class="font-medium truncate" x-text="p.number"></p>
-                  <p class="text-xs text-slate-500 mt-0.5" x-text="p.company"></p>
-                </div>
-                <span class="text-xs font-medium text-amber-700" x-text="p.expiresIn"></span>
-              </li>
-            </template>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Employee view -->
-      <section x-show="isEmployee" class="card p-6 sm:p-8">
-        <div class="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <p class="text-xs uppercase tracking-wider text-slate-500">Мой активный полис</p>
-            <h2 class="text-2xl font-bold mt-1" x-text="myPolicy.plan || '—'"></h2>
-            <p class="text-sm text-slate-500" x-text="myPolicy.period || 'Нет активного полиса'"></p>
-          </div>
-          <a href="claims.html?new=1" class="btn btn-primary">
-            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-            Подать обращение
-          </a>
-        </div>
-        <dl class="grid gap-4 sm:grid-cols-3 mt-6">
-          <template x-for="cov in (myPolicy.coverages || [])" :key="cov.name">
-            <div class="rounded-xl bg-slate-50 p-4">
-              <dt class="text-xs uppercase tracking-wider text-slate-500" x-text="cov.name"></dt>
-              <dd class="mt-1 font-semibold" x-text="cov.limit"></dd>
+              </template>
+              <p x-show="recentClaims.length === 0" class="text-sm text-slate-400 text-center py-4">Нет заявок</p>
             </div>
-          </template>
-        </dl>
-      </section>
-    </main>
-  </div>
+          </div>
+
+          <!-- Expiring policies -->
+          <div class="card p-6">
+            <h2 class="text-lg font-semibold text-slate-800 mb-4">Истекающие полисы</h2>
+            <div class="space-y-3">
+              <template x-for="policy in expiringPolicies" :key="policy.id">
+                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                  <div>
+                    <p class="text-sm font-medium text-slate-800" x-text="policy.plan"></p>
+                    <p class="text-xs text-slate-500">Истекает: <span x-text="policy.expires"></span></p>
+                  </div>
+                  <a :href="'/policy.html?id=' + policy.id" class="text-sm text-blue-600 hover:underline">Подробнее</a>
+                </div>
+              </template>
+              <p x-show="expiringPolicies.length === 0" class="text-sm text-slate-400 text-center py-4">Нет истекающих полисов</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ═══ EMPLOYEE DASHBOARD ═══ -->
+    <template x-if="role === 'employee'">
+      <div>
+        <!-- Widgets -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div class="card p-5">
+            <p class="text-sm text-slate-500">Мой полис</p>
+            <p class="text-lg font-bold text-slate-800 mt-1" x-text="stats.myPlan || 'Нет активного полиса'"></p>
+          </div>
+          <div class="card p-5">
+            <p class="text-sm text-slate-500">Мои заявки</p>
+            <p class="text-2xl font-bold text-slate-800 mt-1" x-text="stats.myClaims"></p>
+          </div>
+        </div>
+
+        <!-- Active policy card -->
+        <div class="card p-6 mb-6" x-show="activePolicy">
+          <h2 class="text-lg font-semibold text-slate-800 mb-4">Активный полис</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <p class="text-xs text-slate-500 uppercase tracking-wide">План</p>
+              <p class="text-sm font-medium text-slate-800 mt-1" x-text="activePolicy?.plan"></p>
+            </div>
+            <div>
+              <p class="text-xs text-slate-500 uppercase tracking-wide">Действует до</p>
+              <p class="text-sm font-medium text-slate-800 mt-1" x-text="activePolicy?.expires"></p>
+            </div>
+            <div>
+              <p class="text-xs text-slate-500 uppercase tracking-wide">Статус</p>
+              <span class="badge badge-active mt-1">Активен</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit claim -->
+        <a href="/claims.html" class="btn btn-primary inline-flex">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+          Подать заявку
+        </a>
+      </div>
+    </template>
+  </main>
 
   <script>
-    InsurePro.mountChrome('dashboard');
-
-    const STATUS_LABELS = { pending: 'В ожидании', approved: 'Одобрено', rejected: 'Отклонено', active: 'Активно' };
-    const TYPE_LABELS = { medical: 'Медуслуга', hospitalization: 'Госпитализация', medication: 'Медикаменты', dental: 'Стоматология' };
-
-    function dashboardPage() {
+    function dashboardApp() {
       return {
-        widgets: [],
+        role: 'employee',
+        stats: {},
         recentClaims: [],
         expiringPolicies: [],
-        myPolicy: {},
-        STATUS_LABELS, TYPE_LABELS,
-
-        get user() { return InsurePro.MOCK_USER; },
-        get isAdmin() { return this.user.role === 'admin'; },
-        get isManager() { return this.user.role === 'company_manager'; },
-        get isEmployee() { return this.user.role === 'employee'; },
-        get greeting() {
-          const h = new Date().getHours();
-          const t = h < 6 ? 'Доброй ночи' : h < 12 ? 'Доброе утро' : h < 18 ? 'Добрый день' : 'Добрый вечер';
-          return `${t}, ${this.user.first_name || 'пользователь'}!`;
+        activePolicy: null,
+        statusLabels: {
+          pending: 'На рассмотрении',
+          active: 'Активен',
+          approved: 'Одобрена',
+          rejected: 'Отклонена',
+          reviewing: 'Рассматривается'
         },
 
-        init() {
-          // TODO(API): GET /dashboard/?role=... — заменить на реальный запрос
-          const M = InsurePro.MOCK.dashboard;
-          if (this.isAdmin) {
-            this.widgets = this.adminWidgets(M.admin.widgets);
-            this.recentClaims = InsurePro.MOCK.claims.slice(0, 5);
-            this.expiringPolicies = InsurePro.MOCK.expiringPolicies;
-            this.$nextTick(() => this.drawCharts(M.admin));
-          } else if (this.isManager) {
-            this.widgets = this.managerWidgets(M.company_manager.widgets);
-            this.recentClaims = InsurePro.MOCK.claims.slice(0, 4);
-            this.expiringPolicies = InsurePro.MOCK.expiringPolicies;
-          } else {
-            this.widgets = this.employeeWidgets(M.employee.widgets);
-            this.myPolicy = M.employee.my_policy;
+        formatCurrency(val) {
+          return window.InsurePro.formatCurrency(val || 0);
+        },
+
+        async init() {
+          window.InsurePro.mountChrome('dashboard');
+          const user = window.InsurePro.auth.user() || {};
+          this.role = user.role || 'employee';
+          await this.loadData();
+        },
+
+        async loadData() {
+          try {
+            const data = await window.InsurePro.apiFetch('/dashboard/');
+            this.stats = data.stats || this.getDemoStats();
+            this.recentClaims = data.recent_claims || [];
+            this.expiringPolicies = data.expiring_policies || [];
+            this.activePolicy = data.active_policy || null;
+            this.$nextTick(() => { if (this.role === 'admin') this.renderCharts(data); });
+          } catch {
+            this.loadDemoData();
           }
         },
 
-        adminWidgets(w) {
-          return [
-            { label: 'Всего компаний', value: w.companies, iconBg: 'bg-blue-100', valueColor: 'text-blue-700', trend: '+4 за мес.', trendColor: 'text-green-600',
-              icon: svg('<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/>', 'text-blue-600') },
-            { label: 'Всего полисов', value: w.policies, iconBg: 'bg-indigo-100', valueColor: 'text-indigo-700', trend: '+18 за мес.', trendColor: 'text-green-600',
-              icon: svg('<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>', 'text-indigo-600') },
-            { label: 'Обращений', value: w.claims, iconBg: 'bg-amber-100', valueColor: 'text-amber-700',
-              icon: svg('<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>', 'text-amber-600') },
-            { label: 'Выручка', value: formatRub(w.revenue), iconBg: 'bg-green-100', valueColor: 'text-green-700', trend: '+8.3%', trendColor: 'text-green-600',
-              icon: svg('<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-2.03 0-3.75-1.006-3.75-2.25S9.97 7.5 12 7.5c.768 0 1.536.219 2.121.659L15 8.818"/>', 'text-green-600') },
+        loadDemoData() {
+          this.stats = this.getDemoStats();
+          this.recentClaims = [
+            { id: 1, type: 'Амбулаторное лечение', employee: 'Иванов И.И.', status: 'pending' },
+            { id: 2, type: 'Стоматология', employee: 'Петрова А.С.', status: 'approved' },
+            { id: 3, type: 'Госпитализация', employee: 'Сидоров В.К.', status: 'reviewing' }
           ];
+          this.expiringPolicies = [
+            { id: 1, plan: 'Базовый ДМС', expires: '15.02.2025' },
+            { id: 2, plan: 'Расширенный ДМС', expires: '28.02.2025' }
+          ];
+          this.activePolicy = { plan: 'Стандарт ДМС', expires: '31.12.2025' };
+          this.$nextTick(() => { if (this.role === 'admin') this.renderCharts(null); });
         },
 
-        managerWidgets(w) {
-          return [
-            { label: 'Сотрудников', value: w.employees, iconBg: 'bg-blue-100', valueColor: 'text-blue-700',
-              icon: svg('<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0z"/>', 'text-blue-600') },
-            { label: 'Активных полисов', value: w.active_policies, iconBg: 'bg-green-100', valueColor: 'text-green-700',
-              icon: svg('<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>', 'text-green-600') },
-            { label: 'Обращений в ожидании', value: w.pending_claims, iconBg: 'bg-amber-100', valueColor: 'text-amber-700',
-              icon: svg('<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>', 'text-amber-600') },
-            { label: 'Истекают в 30 дней', value: w.expiring, iconBg: 'bg-red-100', valueColor: 'text-red-700',
-              icon: svg('<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>', 'text-red-600') },
-          ];
+        getDemoStats() {
+          if (this.role === 'admin') return { organizations: 24, activePolicies: 156, openClaims: 12, monthRevenue: 4850000 };
+          if (this.role === 'manager') return { employees: 47, activePolicies: 42, openClaims: 5, monthExpenses: 1250000 };
+          return { myPlan: 'Стандарт ДМС', myClaims: 2 };
         },
 
-        employeeWidgets(w) {
-          return [
-            { label: 'Мои полисы', value: w.my_policies, iconBg: 'bg-blue-100', valueColor: 'text-blue-700',
-              icon: svg('<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751"/>', 'text-blue-600') },
-            { label: 'Мои обращения', value: w.my_claims, iconBg: 'bg-amber-100', valueColor: 'text-amber-700',
-              icon: svg('<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25"/>', 'text-amber-600') },
-          ];
-        },
+        renderCharts(data) {
+          // Policy status doughnut
+          const ctx1 = document.getElementById('policyStatusChart');
+          if (ctx1) {
+            new Chart(ctx1, {
+              type: 'doughnut',
+              data: {
+                labels: ['Активные', 'Черновики', 'Приостановлены', 'Истекшие'],
+                datasets: [{
+                  data: data?.chart_policies || [65, 12, 8, 15],
+                  backgroundColor: ['#16a34a', '#94a3b8', '#d97706', '#dc2626'],
+                  borderWidth: 0
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+              }
+            });
+          }
 
-        drawCharts(data) {
-          const s = data.statuses;
-          new Chart(document.getElementById('chartStatuses'), {
-            type: 'doughnut',
-            data: {
-              labels: ['Активные', 'Черновики', 'Приостановлены', 'Отменены'],
-              datasets: [{
-                data: [s.active, s.draft, s.suspended, s.cancelled],
-                backgroundColor: ['#22c55e', '#94a3b8', '#f59e0b', '#ef4444'],
-                borderWidth: 0,
-              }],
-            },
-            options: { plugins: { legend: { position: 'bottom' } }, cutout: '65%' },
-          });
-          new Chart(document.getElementById('chartRevenue'), {
-            type: 'line',
-            data: {
-              labels: data.revenue.map((x) => x.month),
-              datasets: [{
-                data: data.revenue.map((x) => x.value),
-                borderColor: '#2563eb',
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                fill: true, tension: 0.35, pointRadius: 4,
-              }],
-            },
-            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } },
-          });
-        },
+          // Revenue line chart
+          const ctx2 = document.getElementById('revenueChart');
+          if (ctx2) {
+            new Chart(ctx2, {
+              type: 'line',
+              data: {
+                labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                datasets: [{
+                  label: 'Доход (₽)',
+                  data: data?.chart_revenue || [3200000, 3500000, 4100000, 3800000, 4200000, 4850000, 4600000, 5100000, 4900000, 5300000, 5600000, 5800000],
+                  borderColor: '#2563eb',
+                  backgroundColor: 'rgba(37, 99, 235, 0.08)',
+                  fill: true,
+                  tension: 0.4,
+                  borderWidth: 2,
+                  pointRadius: 3
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                  y: {
+                    beginAtZero: false,
+                    ticks: {
+                      callback: function(val) {
+                        return (val / 1000000).toFixed(1) + ' млн';
+                      }
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
       };
-    }
-
-    function svg(path, color) {
-      return `<svg class="h-5 w-5 ${color}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">${path}</svg>`;
-    }
-    function formatRub(v) {
-      return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0, notation: v >= 1e6 ? 'compact' : 'standard' }).format(v || 0);
     }
   </script>
 </body>

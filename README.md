@@ -1,81 +1,130 @@
-# InsurePro — фронтенд
+# InsurePro — B2B DMS Frontend
 
-Шаблон фронтенда для B2B-платформы ДМС. Чистые HTML + Tailwind CSS (CDN) + Alpine.js. **Без сборки, без Node.js, без локального сервера.**
+Фронтенд для системы управления корпоративным добровольным медицинским страхованием (ДМС).
 
-## Как запустить
+Статический проект на **HTML + Tailwind CSS (CDN) + Alpine.js** — без сборщиков, без Node.js.
 
-1. Скачать / склонировать репозиторий.
-2. Двойной клик по `index.html` (или любой другой `.html`).
+---
 
-Всё. Браузер откроет страницу, CDN подгрузит Tailwind и Alpine, данные возьмутся из `js/mock.js`.
+## Быстрый старт
 
-## Переключение роли (для разработки)
+### Вариант 1: Python
 
-Чтобы посмотреть дашборд от имени разных ролей — открой `js/layout.js` и поменяй в `MOCK_USER.role`:
-
-- `admin` — видит всё + графики + пункт «Пользователи»
-- `company_manager` — сотрудники, полисы, обращения, отчёты (по умолчанию)
-- `employee` — свой полис + «Подать обращение»
-
-## Структура
-
-```
-index.html            редирект на login
-login.html
-register.html
-verify-email.html
-dashboard.html        роль-зависимые виджеты + Chart.js
-employees.html        таблица + поиск + модал
-plans.html            карточки планов + калькулятор
-policies.html         таблица + фильтры
-policy.html           детальная (?id=10)
-claims.html           таблица + подача в модале
-claim.html            детальная (?id=42)
-reports.html          отчёты + экспорт
-
-css/app.css           общие стили (badges, btn, field, card)
-js/layout.js          navbar + sidebar на всех страницах
-js/mock.js            моковые данные для разработки
+```bash
+cd /path/to/project
+python3 -m http.server 3000
+# Открыть http://localhost:3000
 ```
 
-## Как подключать API
+### Вариант 2: Node.js (npx)
 
-Во всех файлах расставлены маркеры `TODO(API):`. Точки подключения:
+```bash
+npx serve . -l 3000
+# или
+npx http-server . -p 3000
+```
 
-| Страница | Куда смотреть | Что подключить |
-|----------|--------------|----------------|
-| `login.html` | `@submit.prevent` формы | `POST /auth/` → сохранить токен в localStorage |
-| `register.html` | метод `submit()` | `POST /auth/reg/company/` |
-| `verify-email.html` | методы `submit()` и `resend()` | `POST /auth/verify-email/`, `POST /auth/send-verify-email/` |
-| `dashboard.html` | метод `init()` | `GET /dashboard/?role=...` |
-| `employees.html` | `init()`, `save()`, `toggleActive()` | `GET/POST/PATCH /employees/` |
-| `plans.html` | `init()`, `calculate()` | `GET /plans/`, `POST /plans/calculate` |
-| `policies.html` | `init()` | `GET /policies/?status=...` |
-| `policy.html` | `init()` | `GET /policies/{id}/` |
-| `claims.html` | `init()`, `save()` | `GET /claims/`, `POST /claims/` |
-| `claim.html` | `init()`, `decide()` | `GET /claims/{id}/`, `PATCH /claims/{id}/` |
-| `reports.html` | `generate()`, `exportFile()` | `GET /reports/`, `GET /reports/export/` |
-| `js/layout.js` | `MOCK_USER`, `data-chrome-logout` | брать юзера из localStorage, `POST /auth/logout/` |
+### Вариант 3: VS Code
 
-Мок-данные живут в `js/mock.js` — когда перепишешь страницу на API, просто удали ссылку на мок из соответствующего HTML.
+Установите расширение **Live Server**, откройте папку проекта и запустите сервер (правый клик на `index.html` → "Open with Live Server").
 
-## Роли и доступ
+---
 
-Управление видимостью через Alpine Store `$store.auth`:
+## Настройка API
+
+По умолчанию все запросы идут на `http://localhost:8000`.
+
+Чтобы изменить базовый URL API, добавьте `<meta>` тег в `<head>` любой страницы:
 
 ```html
-<button x-show="$store.auth.hasRole('admin')">Только админ</button>
-<button x-show="$store.auth.hasRole('admin', 'company_manager')">Админ или менеджер</button>
+<meta name="api-base" content="https://api.example.com">
 ```
 
-Значения ролей: `admin`, `company_manager`, `employee`.
+---
 
-## Что ещё не сделано (специально — под твои правки)
+## Структура файлов
 
-- Страница пользователей `/users.html` (в меню есть, но пункта пока нет)
-- Форма «Забыли пароль»
-- Формы редактирования полисов (только просмотр и статус)
-- Реальная загрузка файлов в обращениях
-- Refresh-token логика
+```
+├── css/
+│   └── app.css              # Общие стили (badge, card, field, btn, table, skeleton)
+├── js/
+│   ├── api.js               # API-клиент, авторизация, toast, форматирование
+│   └── layout.js            # Навбар + сайдбар (chrome), навигация с ролями
+├── index.html               # Редирект: авторизован → dashboard, иначе → login
+├── login.html               # Форма входа
+├── register.html            # Регистрация компании
+├── verify-email.html        # Подтверждение почты (6-значный код)
+├── dashboard.html           # Панель управления (ролевая)
+├── employees.html           # Управление сотрудниками
+├── plans.html               # Планы страхования (карточки + калькулятор)
+├── policies.html            # Список полисов
+├── policy.html              # Детали полиса (по ?id=)
+├── claims.html              # Список заявок + создание
+├── claim.html               # Детали заявки (по ?id=)
+├── reports.html             # Отчёты + экспорт
+└── README.md
+```
 
-Всё это удобно добавлять поверх текущих страниц — структура и стили уже на месте.
+---
+
+## Роли пользователей
+
+| Роль       | Описание                                 | Доступ                              |
+|------------|------------------------------------------|-------------------------------------|
+| `admin`    | Администратор платформы                  | Все разделы, все отчёты, управление |
+| `manager`  | Менеджер компании                        | Сотрудники, полисы, заявки, отчёты  |
+| `employee` | Сотрудник застрахованной компании        | Свой полис, подача заявок, планы    |
+
+Роль хранится в `localStorage` как часть объекта пользователя (`insurepro_user`).
+
+Боковая навигация автоматически фильтруется по роли. Управляющие кнопки (одобрить/отклонить заявку, сменить статус полиса) доступны только admin/manager.
+
+---
+
+## Технологии
+
+- **Tailwind CSS** — CDN, без конфига
+- **Alpine.js 3** — реактивность, состояние
+- **Chart.js** — графики на dashboard (только для admin)
+- **Toastify.js** — уведомления
+- **Heroicons** — SVG-иконки inline
+
+---
+
+## Демо-режим
+
+Если API недоступен, страницы автоматически переключаются на **демо-данные** (fallback). Это позволяет просматривать интерфейс без запущенного бэкенда.
+
+Для тестирования авторизации вручную заполните localStorage:
+
+```js
+localStorage.setItem('insurepro_token', 'demo-token');
+localStorage.setItem('insurepro_user', JSON.stringify({
+  name: 'Иван Администратор',
+  email: 'admin@company.ru',
+  role: 'admin' // или 'manager', 'employee'
+}));
+```
+
+Затем откройте `/dashboard.html`.
+
+---
+
+## Цветовая схема статусов
+
+| Статус       | Цвет    | CSS-класс         |
+|-------------|---------|-------------------|
+| Активен     | Зелёный | `.badge-active`   |
+| Черновик    | Серый   | `.badge-draft`    |
+| Приостановлен | Жёлтый | `.badge-suspended`|
+| Отменён     | Красный | `.badge-cancelled`|
+| Истёк       | Красный | `.badge-expired`  |
+| На рассмотрении | Синий | `.badge-pending` |
+| Одобрена    | Зелёный | `.badge-approved` |
+| Отклонена   | Красный | `.badge-rejected` |
+
+---
+
+## Лицензия
+
+Proprietary — только для внутреннего использования.

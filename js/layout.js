@@ -1,162 +1,166 @@
-/* ==========================================================================
- * InsurePro — общий layout (navbar + sidebar)
- *
- * Использование на любой странице:
- *   InsurePro.mountChrome('dashboard');
- *
- * TODO(API): когда появится бэкенд — заменить MOCK_USER на данные из
- * localStorage.getItem('user_profile') после POST /auth/
- * ========================================================================== */
-
+/**
+ * InsurePro — Shared layout (navbar + sidebar)
+ */
 (function () {
   'use strict';
 
-  // TODO(API): заменить на реального пользователя из localStorage
-  const MOCK_USER = {
-    first_name: 'Иван',
-    last_name: 'Петров',
-    email: 'ivan@company.ru',
-    role: 'company_manager', // admin | company_manager | employee
-  };
-
-  const NAV = [
-    { id: 'dashboard', href: 'dashboard.html', label: 'Дашборд', icon: icon('dashboard') },
-    { id: 'employees', href: 'employees.html', label: 'Сотрудники', icon: icon('employees'), roles: ['admin', 'company_manager'] },
-    { id: 'policies', href: 'policies.html', label: 'Полисы', icon: icon('policies') },
-    { id: 'claims', href: 'claims.html', label: 'Обращения', icon: icon('claims') },
-    { id: 'plans', href: 'plans.html', label: 'Планы страхования', icon: icon('plans') },
-    { id: 'reports', href: 'reports.html', label: 'Отчёты', icon: icon('reports'), roles: ['admin', 'company_manager'] },
-    { id: 'users', href: 'users.html', label: 'Пользователи', icon: icon('users'), roles: ['admin'] },
+  const NAV_ITEMS = [
+    { id: 'dashboard', label: 'Панель управления', href: '/dashboard.html', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', roles: null },
+    { id: 'employees', label: 'Сотрудники', href: '/employees.html', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', roles: ['admin', 'manager'] },
+    { id: 'plans', label: 'Планы страхования', href: '/plans.html', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', roles: null },
+    { id: 'policies', label: 'Полисы', href: '/policies.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', roles: null },
+    { id: 'claims', label: 'Заявки', href: '/claims.html', icon: 'M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z', roles: null },
+    { id: 'reports', label: 'Отчёты', href: '/reports.html', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', roles: ['admin', 'manager'] }
   ];
 
-  const ROLE_LABEL = {
-    admin: 'Администратор',
-    company_manager: 'Менеджер компании',
-    employee: 'Сотрудник',
-  };
-
-  function icon(name) {
-    const paths = {
-      dashboard: '<path stroke-linecap="round" stroke-linejoin="round" d="M3 13.5V21a.75.75 0 00.75.75h5.25v-7.5h5.25V21h5.25a.75.75 0 00.75-.75v-7.5m-19.5 0L12 3l9 10.5"/>',
-      employees: '<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>',
-      policies: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z"/>',
-      claims: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>',
-      plans: '<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z"/>',
-      reports: '<path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>',
-      users: '<path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"/>',
-      logout: '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/>',
-      menu: '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>',
-    };
-    return '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75" stroke="currentColor" class="h-5 w-5" aria-hidden="true">' + (paths[name] || '') + '</svg>';
+  function getInitials(name) {
+    if (!name) return '?';
+    const parts = name.trim().split(/\s+/);
+    return parts.map(p => p[0]).slice(0, 2).join('').toUpperCase();
   }
 
-  function initials(u) {
-    if (!u) return '?';
-    const a = (u.first_name || '').charAt(0);
-    const b = (u.last_name || '').charAt(0);
-    return (a + b).toUpperCase() || (u.email || '?').charAt(0).toUpperCase();
-  }
-
-  function fullName(u) {
-    if (!u) return 'Гость';
-    const n = ((u.first_name || '') + ' ' + (u.last_name || '')).trim();
-    return n || u.email || 'Пользователь';
-  }
-
-  function escapeHTML(s) {
-    return String(s == null ? '' : s).replace(/[&<>"']/g, (m) => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-    }[m]));
-  }
-
-  function navbarHTML(user) {
-    const role = ROLE_LABEL[user.role] || 'Пользователь';
-    return `
-      <div class="flex items-center gap-3">
-        <button type="button" class="lg:hidden rounded-lg p-2 text-slate-600 hover:bg-slate-100" aria-label="Открыть меню" data-chrome-toggle>${icon('menu')}</button>
-        <a href="dashboard.html" class="flex items-center gap-2 rounded-lg px-1">
-          <span class="grid h-9 w-9 place-items-center rounded-lg bg-blue-600 text-white font-bold">IP</span>
-          <span class="font-bold text-blue-600 text-lg hidden sm:inline">InsurePro</span>
-        </a>
-      </div>
-      <div class="flex items-center gap-3">
-        <div class="hidden sm:flex flex-col items-end leading-tight">
-          <span class="text-sm font-medium text-slate-800">${escapeHTML(fullName(user))}</span>
-          <span class="text-xs text-slate-500">${escapeHTML(role)}</span>
-        </div>
-        <span class="grid h-10 w-10 place-items-center rounded-full bg-blue-100 text-blue-700 font-semibold" aria-hidden="true">${initials(user)}</span>
-        <button type="button" class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600" data-chrome-logout>
-          ${icon('logout')}<span class="hidden sm:inline">Выйти</span>
-        </button>
-      </div>
-    `;
-  }
-
-  function sidebarHTML(activeId, user) {
-    const items = NAV
-      .filter((item) => !item.roles || item.roles.includes(user.role))
-      .map((item) => {
-        const isActive = item.id === activeId;
-        const base = 'group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors';
-        const styled = isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900';
-        const iconCls = isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600';
-        return `<li><a href="${item.href}" class="${base} ${styled}" ${isActive ? 'aria-current="page"' : ''}><span class="${iconCls}">${item.icon}</span>${escapeHTML(item.label)}</a></li>`;
-      }).join('');
-
-    return `
-      <div class="flex h-full flex-col">
-        <div class="lg:hidden p-4 flex items-center justify-between border-b border-slate-200">
-          <span class="font-bold text-blue-600">InsurePro</span>
-          <button type="button" class="p-2 rounded-lg hover:bg-slate-100" aria-label="Закрыть меню" data-chrome-close>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-          </button>
-        </div>
-        <nav aria-label="Основная навигация" class="flex-1 overflow-y-auto p-4">
-          <ul class="flex flex-col gap-1">${items}</ul>
-        </nav>
-        <footer class="p-4 text-xs text-slate-400 border-t border-slate-100">InsurePro · v1.0</footer>
-      </div>
-    `;
+  function heroIcon(path) {
+    return `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="${path}"/></svg>`;
   }
 
   function mountChrome(activeId) {
-    // TODO(API): заменить MOCK_USER на данные из localStorage
-    const user = MOCK_USER;
+    const { auth } = window.InsurePro;
+    if (!auth.requireAuth()) return;
 
-    const nav = document.querySelector('[data-chrome-navbar]');
-    const side = document.querySelector('[data-chrome-sidebar]');
-    if (nav) nav.innerHTML = navbarHTML(user);
-    if (side) side.innerHTML = sidebarHTML(activeId, user);
+    const user = auth.user() || { name: 'Пользователь', role: 'employee', email: '' };
+    const userRole = user.role || 'employee';
+    const userName = user.name || user.email || 'Пользователь';
 
-    document.addEventListener('click', (e) => {
-      const t = e.target;
-      if (!(t instanceof Element)) return;
-      if (t.closest('[data-chrome-logout]')) {
+    const roleLabels = { admin: 'Администратор', manager: 'Менеджер', employee: 'Сотрудник' };
+
+    const filteredNav = NAV_ITEMS.filter(item => {
+      if (!item.roles) return true;
+      return item.roles.includes(userRole);
+    });
+
+    /* ─── Skip link ──────────────────────────────────────── */
+    const skipLink = document.createElement('a');
+    skipLink.href = '#main-content';
+    skipLink.className = 'skip-link';
+    skipLink.textContent = 'Перейти к содержимому';
+    document.body.prepend(skipLink);
+
+    /* ─── Navbar ─────────────────────────────────────────── */
+    const navbar = document.createElement('header');
+    navbar.setAttribute('role', 'banner');
+    navbar.className = 'sticky top-0 z-50 bg-white border-b border-slate-200 h-16 flex items-center px-4 lg:px-6';
+    navbar.innerHTML = `
+      <button data-action="toggle-sidebar" class="lg:hidden mr-3 p-2 rounded-lg hover:bg-slate-100 transition" aria-label="Открыть меню">
+        <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+      </button>
+      <a href="/dashboard.html" class="flex items-center gap-2 font-bold text-blue-600 text-lg" aria-label="InsurePro — Главная">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span class="hidden sm:inline">InsurePro</span>
+      </a>
+      <div class="ml-auto flex items-center gap-3">
+        <div class="text-right hidden sm:block">
+          <div class="text-sm font-medium text-slate-800">${userName}</div>
+          <div class="text-xs text-slate-500">${roleLabels[userRole] || userRole}</div>
+        </div>
+        <div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-semibold" aria-hidden="true">${getInitials(userName)}</div>
+        <button data-action="logout" class="p-2 rounded-lg hover:bg-slate-100 transition" aria-label="Выйти" title="Выйти">
+          <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>
+        </button>
+      </div>
+    `;
+    document.body.prepend(navbar);
+
+    /* ─── Sidebar ────────────────────────────────────────── */
+    const aside = document.createElement('aside');
+    aside.setAttribute('data-chrome-sidebar', '');
+    aside.setAttribute('role', 'navigation');
+    aside.setAttribute('aria-label', 'Основная навигация');
+    aside.innerHTML = `
+      <div class="p-4 border-b border-slate-100 flex items-center justify-between lg:hidden">
+        <span class="font-bold text-blue-600">InsurePro</span>
+        <button data-action="close-sidebar" class="p-1.5 rounded-lg hover:bg-slate-100" aria-label="Закрыть меню">
+          <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <nav class="p-3 flex flex-col gap-1" aria-label="Меню">
+        ${filteredNav.map(item => {
+          const active = item.id === activeId;
+          return `<a href="${item.href}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${active ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}" ${active ? 'aria-current="page"' : ''}>
+            ${heroIcon(item.icon)}
+            <span>${item.label}</span>
+          </a>`;
+        }).join('')}
+      </nav>
+    `;
+
+    const backdrop = document.createElement('div');
+    backdrop.setAttribute('data-chrome-backdrop', '');
+    backdrop.setAttribute('data-action', 'close-sidebar');
+
+    /* ─── Layout wrapper ─────────────────────────────────── */
+    const main = document.querySelector('main') || document.createElement('main');
+    main.id = 'main-content';
+    main.setAttribute('role', 'main');
+
+    const layoutWrap = document.createElement('div');
+    layoutWrap.className = 'flex min-h-[calc(100vh-4rem)]';
+    layoutWrap.appendChild(aside);
+    layoutWrap.appendChild(backdrop);
+
+    const contentWrap = document.createElement('div');
+    contentWrap.className = 'flex-1 bg-gray-50 p-4 lg:p-6 overflow-x-hidden';
+
+    // Move main's children into contentWrap
+    while (main.firstChild) {
+      contentWrap.appendChild(main.firstChild);
+    }
+    layoutWrap.appendChild(contentWrap);
+    main.appendChild(layoutWrap);
+
+    if (!main.parentNode) {
+      document.body.appendChild(main);
+    }
+
+    /* ─── Event delegation ───────────────────────────────── */
+    document.addEventListener('click', function (e) {
+      const action = e.target.closest('[data-action]');
+      if (!action) return;
+
+      const act = action.getAttribute('data-action');
+      if (act === 'toggle-sidebar') {
+        aside.classList.add('is-open');
+      } else if (act === 'close-sidebar') {
+        aside.classList.remove('is-open');
+      } else if (act === 'logout') {
         e.preventDefault();
-        // TODO(API): POST /auth/logout/, затем localStorage.clear()
-        location.href = 'login.html';
-      }
-      if (t.closest('[data-chrome-toggle]')) {
-        side?.classList.add('is-open');
-        document.body.classList.add('overflow-hidden');
-      }
-      if (t.closest('[data-chrome-close]') || t.closest('[data-chrome-backdrop]')) {
-        side?.classList.remove('is-open');
-        document.body.classList.remove('overflow-hidden');
+        auth.logout();
       }
     });
 
-    // Alpine store для доступа к роли в x-show
-    document.addEventListener('alpine:init', () => {
-      window.Alpine.store('auth', {
-        user,
-        role: user.role,
-        hasRole(...roles) { return roles.includes(user.role); },
-      });
+    /* ─── Close sidebar on Escape ────────────────────────── */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && aside.classList.contains('is-open')) {
+        aside.classList.remove('is-open');
+      }
     });
   }
 
+  /* ─── Alpine store ─────────────────────────────────────── */
+  document.addEventListener('alpine:init', function () {
+    if (window.Alpine && window.Alpine.store) {
+      const user = window.InsurePro.auth.user() || {};
+      window.Alpine.store('auth', {
+        user: user,
+        role: user.role || 'employee',
+        isAuthenticated: window.InsurePro.auth.isAuthenticated(),
+        hasRole(role) {
+          return window.InsurePro.auth.hasRole(role);
+        }
+      });
+    }
+  });
+
+  /* ─── Expose ───────────────────────────────────────────── */
   window.InsurePro = window.InsurePro || {};
   window.InsurePro.mountChrome = mountChrome;
-  window.InsurePro.MOCK_USER = MOCK_USER;
 })();
