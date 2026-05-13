@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подтверждение почты — InsurePro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link rel="stylesheet" href="/css/app.css">
+  <script src="/js/api.js"></script>
+</head>
+<body class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+
+  <div class="w-full max-w-md" x-data="verifyForm()" x-cloak>
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 text-blue-600 mb-2">
+        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span class="text-2xl font-bold">InsurePro</span>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="card p-8 text-center">
+      <!-- Icon -->
+      <div class="w-16 h-16 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+      </div>
+
+      <h1 class="text-xl font-semibold text-slate-800 mb-2">Подтверждение почты</h1>
+      <p class="text-sm text-slate-500 mb-6">
+        Мы отправили 6-значный код на адрес<br>
+        <span class="font-medium text-slate-700" x-text="email"></span>
+      </p>
+
+      <!-- Error -->
+      <div x-show="error" x-transition class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700" role="alert">
+        <span x-text="error"></span>
+      </div>
+
+      <!-- Success -->
+      <div x-show="success" x-transition class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700" role="status">
+        <span x-text="success"></span>
+      </div>
+
+      <form @submit.prevent="submit" novalidate>
+        <!-- Code input -->
+        <div class="flex justify-center gap-2 mb-6">
+          <template x-for="(digit, index) in digits" :key="index">
+            <input
+              type="text"
+              inputmode="numeric"
+              maxlength="1"
+              class="w-12 h-14 text-center text-xl font-semibold border border-slate-300 rounded-lg focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition"
+              :value="digit"
+              @input="handleInput($event, index)"
+              @keydown="handleKeydown($event, index)"
+              @paste="handlePaste($event)"
+              :aria-label="'Цифра ' + (index + 1)"
+            >
+          </template>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary w-full mb-4" :disabled="loading || code.length < 6">
+          <svg x-show="loading" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+          <span x-text="loading ? 'Проверка...' : 'Подтвердить'"></span>
+        </button>
+      </form>
+
+      <!-- Resend -->
+      <div class="text-sm text-slate-500">
+        <span x-show="cooldown > 0">Отправить повторно через <span class="font-medium text-slate-700" x-text="cooldown"></span> сек.</span>
+        <button
+          x-show="cooldown === 0"
+          @click="resend"
+          class="text-blue-600 hover:text-blue-800 font-medium"
+          :disabled="resending"
+        >
+          <span x-text="resending ? 'Отправка...' : 'Отправить код повторно'"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Back -->
+    <p class="text-center mt-6 text-sm text-slate-500">
+      <a href="/login.html" class="text-blue-600 hover:text-blue-800 font-medium">← Вернуться ко входу</a>
+    </p>
+  </div>
+
+  <script>
+    function verifyForm() {
+      return {
+        email: new URLSearchParams(window.location.search).get('email') || '',
+        digits: ['', '', '', '', '', ''],
+        error: '',
+        success: '',
+        loading: false,
+        resending: false,
+        cooldown: 60,
+        timer: null,
+
+        get code() {
+          return this.digits.join('');
+        },
+
+        init() {
+          this.startCooldown();
+        },
+
+        startCooldown() {
+          this.cooldown = 60;
+          if (this.timer) clearInterval(this.timer);
+          this.timer = setInterval(() => {
+            this.cooldown--;
+            if (this.cooldown <= 0) {
+              clearInterval(this.timer);
+              this.cooldown = 0;
+            }
+          }, 1000);
+        },
+
+        handleInput(event, index) {
+          const val = event.target.value.replace(/\D/g, '');
+          this.digits[index] = val ? val[0] : '';
+          event.target.value = this.digits[index];
+          if (val && index < 5) {
+            event.target.parentElement.querySelectorAll('input')[index + 1].focus();
+          }
+        },
+
+        handleKeydown(event, index) {
+          if (event.key === 'Backspace' && !this.digits[index] && index > 0) {
+            const inputs = event.target.parentElement.querySelectorAll('input');
+            inputs[index - 1].focus();
+          }
+        },
+
+        handlePaste(event) {
+          event.preventDefault();
+          const paste = (event.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+          for (let i = 0; i < 6; i++) {
+            this.digits[i] = paste[i] || '';
+          }
+          const inputs = event.target.parentElement.querySelectorAll('input');
+          const focusIdx = Math.min(paste.length, 5);
+          inputs[focusIdx].focus();
+        },
+
+        async submit() {
+          this.error = '';
+          this.success = '';
+          if (this.code.length < 6) return;
+
+          this.loading = true;
+          try {
+            await window.InsurePro.apiFetch('/auth/verify-email/', {
+              method: 'POST',
+              body: { email: this.email, code: this.code }
+            });
+            this.success = 'Почта подтверждена! Перенаправление...';
+            window.InsurePro.toast('Почта подтверждена!', 'success');
+            setTimeout(() => { window.location.href = '/login.html'; }, 1500);
+          } catch (err) {
+            this.error = err.message || 'Неверный код';
+          } finally {
+            this.loading = false;
+          }
+        },
+
+        async resend() {
+          this.resending = true;
+          this.error = '';
+          try {
+            await window.InsurePro.apiFetch('/auth/resend-code/', {
+              method: 'POST',
+              body: { email: this.email }
+            });
+            window.InsurePro.toast('Код отправлен повторно', 'success');
+            this.startCooldown();
+          } catch (err) {
+            this.error = err.message || 'Не удалось отправить код';
+          } finally {
+            this.resending = false;
+          }
+        }
+      };
+    }
+  </script>
+</body>
+</html>

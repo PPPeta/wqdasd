@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Полисы — InsurePro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link rel="stylesheet" href="/css/app.css">
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
+</head>
+<body class="bg-gray-50">
+
+  <main x-data="policiesApp()" x-init="init()" x-cloak>
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">Полисы</h1>
+        <p class="text-sm text-slate-500 mt-1">Управление страховыми полисами</p>
+      </div>
+    </div>
+
+    <!-- Status filter tabs -->
+    <div class="flex flex-wrap gap-2 mb-6" role="tablist" aria-label="Фильтр по статусу">
+      <template x-for="tab in tabs" :key="tab.value">
+        <button
+          class="px-4 py-2 rounded-lg text-sm font-medium transition"
+          :class="activeTab === tab.value ? 'bg-blue-600 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'"
+          @click="activeTab = tab.value; loadPolicies()"
+          role="tab"
+          :aria-selected="activeTab === tab.value"
+          x-text="tab.label"
+        ></button>
+      </template>
+    </div>
+
+    <!-- Table -->
+    <div class="card overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>№ полиса</th>
+              <th>План</th>
+              <th>Компания</th>
+              <th>Период</th>
+              <th>Стоимость</th>
+              <th>Статус</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <template x-for="policy in policies" :key="policy.id">
+              <tr>
+                <td class="font-medium" x-text="'#' + policy.id"></td>
+                <td x-text="policy.plan"></td>
+                <td x-text="policy.company"></td>
+                <td class="text-slate-500 text-sm" x-text="policy.start_date + ' — ' + policy.end_date"></td>
+                <td class="font-medium" x-text="formatCurrency(policy.cost)"></td>
+                <td>
+                  <span class="badge" :class="'badge-' + policy.status" x-text="statusLabels[policy.status]"></span>
+                </td>
+                <td class="text-right">
+                  <a :href="'/policy.html?id=' + policy.id" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Подробнее</a>
+                </td>
+              </tr>
+            </template>
+            <tr x-show="policies.length === 0">
+              <td colspan="7" class="text-center text-slate-400 py-8">Полисы не найдены</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function policiesApp() {
+      return {
+        policies: [],
+        activeTab: 'all',
+        tabs: [
+          { value: 'all', label: 'Все' },
+          { value: 'active', label: 'Активные' },
+          { value: 'draft', label: 'Черновики' },
+          { value: 'suspended', label: 'Приостановлены' },
+          { value: 'cancelled', label: 'Отменены' },
+          { value: 'expired', label: 'Истекшие' }
+        ],
+        statusLabels: {
+          active: 'Активен',
+          draft: 'Черновик',
+          suspended: 'Приостановлен',
+          cancelled: 'Отменён',
+          expired: 'Истёк'
+        },
+
+        formatCurrency(val) {
+          return window.InsurePro.formatCurrency(val || 0);
+        },
+
+        async init() {
+          window.InsurePro.mountChrome('policies');
+          await this.loadPolicies();
+        },
+
+        async loadPolicies() {
+          try {
+            const params = new URLSearchParams();
+            if (this.activeTab !== 'all') params.set('status', this.activeTab);
+            const data = await window.InsurePro.apiFetch(`/policies/?${params}`);
+            this.policies = data.results || data;
+          } catch {
+            this.policies = this.getDemo();
+          }
+        },
+
+        getDemo() {
+          const all = [
+            { id: 1001, plan: 'Стандарт ДМС', company: 'ООО «ТехноСофт»', start_date: '01.01.2025', end_date: '31.12.2025', cost: 2160000, status: 'active' },
+            { id: 1002, plan: 'Премиум ДМС', company: 'АО «ФинТех»', start_date: '01.03.2025', end_date: '28.02.2026', cost: 4800000, status: 'active' },
+            { id: 1003, plan: 'Базовый ДМС', company: 'ИП Козлов', start_date: '15.02.2025', end_date: '14.02.2026', cost: 300000, status: 'draft' },
+            { id: 1004, plan: 'Стандарт ДМС', company: 'ООО «Альфа»', start_date: '01.06.2024', end_date: '31.05.2025', cost: 1080000, status: 'suspended' },
+            { id: 1005, plan: 'Базовый ДМС', company: 'ООО «Бета»', start_date: '01.01.2024', end_date: '31.12.2024', cost: 600000, status: 'expired' },
+            { id: 1006, plan: 'Премиум ДМС', company: 'ООО «Гамма»', start_date: '01.04.2024', end_date: '31.03.2025', cost: 3200000, status: 'cancelled' }
+          ];
+          if (this.activeTab === 'all') return all;
+          return all.filter(p => p.status === this.activeTab);
+        }
+      };
+    }
+  </script>
+</body>
+</html>

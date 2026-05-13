@@ -1,79 +1,130 @@
-# Nebula Landing
+# InsurePro — B2B DMS Frontend
 
-A production-grade, heavily animated landing page built with **Next.js 14 App Router**, **React 18**, **TypeScript (strict)**, **Tailwind CSS**, **Framer Motion**, **TanStack Query**, **Zustand**, and **Lenis**.
+Фронтенд для системы управления корпоративным добровольным медицинским страхованием (ДМС).
 
-## Stack
+Статический проект на **HTML + Tailwind CSS (CDN) + Alpine.js** — без сборщиков, без Node.js.
 
-- **Framework:** Next.js 14 (App Router, RSC)
-- **Language:** TypeScript (strict, `noUncheckedIndexedAccess`)
-- **Styling:** Tailwind CSS + design tokens via CSS variables
-- **Animation:** Framer Motion + Lenis smooth scroll
-- **State:** Zustand (UI), TanStack Query (server)
-- **A11y:** Radix UI primitives, reduced-motion aware, skip link, focus rings
+---
 
-## Scripts
+## Быстрый старт
+
+### Вариант 1: Python
 
 ```bash
-pnpm install          # install dependencies
-pnpm dev              # local dev server
-pnpm build && pnpm start
-pnpm lint             # Next + TS ESLint
-pnpm type-check       # strict TS
+cd /path/to/project
+python3 -m http.server 3000
+# Открыть http://localhost:3000
 ```
 
-## Dependencies
+### Вариант 2: Node.js (npx)
 
-Runtime:
-
-```
-next react react-dom
-framer-motion lenis
-@tanstack/react-query
-@radix-ui/react-accordion @radix-ui/react-dialog @radix-ui/react-slot
-zustand class-variance-authority clsx tailwind-merge lucide-react
+```bash
+npx serve . -l 3000
+# или
+npx http-server . -p 3000
 ```
 
-Dev:
+### Вариант 3: VS Code
 
-```
-typescript @types/react @types/react-dom @types/node
-tailwindcss tailwindcss-animate postcss autoprefixer
-eslint eslint-config-next
-```
+Установите расширение **Live Server**, откройте папку проекта и запустите сервер (правый клик на `index.html` → "Open with Live Server").
 
-## Architecture
+---
 
-```
-src/
-├─ app/                 Next.js App Router (layout, page, error, loading, not-found)
-├─ components/
-│  ├─ effects/          Pure visual effects (cursor, particles, scramble, blobs, progress)
-│  ├─ layout/           Navbar, Footer
-│  ├─ sections/         One file per landing section (composition-first)
-│  └─ ui/               Reusable primitives (Button, Section, Reveal, TiltCard…)
-├─ hooks/               use-magnetic, use-media-query, use-mounted
-├─ lib/                 constants, fonts, utils
-├─ providers/           AppProviders, QueryProvider, SmoothScrollProvider
-└─ store/               Zustand UI store
+## Настройка API
+
+По умолчанию все запросы идут на `http://localhost:8000`.
+
+Чтобы изменить базовый URL API, добавьте `<meta>` тег в `<head>` любой страницы:
+
+```html
+<meta name="api-base" content="https://api.example.com">
 ```
 
-## Animations included
+---
 
-- Magnetic hover buttons (pointer-adaptive, respects `prefers-reduced-motion`)
-- Custom cursor with blend-mode + interactive expansion (auto-disabled on touch)
-- Scroll progress bar (GPU transform)
-- Text scramble / decrypt effect
-- 3D tilt cards with spotlight glow
-- Parallax hero, animated workflow timeline, animated counters
-- Particle starfield canvas, aurora gradient blobs, noise texture overlay
-- Infinite marquee logo cloud, sticky hide-on-scroll navbar
-- Radix accordion with motion reveals
-- Animated mobile nav with stagger
+## Структура файлов
 
-## Accessibility
+```
+├── css/
+│   └── app.css              # Общие стили (badge, card, field, btn, table, skeleton)
+├── js/
+│   ├── api.js               # API-клиент, авторизация, toast, форматирование
+│   └── layout.js            # Навбар + сайдбар (chrome), навигация с ролями
+├── index.html               # Редирект: авторизован → dashboard, иначе → login
+├── login.html               # Форма входа
+├── register.html            # Регистрация компании
+├── verify-email.html        # Подтверждение почты (6-значный код)
+├── dashboard.html           # Панель управления (ролевая)
+├── employees.html           # Управление сотрудниками
+├── plans.html               # Планы страхования (карточки + калькулятор)
+├── policies.html            # Список полисов
+├── policy.html              # Детали полиса (по ?id=)
+├── claims.html              # Список заявок + создание
+├── claim.html               # Детали заявки (по ?id=)
+├── reports.html             # Отчёты + экспорт
+└── README.md
+```
 
-- `prefers-reduced-motion` short-circuits all non-essential motion
-- Semantic landmarks, skip-to-content link
-- `:focus-visible` rings everywhere
-- ARIA on interactive custom widgets (navbar, accordion)
-- Coarse-pointer detection disables custom cursor
+---
+
+## Роли пользователей
+
+| Роль       | Описание                                 | Доступ                              |
+|------------|------------------------------------------|-------------------------------------|
+| `admin`    | Администратор платформы                  | Все разделы, все отчёты, управление |
+| `manager`  | Менеджер компании                        | Сотрудники, полисы, заявки, отчёты  |
+| `employee` | Сотрудник застрахованной компании        | Свой полис, подача заявок, планы    |
+
+Роль хранится в `localStorage` как часть объекта пользователя (`insurepro_user`).
+
+Боковая навигация автоматически фильтруется по роли. Управляющие кнопки (одобрить/отклонить заявку, сменить статус полиса) доступны только admin/manager.
+
+---
+
+## Технологии
+
+- **Tailwind CSS** — CDN, без конфига
+- **Alpine.js 3** — реактивность, состояние
+- **Chart.js** — графики на dashboard (только для admin)
+- **Toastify.js** — уведомления
+- **Heroicons** — SVG-иконки inline
+
+---
+
+## Демо-режим
+
+Если API недоступен, страницы автоматически переключаются на **демо-данные** (fallback). Это позволяет просматривать интерфейс без запущенного бэкенда.
+
+Для тестирования авторизации вручную заполните localStorage:
+
+```js
+localStorage.setItem('insurepro_token', 'demo-token');
+localStorage.setItem('insurepro_user', JSON.stringify({
+  name: 'Иван Администратор',
+  email: 'admin@company.ru',
+  role: 'admin' // или 'manager', 'employee'
+}));
+```
+
+Затем откройте `/dashboard.html`.
+
+---
+
+## Цветовая схема статусов
+
+| Статус       | Цвет    | CSS-класс         |
+|-------------|---------|-------------------|
+| Активен     | Зелёный | `.badge-active`   |
+| Черновик    | Серый   | `.badge-draft`    |
+| Приостановлен | Жёлтый | `.badge-suspended`|
+| Отменён     | Красный | `.badge-cancelled`|
+| Истёк       | Красный | `.badge-expired`  |
+| На рассмотрении | Синий | `.badge-pending` |
+| Одобрена    | Зелёный | `.badge-approved` |
+| Отклонена   | Красный | `.badge-rejected` |
+
+---
+
+## Лицензия
+
+Proprietary — только для внутреннего использования.
