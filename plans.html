@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Планы страхования — InsurePro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link rel="stylesheet" href="/css/app.css">
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
+</head>
+<body class="bg-gray-50">
+
+  <main x-data="plansApp()" x-init="init()" x-cloak>
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-slate-800">Планы страхования</h1>
+      <p class="text-sm text-slate-500 mt-1">Выберите оптимальный план для вашей компании</p>
+    </div>
+
+    <!-- Plans grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <template x-for="plan in plans" :key="plan.id">
+        <div class="card relative flex flex-col" :class="plan.featured ? 'ring-2 ring-blue-600' : ''">
+          <!-- Featured badge -->
+          <div x-show="plan.featured" class="absolute -top-3 left-1/2 -translate-x-1/2">
+            <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">Популярный</span>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col">
+            <h3 class="text-lg font-semibold text-slate-800" x-text="plan.name"></h3>
+            <p class="text-sm text-slate-500 mt-1 mb-4" x-text="plan.description"></p>
+
+            <!-- Price -->
+            <div class="mb-5">
+              <span class="text-3xl font-bold text-slate-800" x-text="formatCurrency(plan.price_per_employee)"></span>
+              <span class="text-sm text-slate-500"> / сотрудник / мес.</span>
+            </div>
+
+            <!-- Coverages -->
+            <ul class="space-y-2.5 mb-6 flex-1">
+              <template x-for="(coverage, idx) in plan.coverages" :key="idx">
+                <li class="flex items-start gap-2 text-sm text-slate-600">
+                  <svg class="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+                  <span x-text="coverage"></span>
+                </li>
+              </template>
+            </ul>
+
+            <!-- Actions -->
+            <div class="flex gap-2">
+              <button class="btn btn-primary flex-1" :class="plan.featured ? '' : 'btn-secondary'" @click="openCalculator(plan)">
+                Рассчитать
+              </button>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <!-- Calculator Modal -->
+    <div x-show="showCalc" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display:none;">
+      <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" @click="showCalc = false"></div>
+      <div class="relative w-full max-w-md card p-6">
+        <h2 class="text-lg font-semibold text-slate-800 mb-2">Калькулятор стоимости</h2>
+        <p class="text-sm text-slate-500 mb-5">План: <span class="font-medium text-slate-700" x-text="selectedPlan?.name"></span></p>
+
+        <div class="field mb-5">
+          <label for="calc-employees">Количество сотрудников</label>
+          <input type="number" id="calc-employees" x-model.number="calcEmployees" min="1" max="10000" placeholder="Введите число">
+        </div>
+
+        <div class="bg-slate-50 rounded-lg p-4 mb-5">
+          <div class="flex justify-between text-sm mb-2">
+            <span class="text-slate-500">Стоимость за сотрудника</span>
+            <span class="font-medium text-slate-800" x-text="formatCurrency(selectedPlan?.price_per_employee || 0)"></span>
+          </div>
+          <div class="flex justify-between text-sm mb-2">
+            <span class="text-slate-500">Количество сотрудников</span>
+            <span class="font-medium text-slate-800" x-text="calcEmployees || 0"></span>
+          </div>
+          <hr class="my-3 border-slate-200">
+          <div class="flex justify-between">
+            <span class="font-medium text-slate-700">Итого в месяц</span>
+            <span class="text-xl font-bold text-blue-600" x-text="formatCurrency((selectedPlan?.price_per_employee || 0) * (calcEmployees || 0))"></span>
+          </div>
+          <div class="flex justify-between mt-1">
+            <span class="text-sm text-slate-500">Итого в год</span>
+            <span class="text-sm font-medium text-slate-700" x-text="formatCurrency((selectedPlan?.price_per_employee || 0) * (calcEmployees || 0) * 12)"></span>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button class="btn btn-secondary" @click="showCalc = false">Закрыть</button>
+          <button class="btn btn-primary">Оформить</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function plansApp() {
+      return {
+        plans: [],
+        showCalc: false,
+        selectedPlan: null,
+        calcEmployees: 10,
+
+        formatCurrency(val) {
+          return window.InsurePro.formatCurrency(val || 0);
+        },
+
+        async init() {
+          window.InsurePro.mountChrome('plans');
+          await this.loadPlans();
+        },
+
+        async loadPlans() {
+          try {
+            const data = await window.InsurePro.apiFetch('/plans/');
+            this.plans = data.results || data;
+          } catch {
+            this.plans = this.getDemoPlans();
+          }
+        },
+
+        getDemoPlans() {
+          return [
+            {
+              id: 1,
+              name: 'Базовый',
+              description: 'Основные медицинские услуги для небольших команд',
+              price_per_employee: 2500,
+              featured: false,
+              coverages: [
+                'Амбулаторное лечение',
+                'Вызов врача на дом',
+                'Базовая стоматология',
+                'Диагностика',
+                'Скорая помощь'
+              ]
+            },
+            {
+              id: 2,
+              name: 'Стандарт',
+              description: 'Расширенное покрытие для растущих компаний',
+              price_per_employee: 4500,
+              featured: true,
+              coverages: [
+                'Всё из «Базового»',
+                'Госпитализация',
+                'Реабилитация',
+                'Расширенная стоматология',
+                'Офтальмология',
+                'Психологическая помощь',
+                'Телемедицина 24/7'
+              ]
+            },
+            {
+              id: 3,
+              name: 'Премиум',
+              description: 'Полное покрытие для требовательных компаний',
+              price_per_employee: 8000,
+              featured: false,
+              coverages: [
+                'Всё из «Стандарт»',
+                'VIP-палаты',
+                'Лечение за рубежом',
+                'Ведущие клиники',
+                'Полная стоматология с протезированием',
+                'Check-up программы',
+                'Персональный менеджер',
+                'Фитнес и wellness'
+              ]
+            }
+          ];
+        },
+
+        openCalculator(plan) {
+          this.selectedPlan = plan;
+          this.calcEmployees = 10;
+          this.showCalc = true;
+        }
+      };
+    }
+  </script>
+</body>
+</html>
